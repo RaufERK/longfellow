@@ -1,0 +1,180 @@
+<!--
+.firstline {
+}
+.smallt {
+	font-size: 12px;
+	color: #009900;
+	text-decoration: none;
+	font-weight: bold;
+	cursor: pointer;
+	background-color: #CCFFCC;
+	text-align: center;
+}
+.hmenu {
+	font-size: 24px;
+	color: #FFFF00;
+	text-decoration: none;
+	font-weight: bold;
+	font-family: Georgia, "Times New Roman", Times, serif;
+}
+.err {
+	font-size: 14px;
+	color: #FF0000;
+}
+.tab {
+	border: 1px solid #009900;
+	font-size: 12px;
+	font-weight: bold;
+	color: #009900;
+}
+.lur {
+	font-size: 12px;
+	font-weight: bold;
+	color: #009900;
+	border-top: 1px solid #009900;
+	border-right: 1px solid #009900;
+	border-bottom: 0px solid #009900;
+	border-left: 1px solid #009900;
+}
+.lu {
+	font-size: 12px;
+	font-weight: bold;
+	color: #009900;
+	border-top: 1px solid #009900;
+	border-right: 0px solid #009900;
+	border-bottom: 0px solid #009900;
+	border-left: 1px solid #009900;
+	text-align: center;
+}
+.lubr {
+	font-size: 12px;
+	font-weight: bold;
+	color: #009900;
+	border: 1px solid #009900;
+}
+.lub {
+	font-size: 12px;
+	font-weight: bold;
+	color: #009900;
+	border-top: 1px solid #009900;
+	border-right: 0px solid #009900;
+	border-bottom: 1px solid #009900;
+	border-left: 1px solid #009900;
+	text-align: center;
+}
+.buttonflat {
+	font-size: 12px;
+	color: #009900;
+	text-decoration: none;
+	font-weight: bold;
+	background-color: #CCFFCC;
+	text-align: center;
+	border: 0px;
+}
+.sbutton {
+	font-size: 9px;
+	color: #009900;
+	text-decoration: none;
+	cursor: pointer;
+	background-color: #CCFFCC;
+	text-align: center;
+	font-style: normal;
+}
+.text {
+	font-size: 14px;
+	color: #000000;
+}
+.stext {
+	font-size: 12px;
+	color: #000000;
+}
+.whitefield {
+	border: 0px;
+	font-size: 14px;
+	color: #009900;
+	background-color: #FFFFFF;
+}
+.blue {
+	font-size: 14px;
+	color: #0000FF;
+}
+.ftext {
+	font-size: 14px;
+	color: #009900;
+}
+.sfield {
+	font-size: 12px;
+	color: #009900;
+	text-decoration: none;
+	font-weight: bold;
+	cursor: pointer;
+	background-color: #CCFFCC;
+	text-align: left;
+}
+
+.header{
+	font-size: 12pt;
+	color: #009900;
+	text-decoration: none;
+	font-weight: bold;
+}
+.cdate{
+	font-size: 12pt;
+	color: #009900;
+	text-decoration: none;
+	font-weight: bold;
+}
+.fname{
+	font-size: 14pt;
+	color: #009900;
+	font-family: Arial;
+	font-weight: bold;
+}
+.sdesc{
+	color: #009900;
+	font-family: Arial;
+}
+.adres{
+	font-size: 10pt;
+	color: #009900;
+	text-decoration: none;
+	font-weight: bold;
+	font-style: italic;
+}
+.glink{
+	font-size: 10pt;
+	color: #009933;
+}
+.headcolor{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #006600;
+	font-weight: bold;
+
+}
+
+.present{
+	color:Green;
+	font-size: 14pt;
+	margin: 30px 70px;
+}
+.present h1{
+	font-size: 24pt;
+	text-align: center;
+}
+.present h2{
+	text-align: center;
+	font-size: 16pt;
+}
+.bold{
+	font-weight:bold;
+}
+.normal{
+	font-weight:normal;
+}
+
+
+.hide{
+	display: none;
+}
+-->
