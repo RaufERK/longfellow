@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import { MainNav } from '@/components/MainNav'
 
 export const metadata: Metadata = {
   title: 'Издательство Лонгфелло',
@@ -14,6 +15,7 @@ export default function RootLayout({
   return (
     <html lang='ru'>
       <body className='antialiased min-h-dvh bg-background text-foreground'>
+        <MainNav />
         {children}
       </body>
     </html>
