@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "extract:legacy": "tsx scripts/extract-legacy.ts",
+    "fetch:legacy": "tsx scripts/fetch-legacy.ts",
     "seed": "tsx scripts/seed.ts",
     "db:seed": "prisma db seed",
     "build": "next build",
