@@ -1131,7 +1131,7 @@ cookieDate = addDays(cookieDate, 100)
 ;(function () {
   function redirectToHelp(e) {
     if (e && e.preventDefault) e.preventDefault()
-    window.location = '/help'
+    window.location = '/legacy/help.html'
     return false
   }
   function setup() {
