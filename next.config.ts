@@ -30,11 +30,10 @@ const nextConfig: NextConfig = {
       { source: '/authors.html', destination: '/legacy/authors.html' },
       { source: '/contacts.html', destination: '/legacy/contacts.html' },
       { source: '/present.html', destination: '/legacy/present.html' },
-      { source: '/help.html', destination: '/legacy/help.html' },
+      // help should NOT go to legacy
       { source: '/authors', destination: '/legacy/authors.html' },
       { source: '/contacts', destination: '/legacy/contacts.html' },
       { source: '/present', destination: '/legacy/present.html' },
-      { source: '/help', destination: '/legacy/help.html' },
       // legacy internal links without .html
       // legacy internal links without .html
       {

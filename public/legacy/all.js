@@ -255,7 +255,7 @@ function steps(num) {
     deleteCookie('cart')
 
     //if(getIt("dsum"))getIt("dsum").value;//=document.all.price[document.all.price.length-1].value;
-    //if(document.step2.dsumm)document.step2.dsumm.value=document.all.price[document.all.price.length-1].value;
+    //if(document.step2.dsumm)document.step2.dsumm.value=document.all.price[document.all.length-1].value;
     //window.alert(document.all.price[document.all.price.length-1].value);
     //window.alert(document.all.price[document.all.price.length-1].value);
     //document.all.delivery.value
@@ -308,7 +308,7 @@ function count_nal() {
         tmp_x = tmp_x + 1
       }
       var kolvo //количество бандеролей
-      kolvo = 1
+      колво = 1
       var tmp_weight = 0
 
       if (true) {
@@ -786,7 +786,7 @@ function getOrder() {
 
       resortGoods()
       document.getElementById('deliver').style.display = 'block'
-      //document.getElementById("deliver").style="display:block";
+      //document.getElementById('deliver').style="display:block";
     } else {
       //window.alert("Кука пустая!");
     }
@@ -1131,7 +1131,7 @@ cookieDate = addDays(cookieDate, 100)
 ;(function () {
   function redirectToHelp(e) {
     if (e && e.preventDefault) e.preventDefault()
-    window.location = '/legacy/help.html'
+    window.location = '/help.html'
     return false
   }
   function setup() {
