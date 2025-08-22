@@ -10,7 +10,7 @@ module.exports = {
       instances: 1,
       env: {
         NODE_ENV: 'production',
-        PORT: '3010',
+        PORT: '3011',
       },
       log_date_format: 'YYYY-MM-DD HH:mm:ss',
     },
@@ -24,7 +24,7 @@ module.exports = {
       watch: false,
       env: {
         NODE_ENV: 'production',
-        PREFETCH_BASE: 'http://localhost:3010',
+        PREFETCH_BASE: 'http://localhost:3011',
       },
     },
   ],
@@ -36,7 +36,7 @@ module.exports = {
       repo: 'git@github.com:RaufERK/longfellow.git',
       path: '/var/www/longfellow',
       'post-deploy':
-        'export NVM_DIR=$HOME/.nvm && [ -s $NVM_DIR/nvm.sh ] && . $NVM_DIR/nvm.sh && npm ci && npx prisma generate && npx prisma migrate deploy && npm run build && pm2 reload ecosystem.config.cjs --only longfellow',
+        'export NVM_DIR=$HOME/.nvm && [ -s $NVM_DIR/nvm.sh ] && . $NVM_DIR/nvm.sh && mkdir -p ../shared && ln -sf /var/www/longfellow/shared/.env ./.env && npm ci && npx prisma generate && npx prisma migrate deploy && npm run build && pm2 reload ecosystem.config.cjs --only longfellow',
       ssh_options: 'StrictHostKeyChecking=no',
     },
   },

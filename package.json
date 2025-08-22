@@ -10,7 +10,8 @@
     "db:seed": "prisma db seed",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "pm2 deploy ecosystem.config.cjs production"
   },
   "dependencies": {
     "@prisma/client": "^6.14.0",
