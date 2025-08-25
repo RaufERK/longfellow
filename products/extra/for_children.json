@@ -1,0 +1,54 @@
+[
+  {
+    "id": "book_172",
+    "legacyId": 172,
+    "title": "АНГЕЛЫ",
+    "author": null,
+    "shortDescription": "Наши небесные друзья Раскраска для детей Вам предлагается уникальный товар на российском рынке - книжка-раскраска об Ангелах. Она содержит изображение и краткое описание Ангелов, служащих людям в разн...",
+    "longDescription": "Наши небесные друзья Раскраска для детей Вам предлагается уникальный товар на российском рынке - книжка-раскраска об Ангелах. Она содержит изображение и краткое описание Ангелов, служащих людям в разных сферах жизни. Раскрашивая их, дети могут познакомиться с этими небесными друзьями и подружиться с ними. Раскраска будет интересна как детям дошкольного, так и младшего школьного возраста. 170/250мм. 16 страниц.",
+    "price": 105,
+    "wholesalePrice1": null,
+    "wholesalePrice2": null,
+    "weight": null,
+    "sku": null,
+    "inStock": true,
+    "dimensions": null,
+    "pages": null,
+    "publisher": null,
+    "isbn": null,
+    "publishYear": null,
+    "images": {
+      "thumbnail": "/images/products/book/thumbnails/172.webp",
+      "large": null
+    },
+    "category": "book",
+    "subcategory": "for_children",
+    "originalImagePath": "/shopimg/172s.jpg"
+  },
+  {
+    "id": "book_318",
+    "legacyId": 318,
+    "title": "ПОЛЕТЫ С РОЗОВОЙ ФЕЕЙ",
+    "author": null,
+    "shortDescription": "Казарова Н.Лучшая книга для детей, излагающая Высшие Духовные Истины Обложка. 120/165 мм. 104 с. Бумага офсетная.",
+    "longDescription": "Казарова Н.Лучшая книга для детей, излагающая Высшие Духовные Истины Обложка. 120/165 мм. 104 с. Бумага офсетная.",
+    "price": 156,
+    "wholesalePrice1": null,
+    "wholesalePrice2": null,
+    "weight": null,
+    "sku": null,
+    "inStock": true,
+    "dimensions": null,
+    "pages": null,
+    "publisher": null,
+    "isbn": null,
+    "publishYear": null,
+    "images": {
+      "thumbnail": "/images/products/book/thumbnails/318.webp",
+      "large": null
+    },
+    "category": "book",
+    "subcategory": "for_children",
+    "originalImagePath": "/shopimg/318s.jpg"
+  }
+]
