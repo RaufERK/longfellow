@@ -8,6 +8,7 @@
     "fetch:legacy": "tsx scripts/fetch-legacy.ts",
     "parse:products": "tsx scripts/parse-products.ts",
     "parse:products:fixed": "tsx scripts/parse-products-fixed.ts",
+    "seed:products": "tsx scripts/seed-products.ts",
     "seed": "tsx scripts/seed.ts",
     "db:seed": "prisma db seed",
     "build": "next build",

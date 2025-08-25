@@ -12,24 +12,43 @@ datasource db {
 }
 
 model Category {
-  id        Int      @id @default(autoincrement())
-  slug      String   @unique
+  id        Int       @id @default(autoincrement())
+  slug      String    @unique
   title     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  books     Book[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  products  Product[]
 }
 
-model Book {
-  id          Int      @id @default(autoincrement())
-  legacyId    Int?     @unique
-  title       String
-  description String?
-  priceRub    Int?
-  coverUrl    String?
-  htmlPath    String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  categoryId  Int?
-  category    Category? @relation(fields: [categoryId], references: [id])
+model Product {
+  id              String    @id @default(cuid())
+  legacyId        Int?      @unique
+  title           String
+  author          String?
+  shortDescription String?
+  longDescription String?
+  price           Int?
+  wholesalePrice1 Int?
+  wholesalePrice2 Int?
+  weight          Int?
+  sku             String?
+  inStock         Boolean   @default(true)
+  dimensions      String?
+  pages           Int?
+  publisher       String?
+  isbn            String?
+  publishYear     Int?
+  thumbnailUrl    String?
+  largeImageUrl   String?
+  category        String
+  subcategory     String?
+  originalImagePath String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  categoryId      Int?
+  categoryRef     Category? @relation(fields: [categoryId], references: [id])
+
+  @@index([category])
+  @@index([subcategory])
+  @@index([legacyId])
 }
