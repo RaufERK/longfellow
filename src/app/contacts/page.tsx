@@ -1,10 +1,20 @@
+import PageHeader from '@/components/PageHeader'
+
 export default function Contacts() {
   return (
-    <iframe
-      src='/legacy/contacts.html'
-      className='w-full h-dvh border-0'
-      title='Legacy Contacts'
-    />
+    <div>
+      <PageHeader titleImage='h_kontakts.gif' titleAlt='Контакты' />
+      <div className='container mx-auto px-4 py-8'>
+        <p className='text-center text-gray-600'>
+          Контактная информация.{' '}
+          <a
+            href='/legacy/contacts.html'
+            className='text-blue-600 hover:text-blue-800 underline'
+          >
+            Старая версия страницы
+          </a>
+        </p>
+      </div>
+    </div>
   )
 }
-

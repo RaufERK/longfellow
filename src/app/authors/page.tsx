@@ -1,10 +1,20 @@
+import PageHeader from '@/components/PageHeader'
+
 export default function Authors() {
   return (
-    <iframe
-      src='/legacy/authors.html'
-      className='w-full h-dvh border-0'
-      title='Legacy Authors'
-    />
+    <div>
+      <PageHeader titleImage='h_autors.gif' titleAlt='Авторы' />
+      <div className='container mx-auto px-4 py-8'>
+        <p className='text-center text-gray-600'>
+          Информация об авторах.{' '}
+          <a
+            href='/legacy/authors.html'
+            className='text-blue-600 hover:text-blue-800 underline'
+          >
+            Старая версия страницы
+          </a>
+        </p>
+      </div>
+    </div>
   )
 }
-
