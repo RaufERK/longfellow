@@ -10,7 +10,7 @@ export default function Navigation() {
           </Link>
           <div className='flex space-x-8'>
             <Link
-              href='/books'
+              href='/'
               className='text-gray-600 hover:text-gray-900 transition-colors'
             >
               Книги
@@ -20,6 +20,12 @@ export default function Navigation() {
               className='text-gray-600 hover:text-gray-900 transition-colors'
             >
               Буклеты
+            </Link>
+            <Link
+              href='/more'
+              className='text-gray-600 hover:text-gray-900 transition-colors'
+            >
+              Ещё книги
             </Link>
             <Link
               href='/films'
@@ -40,16 +46,22 @@ export default function Navigation() {
               Календарики
             </Link>
             <Link
-              href='/shedevry?cat_id=12'
+              href='/presentations'
               className='text-gray-600 hover:text-gray-900 transition-colors'
             >
-              Изобилие
+              Презентации
             </Link>
             <Link
-              href='/shedevry?cat_id=9'
+              href='/authors'
               className='text-gray-600 hover:text-gray-900 transition-colors'
             >
-              Индуизм
+              Авторы
+            </Link>
+            <Link
+              href='/contacts'
+              className='text-gray-600 hover:text-gray-900 transition-colors'
+            >
+              Контакты
             </Link>
           </div>
         </div>
