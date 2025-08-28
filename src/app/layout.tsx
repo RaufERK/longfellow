@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import Navigation from '@/components/Navigation'
+import SideNavigation from '@/components/SideNavigation'
+import MobileNavigation from '@/components/MobileNavigation'
 
 export const metadata: Metadata = {
   title: 'Издательство Лонгфелло',
@@ -14,9 +15,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='ru'>
-      <body className='antialiased min-h-dvh bg-background text-foreground'>
-        <Navigation />
-        {children}
+      <body
+        className='antialiased min-h-dvh text-foreground'
+        style={{ backgroundColor: '#ccffcc' }}
+      >
+        <SideNavigation />
+        <MobileNavigation />
+
+        {/* Основной контент сдвинут вправо на десктопе */}
+        <div className='lg:ml-[167px] min-h-screen bg-white lg:shadow-lg'>
+          {children}
+        </div>
       </body>
     </html>
   )
