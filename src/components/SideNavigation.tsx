@@ -112,14 +112,7 @@ export default function SideNavigation() {
 
       {/* Декоративный элемент справа от меню */}
       <div className='absolute top-0 right-[-42px] z-10'>
-        <Image
-          src='/legacy/img2/cp_bn_right_1.gif'
-          alt=''
-          width={34}
-          height={179}
-          className='block'
-          style={{ imageRendering: 'pixelated' }}
-        />
+        <div className='h-[179px] w-[34px]'></div>
         <Image
           src='/legacy/img2/menu_10.gif'
           alt=''
