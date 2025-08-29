@@ -7,43 +7,43 @@ export default function PageHeader({ titleImage, titleAlt }: PageHeaderProps) {
   return (
     <div className='w-full'>
       {/* Основная зелёная секция с заголовком */}
-      <div className='bg-green-600 w-full h-[50px] flex items-center justify-center relative'>
-        <div className='text-center'>
+      <div className='bg-[#008000] w-full h-[90px] flex items-center justify-center relative'>
+        <div className='flex flex-col items-center'>
           {/* Основной логотип "Учения Вознесенных Владык" */}
           <img
+            id='title'
             src='/legacy/img2/mp_teaching.gif'
             width={342}
             height={45}
             alt='Учения Вознесенных Владык'
-            className='block mb-1'
             style={{ imageRendering: 'pixelated' }}
           />
           {/* Заголовок страницы */}
           <img
+            id='title-image'
             src={`/legacy/img2/${titleImage}`}
             alt={titleAlt}
-            className='block'
             style={{ imageRendering: 'pixelated' }}
           />
         </div>
       </div>
 
       {/* Декоративная нижняя секция */}
-      <div className='flex w-full h-[10px]'>
+      <div className='flex w-full'>
         {/* Левый угол */}
-        <div className='w-[9px] flex-shrink-0'>
+        <div className='w-[9px] h-[50px]'>
+          <div className='bg-[#008000] w-[9px] h-[40px]' />
           <img
             src='/legacy/img2/mp_h_corner.gif'
             width={9}
-            height={10}
+            height={50}
             alt=''
-            className='block'
             style={{ imageRendering: 'pixelated' }}
           />
         </div>
         {/* Растягивающийся фон */}
         <div
-          className='flex-1 h-[10px]'
+          className='flex-1 h-[50px]'
           style={{
             backgroundImage: 'url(/legacy/img2/mp_h_bg.gif)',
             backgroundRepeat: 'repeat-x',

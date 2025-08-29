@@ -15,7 +15,7 @@ export default async function CalendarsPage() {
 
   return (
     <div>
-      <PageHeader titleImage='h_calendars.gif' titleAlt='Календарики' />
+      <PageHeader titleImage='h_calendars.png' titleAlt='Календарики' />
       <div className='container mx-auto px-4 py-8'>
         <div className='flex justify-end mb-8'>
           <a
