@@ -4,7 +4,7 @@ export default function PresentationsPage() {
   return (
     <div>
       <PageHeader titleImage='h_present.gif' titleAlt='Презентации' />
-      <div className='container mx-auto px-4 py-8'>
+      <div className='container mx-auto px-4 py-8 bg-[#ccffcc]'>
         <div className='max-w-4xl mx-auto'>
           <div className='bg-white rounded-lg shadow-lg p-8'>
             <div className='mb-8'>

@@ -24,7 +24,7 @@ export default function RootLayout({
 
         {/* Основной контент сдвинут вправо на десктопе */}
         <div
-          className='lg:ml-[167px] min-h-screen bg-white lg:shadow-lg'
+          className='lg:ml-[167px] min-h-screen bg-white lg:shadow-lg bg-[#ccffcc]'
           id='top'
         >
           {children}

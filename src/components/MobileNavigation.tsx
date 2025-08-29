@@ -14,7 +14,7 @@ const menuItems = [
 
 export default function MobileNavigation() {
   return (
-    <div className='lg:hidden bg-white shadow-sm border-b sticky top-0 z-50'>
+    <div className='lg:hidden bg-white shadow-sm border-b sticky top-0 z-50 bg-[#ccffcc]'>
       <div className='px-4 py-2'>
         <Link href='/' className='text-lg font-bold text-gray-800 block mb-2'>
           Издательство Лонгфелло

@@ -58,7 +58,7 @@ export default async function MorePage() {
   return (
     <div>
       <PageHeader titleImage='h_dennion.gif' titleAlt='Другие издания' />
-      <div className='container mx-auto px-4 py-8'>
+      <div className='container mx-auto px-4 py-8 bg-[#ccffcc]'>
         {categoriesWithItems.map((category) => (
           <div key={category.id} className='mb-16'>
             <h2 className='text-3xl font-bold mb-8 text-gray-800 border-b-2 border-gray-200 pb-4'>

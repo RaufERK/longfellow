@@ -16,7 +16,7 @@ export default async function BukletsPage() {
   return (
     <div>
       <PageHeader titleImage='h_booklets.gif' titleAlt='Буклеты' />
-      <div className='container mx-auto px-4 py-8'>
+      <div className='container mx-auto px-4 py-8 bg-[#ccffcc]'>
         <div className='flex justify-end mb-8'>
           <a
             href='/legacy/buklets'

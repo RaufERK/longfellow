@@ -4,7 +4,7 @@ export default function Contacts() {
   return (
     <div>
       <PageHeader titleImage='h_kontakts.gif' titleAlt='Контакты' />
-      <div className='container mx-auto px-4 py-8'>
+      <div className='container mx-auto px-4 py-8 bg-[#ccffcc]'>
         <p className='text-center text-gray-600'>
           Контактная информация.{' '}
           <a

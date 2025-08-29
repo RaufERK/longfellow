@@ -16,7 +16,7 @@ export default async function CalendarsPage() {
   return (
     <div>
       <PageHeader titleImage='h_calendars.png' titleAlt='Календарики' />
-      <div className='container mx-auto px-4 py-8'>
+      <div className='container mx-auto px-4 py-8 bg-[#ccffcc]'>
         <div className='flex justify-end mb-8'>
           <a
             href='/legacy/calendars'
