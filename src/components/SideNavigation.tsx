@@ -4,10 +4,10 @@ import menuItems from './navigation'
 
 export default function SideNavigation() {
   return (
-    <div className='hidden lg:block fixed left-0 top-0 h-full w-[125px] z-40 bg-red-500'>
+    <div className='hidden lg:block fixed left-0 top-0 h-full w-[125px] z-40'>
       {/* Фоновый узор */}
       <div
-        className='absolute inset-0 w-full h-full bg-red-500'
+        className='absolute inset-0 w-full h-full'
         style={{
           backgroundImage: 'url(/legacy/img2/cp_uzor.gif)',
           backgroundRepeat: 'repeat',
@@ -15,7 +15,7 @@ export default function SideNavigation() {
       />
 
       {/* Меню */}
-      <nav className='relative z-10 bg-red-500'>
+      <nav className='relative z-10'>
         <table className='border-collapse'>
           <tbody>
             {menuItems.map((item, index) => (
@@ -39,7 +39,7 @@ export default function SideNavigation() {
       </nav>
 
       {/* Декоративный элемент справа от меню */}
-      <div className='absolute top-0 right-[-42px] z-10 bg-red-500'>
+      <div className='absolute top-0 right-[-42px] z-10'>
         <div className='h-[179px] w-[42px] bg-[#ccffcc]' />
         <Image
           src='/legacy/img2/menu_10.gif'
