@@ -2,7 +2,9 @@ import Image from 'next/image'
 
 export default function Footer() {
   return (
-    <footer className='w-full flex flex-col items-center'>
+    <footer
+      className='w-full flex flex-col items-center bg-[#ccffcc]'
+    >
       {/* Спейсер */}
       <div className='h-[30px]' />
 
