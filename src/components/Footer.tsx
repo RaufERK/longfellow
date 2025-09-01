@@ -39,7 +39,7 @@ export default function Footer() {
       <div className='h-[30px]' />
 
       {/* Нижняя часть с угловым элементом и фоном */}
-      <div className='w-full flex'>
+      <div className='w-full flex bg-[#008000]'>
         <div className='w-[10px] bg-[#008000]'>
           <Image
             src='/legacy/img2/mp_d_corner.gif'
