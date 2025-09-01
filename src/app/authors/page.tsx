@@ -4,7 +4,8 @@ export const dynamic = 'force-dynamic'
 
 export default function Authors() {
   return (
-    <div>
+    <div className='bg-[#ccffcc]'>
+
       <PageHeader titleImage='h_autors.gif' titleAlt='Авторы' />
       <div className='container mx-auto px-4 py-8'>
         <p className='text-center text-gray-600'>

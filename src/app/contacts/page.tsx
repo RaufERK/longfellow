@@ -4,7 +4,7 @@ export const dynamic = 'force-dynamic'
 
 export default function Contacts() {
   return (
-    <div>
+    <div className='bg-[#ccffcc]'>
       <PageHeader titleImage='h_kontakts.gif' titleAlt='Контакты' />
       <div className='container mx-auto px-4 py-8 bg-[#ccffcc]'>
         <p className='text-center text-gray-600'>

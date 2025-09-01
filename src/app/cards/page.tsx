@@ -15,18 +15,9 @@ export default async function CardsPage() {
   })
 
   return (
-    <div>
+    <div className='bg-[#ccffcc]'>
       <PageHeader titleImage='h_faces.gif' titleAlt='Открытки' />
       <div className='container mx-auto px-4 py-8 bg-[#ccffcc]'>
-        <div className='flex justify-end mb-8'>
-          <a
-            href='/legacy/cards'
-            className='text-blue-600 hover:text-blue-800 underline text-sm'
-          >
-            Старая версия страницы
-          </a>
-        </div>
-
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
           {cards.map((card) => (
             <CompactCard key={card.id} product={card} variant='cards' />

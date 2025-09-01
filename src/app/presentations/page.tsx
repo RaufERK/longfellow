@@ -4,7 +4,7 @@ export const dynamic = 'force-dynamic'
 
 export default function PresentationsPage() {
   return (
-    <div>
+    <div className='bg-[#ccffcc]'>
       <PageHeader titleImage='h_present.gif' titleAlt='Презентации' />
       <div className='container mx-auto px-4 py-8 bg-[#ccffcc]'>
         <div className='max-w-4xl mx-auto'>

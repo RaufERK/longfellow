@@ -15,18 +15,9 @@ export default async function CalendarsPage() {
   })
 
   return (
-    <div>
+    <div className='bg-[#ccffcc]'>
       <PageHeader titleImage='h_calendars.png' titleAlt='Календарики' />
       <div className='container mx-auto px-4 py-8 bg-[#ccffcc]'>
-        <div className='flex justify-end mb-8'>
-          <a
-            href='/legacy/calendars'
-            className='text-blue-600 hover:text-blue-800 underline text-sm'
-          >
-            Старая версия страницы
-          </a>
-        </div>
-
         <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6'>
           {calendars.map((calendar) => (
             <CompactCard
