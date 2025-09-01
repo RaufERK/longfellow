@@ -2,6 +2,8 @@ import { prisma } from '@/lib/prisma'
 import BookCard from '@/components/BookCard'
 import PageHeader from '@/components/PageHeader'
 
+export const dynamic = 'force-dynamic'
+
 const categories = [
   {
     id: '12',
@@ -55,12 +57,12 @@ export default async function MorePage() {
   const categoriesWithItems = await Promise.all(categoryPromises)
 
   return (
-    <div>
+    <div className='bg-[#ccffcc]'>
       <PageHeader titleImage='h_dennion.gif' titleAlt='Другие издания' />
       <div className='container mx-auto px-4 py-8 bg-[#ccffcc]'>
         {categoriesWithItems.map((category) => (
           <div key={category.id} className='mb-16'>
-            <h2 className='text-3xl font-bold mb-8 text-gray-800 border-b-2 border-gray-200 pb-4'>
+            <h2 className='text-3xl font-bold mb-8 text-gray-800'>
               {category.title}
             </h2>
 

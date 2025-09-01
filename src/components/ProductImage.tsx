@@ -8,6 +8,9 @@ interface ProductImageProps {
   alt: string
   className?: string
   sizes?: string
+  width?: number
+  height?: number
+  useNativeSize?: boolean
 }
 
 export default function ProductImage({
@@ -15,6 +18,9 @@ export default function ProductImage({
   alt,
   className = '',
   sizes,
+  width,
+  height,
+  useNativeSize = false,
 }: ProductImageProps) {
   const [isError, setIsError] = useState(false)
 
@@ -37,6 +43,20 @@ export default function ProductImage({
           />
         </svg>
       </div>
+    )
+  }
+
+  if (useNativeSize && width && height) {
+    return (
+      <Image
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        className={`object-contain ${className}`}
+        sizes={sizes}
+        onError={() => setIsError(true)}
+      />
     )
   }
 

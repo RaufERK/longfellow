@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 interface PageHeaderProps {
   titleImage: string
   titleAlt: string
@@ -10,7 +12,7 @@ export default function PageHeader({ titleImage, titleAlt }: PageHeaderProps) {
       <div className='bg-[#008000] w-full h-[90px] flex items-center justify-center relative'>
         <div className='flex flex-col items-center'>
           {/* Основной логотип "Учения Вознесенных Владык" */}
-          <img
+          <Image
             id='title'
             src='/legacy/img2/mp_teaching.gif'
             width={342}
@@ -19,9 +21,11 @@ export default function PageHeader({ titleImage, titleAlt }: PageHeaderProps) {
             style={{ imageRendering: 'pixelated' }}
           />
           {/* Заголовок страницы */}
-          <img
+          <Image
             id='title-image'
             src={`/legacy/img2/${titleImage}`}
+            width={200}
+            height={30}
             alt={titleAlt}
             style={{ imageRendering: 'pixelated' }}
           />
@@ -33,7 +37,7 @@ export default function PageHeader({ titleImage, titleAlt }: PageHeaderProps) {
         {/* Левый угол */}
         <div className='w-[9px] h-[50px]'>
           <div className='bg-[#008000] w-[9px] h-[40px]' />
-          <img
+          <Image
             src='/legacy/img2/mp_h_corner.gif'
             width={9}
             height={50}

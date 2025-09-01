@@ -2,6 +2,8 @@ import { prisma } from '@/lib/prisma'
 import BookCard from '@/components/BookCard'
 import PageHeader from '@/components/PageHeader'
 
+export const dynamic = 'force-dynamic'
+
 export default async function BukletsPage() {
   const buklets = await prisma.product.findMany({
     where: {
@@ -13,7 +15,7 @@ export default async function BukletsPage() {
   })
 
   return (
-    <div>
+    <div className='bg-[#ccffcc]'>
       <PageHeader titleImage='h_booklets.gif' titleAlt='Буклеты' />
       <div className='container mx-auto px-4 py-8 bg-[#ccffcc]'>
         <div className='flex justify-end mb-8'>

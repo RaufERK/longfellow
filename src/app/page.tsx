@@ -2,6 +2,8 @@ import { prisma } from '@/lib/prisma'
 import BookCard from '@/components/BookCard'
 import PageHeader from '@/components/PageHeader'
 
+export const dynamic = 'force-dynamic'
+
 export default async function HomePage() {
   const books = await prisma.product.findMany({
     where: {

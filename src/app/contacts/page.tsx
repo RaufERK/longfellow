@@ -1,5 +1,7 @@
 import PageHeader from '@/components/PageHeader'
 
+export const dynamic = 'force-dynamic'
+
 export default function Contacts() {
   return (
     <div>

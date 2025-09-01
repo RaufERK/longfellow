@@ -2,6 +2,8 @@ import { prisma } from '@/lib/prisma'
 import CompactCard from '@/components/CompactCard'
 import PageHeader from '@/components/PageHeader'
 
+export const dynamic = 'force-dynamic'
+
 export default async function CalendarsPage() {
   const calendars = await prisma.product.findMany({
     where: {

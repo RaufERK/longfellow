@@ -2,12 +2,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import ProductImage from '@/components/ProductImage'
 
 type Product = {
-  id: number
+  id: string
   title: string
   author?: string | null
   thumbnailUrl?: string | null
   shortDescription?: string | null
-  price?: string | null
+  price?: number | null
   dimensions?: string | null
   pages?: number | null
   publisher?: string | null
@@ -19,9 +19,7 @@ type BookCardProps = {
   product: Product
 }
 
-export default function BookCard({
-  product
-}: BookCardProps) {
+export default function BookCard({ product }: BookCardProps) {
   return (
     <Card
       id='commonCard'
@@ -29,11 +27,13 @@ export default function BookCard({
     >
       <CardHeader className='p-4'>
         {product.thumbnailUrl && (
-          <div className='relative h-64 mb-4'>
+          <div className='flex justify-center mb-4'>
             <ProductImage
               src={product.thumbnailUrl}
               alt={product.title}
-              sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+              width={100}
+              height={150}
+              useNativeSize={true}
             />
           </div>
         )}
