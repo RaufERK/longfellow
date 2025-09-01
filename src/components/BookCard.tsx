@@ -37,7 +37,7 @@ export default function BookCard({ product }: BookCardProps) {
             />
           </div>
         )}
-        <CardTitle className='text-lg font-semibold line-clamp-2'>
+        <CardTitle className='text-lg font-semibold line-clamp-2 text-center'>
           {product.title}
         </CardTitle>
         {product.author && (
@@ -46,12 +46,12 @@ export default function BookCard({ product }: BookCardProps) {
       </CardHeader>
       <CardContent className='p-4 pt-0'>
         {product.shortDescription && (
-          <div className='text-sm text-gray-600 line-clamp-3 mb-4'>
+          <div className='text-base text-gray-900 line-clamp-3 mb-4'>
             {product.shortDescription}
           </div>
         )}
 
-        <div className='text-xs text-gray-500 mb-4 space-y-1'>
+        <div className='text-base text-gray-500 mb-4 space-y-1'>
           {product.dimensions && <div>Размер: {product.dimensions}</div>}
           {product.pages && <div>Страниц: {product.pages}</div>}
           {product.publisher && <div>Издательство: {product.publisher}</div>}

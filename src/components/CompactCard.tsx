@@ -33,13 +33,13 @@ export default function CompactCard({ product, variant }: CompactCardProps) {
             />
           </div>
         )}
-        <CardTitle className='font-semibold line-clamp-2'>
+        <CardTitle className='font-semibold line-clamp-2 text-center'>
           {product.title}
         </CardTitle>
       </CardHeader>
       <CardContent className='p-4 pt-0'>
         {product.shortDescription && (
-          <div className='text-sm text-gray-600 line-clamp-2 mb-3'>
+          <div className='text-base text-gray-600 line-clamp-2 mb-3'>
             {product.shortDescription}
           </div>
         )}

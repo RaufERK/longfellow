@@ -21,7 +21,7 @@ export default async function FilmsPage() {
         <div className='flex justify-end mb-8'>
           <a
             href='/legacy/films'
-            className='text-blue-600 hover:text-blue-800 underline text-sm'
+            className='text-green-600 hover:text-green-800 underline text-sm'
           >
             Старая версия страницы
           </a>

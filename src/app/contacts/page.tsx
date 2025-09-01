@@ -55,8 +55,8 @@ export default function Contacts() {
                 </p>
               </div>
 
-              <div className='bg-blue-50 border-l-4 border-blue-400 p-6 mb-6'>
-                <h3 className='text-lg font-semibold text-blue-800 mb-4'>
+              <div className='bg-yellow-50 border-l-4 border-yellow-400 p-6 mb-6'>
+                <h3 className='text-lg font-semibold text-yellow-800 mb-4'>
                   🏛️ Юридические реквизиты
                 </h3>
                 <div className='space-y-1 text-gray-700'>
@@ -89,7 +89,7 @@ export default function Contacts() {
                       href='https://www.chitai-gorod.ru'
                       target='_blank'
                       rel='noopener noreferrer'
-                      className='text-blue-600 hover:text-blue-800 underline'
+                      className='text-green-600 hover:text-green-800 underline'
                     >
                       Сеть книжных магазинов «Читай Город» и «Новый книжный»
                     </a>
@@ -99,7 +99,7 @@ export default function Contacts() {
                       href='https://www.bookmg.ru'
                       target='_blank'
                       rel='noopener noreferrer'
-                      className='text-blue-600 hover:text-blue-800 underline'
+                      className='text-green-600 hover:text-green-800 underline'
                     >
                       «Молодая гвардия»
                     </a>
@@ -109,7 +109,7 @@ export default function Contacts() {
                       href='https://white-clouds.ru'
                       target='_blank'
                       rel='noopener noreferrer'
-                      className='text-blue-600 hover:text-blue-800 underline'
+                      className='text-green-600 hover:text-green-800 underline'
                     >
                       «Белые облака»
                     </a>
@@ -119,7 +119,7 @@ export default function Contacts() {
                       href='https://www.bookvoed.ru'
                       target='_blank'
                       rel='noopener noreferrer'
-                      className='text-blue-600 hover:text-blue-800 underline'
+                      className='text-green-600 hover:text-green-800 underline'
                     >
                       «Буквоед»
                     </a>
@@ -133,7 +133,7 @@ export default function Contacts() {
                     href='https://www.amasters.ru'
                     target='_blank'
                     rel='noopener noreferrer'
-                    className='text-blue-600 hover:text-blue-800 underline'
+                    className='text-green-600 hover:text-green-800 underline'
                   >
                     www.amasters.ru
                   </a>
