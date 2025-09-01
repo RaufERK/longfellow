@@ -1,6 +1,5 @@
 import { prisma } from '@/lib/prisma'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import ProductImage from '@/components/ProductImage'
+import CompactCard from '@/components/CompactCard'
 import PageHeader from '@/components/PageHeader'
 
 export default async function CalendarsPage() {
@@ -28,49 +27,11 @@ export default async function CalendarsPage() {
 
         <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6'>
           {calendars.map((calendar) => (
-            <Card
+            <CompactCard
               key={calendar.id}
-              className='overflow-hidden hover:shadow-lg transition-shadow'
-            >
-              <CardHeader className='p-4'>
-                {calendar.thumbnailUrl && (
-                  <div className='relative h-40 mb-4'>
-                    <ProductImage
-                      src={calendar.thumbnailUrl}
-                      alt={calendar.title}
-                      sizes='(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw'
-                    />
-                  </div>
-                )}
-                <CardTitle className='text-sm font-semibold line-clamp-2'>
-                  {calendar.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className='p-4 pt-0'>
-                {calendar.shortDescription && (
-                  <div className='text-xs text-gray-600 line-clamp-2 mb-3'>
-                    {calendar.shortDescription}
-                  </div>
-                )}
-
-                {calendar.dimensions && (
-                  <div className='text-xs text-gray-500 mb-2'>
-                    {calendar.dimensions}
-                  </div>
-                )}
-
-                {calendar.price && (
-                  <div className='flex justify-between items-center'>
-                    <span className='text-lg font-bold text-green-600'>
-                      {calendar.price} ₽
-                    </span>
-                    <button className='bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm transition-colors'>
-                      В корзину
-                    </button>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+              product={calendar}
+              variant='calendars'
+            />
           ))}
         </div>
 
