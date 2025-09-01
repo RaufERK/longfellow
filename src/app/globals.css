@@ -6,8 +6,6 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -118,6 +116,39 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: Georgia, Times, serif;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  div,
+  span,
+  a,
+  button,
+  input,
+  textarea {
+    font-family: Georgia, Times, serif;
+  }
+
+  h1 {
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  h2 {
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  h3 {
+    font-size: 16px;
+    font-weight: bold;
   }
 }
 

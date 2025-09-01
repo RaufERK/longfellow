@@ -16,9 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='ru'>
-      <body
-        className='antialiased min-h-dvh text-foreground bg-[#ccffcc]'
-      >
+      <body className='antialiased min-h-dvh text-foreground bg-[#ccffcc]'>
         <SideNavigation />
         <MobileNavigation />
 

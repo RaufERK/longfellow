@@ -33,19 +33,19 @@ export default function CompactCard({ product, variant }: CompactCardProps) {
             />
           </div>
         )}
-        <CardTitle className='text-sm font-semibold line-clamp-2'>
+        <CardTitle className='font-semibold line-clamp-2'>
           {product.title}
         </CardTitle>
       </CardHeader>
       <CardContent className='p-4 pt-0'>
         {product.shortDescription && (
-          <div className='text-xs text-gray-600 line-clamp-2 mb-3'>
+          <div className='text-sm text-gray-600 line-clamp-2 mb-3'>
             {product.shortDescription}
           </div>
         )}
 
         {variant === 'calendars' && product.dimensions && (
-          <div className='text-xs text-gray-500 mb-2'>{product.dimensions}</div>
+          <div className='text-sm text-gray-500 mb-2'>{product.dimensions}</div>
         )}
 
         {product.price && (
@@ -53,7 +53,7 @@ export default function CompactCard({ product, variant }: CompactCardProps) {
             <span className='text-lg font-bold text-green-600'>
               {product.price} ₽
             </span>
-            <button className='bg-yellow-400 hover:bg-orange-400 text-black px-3 py-1 rounded text-sm transition-colors font-medium'>
+            <button className='bg-yellow-400 hover:bg-orange-400 text-black px-3 py-1 rounded transition-colors font-medium'>
               В корзину
             </button>
           </div>
