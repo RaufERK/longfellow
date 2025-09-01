@@ -7,6 +7,11 @@ import Footer from '@/components/Footer'
 export const metadata: Metadata = {
   title: 'Издательство Лонгфелло',
   description: 'Зеркало legacy-сайта longfellow.ru и новая платформа',
+  icons: {
+    icon: '/long.png',
+    shortcut: '/long.png',
+    apple: '/long.png',
+  },
 }
 
 export default function RootLayout({
