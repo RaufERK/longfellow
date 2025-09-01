@@ -62,7 +62,7 @@ export default async function MorePage() {
       <div className='container mx-auto px-4 py-8 bg-[#ccffcc]'>
         {categoriesWithItems.map((category) => (
           <div key={category.id} className='mb-16'>
-            <h2 className='text-3xl font-bold mb-8 text-gray-800'>
+            <h2 className='text-3xl font-bold mb-8 text-green-800'>
               {category.title}
             </h2>
 

@@ -10,7 +10,7 @@ export default function PresentationsPage() {
         <div className='max-w-4xl mx-auto'>
           <div className='bg-white rounded-lg shadow-lg p-8'>
             <div className='mb-8'>
-              <h2 className='text-2xl font-semibold mb-4 text-blue-600'>
+              <h2 className='text-2xl font-semibold mb-4 text-gray-600'>
                 Семь лучей космоса
               </h2>
 
@@ -19,7 +19,7 @@ export default function PresentationsPage() {
                   <strong>Во вторник, 11 февраля в 20:00</strong> в магазине{' '}
                   <a
                     href='https://white-clouds.ru/contacts/'
-                    className='text-blue-600 hover:text-blue-800 underline'
+                    className='text-orange-600 hover:text-orange-800 underline'
                     target='_blank'
                     rel='noopener noreferrer'
                   >
@@ -86,8 +86,8 @@ export default function PresentationsPage() {
                   Божественный План.
                 </p>
 
-                <div className='bg-blue-50 border border-blue-200 rounded-lg p-6 text-center'>
-                  <p className='text-lg font-semibold text-blue-800 mb-2'>
+                <div className='bg-orange-50 border border-orange-200 rounded-lg p-6 text-center'>
+                  <p className='text-lg font-semibold text-orange-800 mb-2'>
                     Приходите и меняйте свою жизнь к лучшему с учениями
                     Вознесенных Владык!
                   </p>
@@ -98,7 +98,7 @@ export default function PresentationsPage() {
                       в магазине{' '}
                       <a
                         href='https://white-clouds.ru/contacts/'
-                        className='text-blue-600 hover:text-blue-800 underline'
+                        className='text-orange-600 hover:text-orange-800 underline'
                         target='_blank'
                         rel='noopener noreferrer'
                       >
@@ -120,7 +120,7 @@ export default function PresentationsPage() {
                 нам{' '}
                 <a
                   href='mailto:kniga@longfellow.ru'
-                  className='text-blue-600 hover:text-blue-800 underline'
+                  className='text-orange-600 hover:text-orange-800 underline'
                 >
                   kniga@longfellow.ru
                 </a>
