@@ -56,9 +56,13 @@ export default function PageHeader({ titleImage, titleAlt }: PageHeaderProps) {
           <Image
             src='/legacy/img2/mp_h_corner.gif'
             width={9}
-            height={50}
+            height={10}
             alt=''
-            style={{ imageRendering: 'pixelated' }}
+            style={{
+              imageRendering: 'pixelated',
+              width: 'auto',
+              height: 'auto',
+            }}
           />
         </div>
         {/* Растягивающийся фон */}

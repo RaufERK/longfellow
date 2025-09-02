@@ -34,6 +34,7 @@ export default function BookCard({ product }: BookCardProps) {
               width={100}
               height={150}
               useNativeSize={true}
+              sizes='100px'
             />
           </div>
         )}

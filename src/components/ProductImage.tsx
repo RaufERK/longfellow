@@ -47,29 +47,20 @@ export default function ProductImage({
   }
 
   if (useNativeSize && width && height) {
-    const aspectRatio = width / height
     return (
       <div
-        className='flex justify-center items-center'
+        className='relative flex justify-center items-center'
         style={{
           width: `${width}px`,
           height: `${height}px`,
-          aspectRatio: aspectRatio.toString(),
         }}
       >
         <Image
           src={src}
           alt={alt}
-          width={width}
-          height={height}
-          className={`object-contain w-full h-full ${className}`}
-          sizes={sizes}
-          style={{
-            width: 'auto',
-            height: 'auto',
-            maxWidth: '100%',
-            maxHeight: '100%',
-          }}
+          fill
+          className={`object-contain ${className}`}
+          sizes={sizes || `${width}px`}
           onError={() => setIsError(true)}
         />
       </div>

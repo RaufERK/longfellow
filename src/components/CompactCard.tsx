@@ -30,6 +30,7 @@ export default function CompactCard({ product, variant }: CompactCardProps) {
               width={imageWidth}
               height={imageHeight}
               useNativeSize={true}
+              sizes={`${imageWidth}px`}
             />
           </div>
         )}
