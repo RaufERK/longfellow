@@ -170,9 +170,9 @@ export default function HelpPage() {
                   Возможны два способа доставки товаров:
                 </p>
 
-                <div className='bg-blue-50 border-l-4 border-blue-400 p-6 mb-4'>
+                <div className='bg-gray-50 border-l-4 border-gray-400 p-6 mb-4'>
                   <h4
-                    className='font-semibold text-blue-800 mb-3'
+                    className='font-semibold text-gray-800 mb-3'
                     style={{ fontSize: '20px' }}
                   >
                     🚗 Доставка курьером по Москве
