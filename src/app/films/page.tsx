@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma'
 import BookCard from '@/components/BookCard'
 import PageHeader from '@/components/PageHeader'
+import SearchCartBar from '@/components/SearchCartBar'
 
 export const dynamic = 'force-dynamic'
 
@@ -17,6 +18,7 @@ export default async function FilmsPage() {
   return (
     <div className='bg-[#ccffcc]'>
       <PageHeader titleImage='h_dennion.gif' titleAlt='Фильмы' />
+      <SearchCartBar placeholder='Поиск фильмов...' />
       <div className='container mx-auto px-4 py-8 bg-[#ccffcc]'>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
           {films.map((film) => (

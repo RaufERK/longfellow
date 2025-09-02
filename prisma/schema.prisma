@@ -47,8 +47,46 @@ model Product {
   updatedAt       DateTime  @updatedAt
   categoryId      Int?
   categoryRef     Category? @relation(fields: [categoryId], references: [id])
+  orderItems      OrderItem[]
 
   @@index([category])
   @@index([subcategory])
   @@index([legacyId])
+}
+
+model Order {
+  id             String      @id @default(cuid())
+  orderNumber    Int         @unique
+  customerName   String
+  customerEmail  String
+  customerPhone  String
+  customerPhone2 String?
+  customerAddress String
+  deliveryType   String      @default("Почтой России")
+  notes          String?
+  totalAmount    Int         // в копейках (500 руб = 50000)
+  status         String      @default("pending") // pending, sent, completed
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  
+  items          OrderItem[]
+  
+  @@index([orderNumber])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id           String  @id @default(cuid())
+  orderId      String
+  productId    String
+  productTitle String
+  quantity     Int
+  price        Int     // цена за единицу в копейках
+  
+  order        Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product      Product @relation(fields: [productId], references: [id])
+  
+  @@index([orderId])
+  @@index([productId])
 }

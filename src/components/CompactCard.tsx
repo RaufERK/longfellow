@@ -1,5 +1,8 @@
+'use client'
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import ProductImage from '@/components/ProductImage'
+import { useCart } from '@/hooks/useCart'
 
 type Product = {
   id: string
@@ -18,6 +21,21 @@ type CompactCardProps = {
 export default function CompactCard({ product, variant }: CompactCardProps) {
   const imageWidth = variant === 'calendars' ? 60 : 80
   const imageHeight = variant === 'calendars' ? 90 : 120
+
+  const { addToCart, getItemQuantity } = useCart()
+
+  const handleAddToCart = () => {
+    if (!product.price) return
+
+    addToCart({
+      id: product.id,
+      title: product.title,
+      price: product.price,
+      thumbnailUrl: product.thumbnailUrl || undefined,
+    })
+  }
+
+  const itemQuantity = getItemQuantity(product.id)
 
   return (
     <Card className='overflow-hidden hover:shadow-lg transition-shadow'>
@@ -54,9 +72,19 @@ export default function CompactCard({ product, variant }: CompactCardProps) {
             <span className='text-lg font-bold text-green-600'>
               {product.price} ₽
             </span>
-            <button className='bg-yellow-400 hover:bg-orange-400 text-black px-3 py-1 rounded transition-colors font-medium'>
-              В корзину
-            </button>
+            <div className='flex items-center gap-2'>
+              {itemQuantity > 0 && (
+                <span className='text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded'>
+                  {itemQuantity}
+                </span>
+              )}
+              <button
+                onClick={handleAddToCart}
+                className='bg-yellow-400 hover:bg-orange-400 text-black px-3 py-1 rounded transition-colors font-medium'
+              >
+                В корзину
+              </button>
+            </div>
           </div>
         )}
       </CardContent>
