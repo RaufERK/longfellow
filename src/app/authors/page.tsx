@@ -1,4 +1,5 @@
 import PageHeader from '@/components/PageHeader'
+import Image from 'next/image'
 
 export const dynamic = 'force-dynamic'
 
@@ -12,7 +13,7 @@ export default function Authors() {
             <div className='grid grid-cols-1 md:grid-cols-2 gap-8 mb-8'>
               <div className='text-center'>
                 <div className='mb-4'>
-                  <img
+                  <Image
                     src='/legacy/img2/Mark_Profet.jpg'
                     alt='Марк Л. Профет'
                     width={152}
@@ -27,7 +28,7 @@ export default function Authors() {
 
               <div className='text-center'>
                 <div className='mb-4'>
-                  <img
+                  <Image
                     src='/legacy/img2/Mother.jpg'
                     alt='Элизабет Клэр Профет'
                     width={166}
@@ -48,9 +49,9 @@ export default function Authors() {
                 духовности Востока-Запада в 1958 году. Кроме представленных
                 выше, эти Посланники Вознесенных Владык написали еще ряд
                 классических произведений духовной литературы, в том числе
-                <strong>"Утерянные учения Иисуса"</strong>,{' '}
-                <strong>"Запрещенные мистерии Еноха"</strong>,
-                <strong>"Молитвы и медитации"</strong>.
+                <strong>&ldquo;Утерянные учения Иисуса&rdquo;</strong>,{' '}
+                <strong>&ldquo;Запрещенные мистерии Еноха&rdquo;</strong>,
+                <strong>&ldquo;Молитвы и медитации&rdquo;</strong>.
               </p>
 
               <p className='text-gray-700 mb-6 text-justify'>

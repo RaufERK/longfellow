@@ -1,4 +1,4 @@
-import PageHeader from '@/components/PageHeader'
+import Image from 'next/image'
 
 export const dynamic = 'force-dynamic'
 
@@ -10,7 +10,7 @@ export default function HelpPage() {
         <div className='bg-[#008000] w-full h-[90px] flex items-center justify-center relative'>
           <div className='flex flex-col items-center'>
             {/* Основной логотип "Учения Вознесенных Владык" */}
-            <img
+            <Image
               src='/legacy/img2/mp_teaching.gif'
               width={342}
               height={45}
@@ -32,7 +32,7 @@ export default function HelpPage() {
           {/* Левый угол */}
           <div className='w-[9px] h-[50px]'>
             <div className='bg-[#008000] w-[9px] h-[40px]' />
-            <img
+            <Image
               src='/legacy/img2/mp_h_corner.gif'
               width={9}
               height={50}
@@ -91,9 +91,9 @@ export default function HelpPage() {
                 </h3>
 
                 <p className='text-gray-700 mb-4' style={{ fontSize: '18px' }}>
-                  Интернет магазин издательства "Лонгфелло" предлагает вам
-                  приобрести книги и брошюры напрямую от издательства без
-                  торговых и рекламных наценок.
+                  Интернет магазин издательства &ldquo;Лонгфелло&rdquo;
+                  предлагает вам приобрести книги и брошюры напрямую от
+                  издательства без торговых и рекламных наценок.
                 </p>
 
                 <p className='text-gray-700 mb-6' style={{ fontSize: '18px' }}>
@@ -120,12 +120,13 @@ export default function HelpPage() {
                   <li>Выбрать понравившийся вам товар</li>
                   <li>Указать требуемое количество</li>
                   <li>
-                    Нажать на кнопку "Заказать" (Товар автоматически будет
-                    добавлен к вашему заказу)
+                    Нажать на кнопку &ldquo;Заказать&rdquo; (Товар автоматически
+                    будет добавлен к вашему заказу)
                   </li>
                   <li>
                     После того как все интересующие вас товары выбраны, нажмите
-                    на кнопку "Ваш заказ" чтобы перейти к редактированию заказа
+                    на кнопку &ldquo;Ваш заказ&rdquo; чтобы перейти к
+                    редактированию заказа
                   </li>
                   <li>
                     Здесь вы можете изменить количество экземпляров или удалить
@@ -133,15 +134,15 @@ export default function HelpPage() {
                   </li>
                   <li>
                     После редактирования заказа выберите тип доставки и нажмите
-                    "Далее"
+                    &ldquo;Далее&rdquo;
                   </li>
                   <li>
                     Введите данные, необходимые для доставки заказа, и нажмите
-                    "Далее"
+                    &ldquo;Далее&rdquo;
                   </li>
                   <li>
                     Удостоверьтесь, что все данные введены правильно и нажмите
-                    "Оформить заказ"
+                    &ldquo;Оформить заказ&rdquo;
                   </li>
                 </ol>
 
