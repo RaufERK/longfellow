@@ -18,15 +18,6 @@ export default async function FilmsPage() {
     <div className='bg-[#ccffcc]'>
       <PageHeader titleImage='h_dennion.gif' titleAlt='Фильмы' />
       <div className='container mx-auto px-4 py-8 bg-[#ccffcc]'>
-        <div className='flex justify-end mb-8'>
-          <a
-            href='/legacy/films'
-            className='text-green-600 hover:text-green-800 underline text-sm'
-          >
-            Старая версия страницы
-          </a>
-        </div>
-
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
           {films.map((film) => (
             <BookCard key={film.id} product={film} />
