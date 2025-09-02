@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic'
 
 export default function NotFound() {
   return (
-    <div>
+    <div className='bg-[#ccffcc]'>
       <PageHeader titleImage='h_books.gif' titleAlt='Страница не найдена' />
       <div className='container mx-auto px-4 py-8 bg-[#ccffcc]'>
         <div className='text-center'>

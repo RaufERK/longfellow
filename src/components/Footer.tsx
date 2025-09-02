@@ -2,14 +2,12 @@ import Image from 'next/image'
 
 export default function Footer() {
   return (
-    <footer
-      className='w-full flex flex-col items-center bg-[#ccffcc]'
-    >
+    <footer className='w-full flex flex-col items-center bg-[#ccffcc]'>
       {/* Спейсер */}
-      <div className='h-[30px]' />
+      <div className='h-[30px] bg-red-500' />
 
       {/* Основная часть footer с тремя изображениями */}
-      <div className='flex items-center justify-center'>
+      <div className='flex items-center justify-center bg-red-500'>
         <Image
           src='/legacy/img2/mp_d_left_us.gif'
           alt=''
@@ -50,15 +48,16 @@ export default function Footer() {
           />
         </div>
         <div
-          className='flex-1 h-[31px] flex items-center justify-center'
+          className='flex-1 h-[50px] flex items-center justify-center'
           style={{
             backgroundImage: "url('/legacy/img2/mp_h_bg.gif')",
             backgroundRepeat: 'repeat-x',
           }}
         >
-          <div className='w-[10px] h-[31px]' />
+          {/* <div className='w-[10px]' /> */}
         </div>
       </div>
+      <div className='w-full h-[1px] bg-[#008000]' />
     </footer>
   )
 }
