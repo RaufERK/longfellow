@@ -39,6 +39,16 @@ export default function ShoppingCartPage() {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
+  const handleClearCart = () => {
+    if (
+      window.confirm(
+        'Вы уверены, что хотите очистить корзину? Все товары будут удалены.'
+      )
+    ) {
+      clearCart()
+    }
+  }
+
   const handleSubmitOrder = async () => {
     if (!isMinimumOrderMet()) {
       alert(`Минимальная сумма заказа: ${process.env.NEXT_PUBLIC_MINSUMM} ₽`)
@@ -141,7 +151,17 @@ export default function ShoppingCartPage() {
               {/* Левая колонка - товары в корзине */}
               <Card className='bg-white'>
                 <CardHeader>
-                  <CardTitle>Выбранные товары</CardTitle>
+                  <div className='flex justify-between items-center'>
+                    <CardTitle>Выбранные товары</CardTitle>
+                    <Button
+                      variant='outline'
+                      size='sm'
+                      onClick={handleClearCart}
+                      className='text-red-600 border-red-300 hover:bg-red-50'
+                    >
+                      Очистить корзину
+                    </Button>
+                  </div>
                 </CardHeader>
                 <CardContent className='space-y-4'>
                   {cart.items.map((item) => (
