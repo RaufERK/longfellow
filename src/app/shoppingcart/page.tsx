@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import ProductImage from '@/components/ProductImage'
 import SearchCartBar from '@/components/SearchCartBar'
+import PageHeader from '@/components/PageHeader'
 import {
   OrderFormData,
   CreateOrderRequest,
@@ -94,12 +95,13 @@ export default function ShoppingCartPage() {
 
   if (cart.items.length === 0) {
     return (
-      <div className='min-h-screen bg-gray-50'>
+      <div className='min-h-screen bg-[#ccffcc]'>
+        <PageHeader titleImage='h_present.gif' titleAlt='Корзина товаров' />
         <SearchCartBar placeholder='Поиск товаров...' />
         <div className='py-8'>
           <div className='container mx-auto px-4'>
             <div className='max-w-2xl mx-auto'>
-              <Card>
+              <Card className='bg-white'>
                 <CardHeader>
                   <CardTitle className='text-2xl text-center'>
                     Корзина пуста
@@ -125,7 +127,8 @@ export default function ShoppingCartPage() {
   }
 
   return (
-    <div className='min-h-screen bg-gray-50'>
+    <div className='min-h-screen bg-[#ccffcc]'>
+      <PageHeader titleImage='h_present.gif' titleAlt='Корзина товаров' />
       <SearchCartBar placeholder='Поиск товаров...' />
       <div className='py-8'>
         <div className='container mx-auto px-4'>
@@ -136,7 +139,7 @@ export default function ShoppingCartPage() {
 
             <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
               {/* Левая колонка - товары в корзине */}
-              <Card>
+              <Card className='bg-white'>
                 <CardHeader>
                   <CardTitle>Выбранные товары</CardTitle>
                 </CardHeader>
@@ -222,7 +225,7 @@ export default function ShoppingCartPage() {
               </Card>
 
               {/* Правая колонка - форма заказа */}
-              <Card>
+              <Card className='bg-white'>
                 <CardHeader>
                   <CardTitle>Оформление заказа</CardTitle>
                 </CardHeader>
