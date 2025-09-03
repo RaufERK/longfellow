@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useCart } from '@/hooks/useCart'
 import { Input } from '@/components/ui/input'
@@ -15,7 +15,12 @@ export default function SearchCartBar({
   placeholder = 'Поиск товаров...',
 }: SearchCartBarProps) {
   const [searchQuery, setSearchQuery] = useState('')
+  const [mounted, setMounted] = useState(false)
   const { cart, isLoaded } = useCart()
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const handleSearchChange = (value: string) => {
     setSearchQuery(value)
@@ -26,7 +31,7 @@ export default function SearchCartBar({
     return new Intl.NumberFormat('ru-RU').format(price)
   }
 
-  if (!isLoaded) {
+  if (!mounted || !isLoaded) {
     return (
       <div className='w-full bg-yellow-400 border-b border-yellow-500 py-3 px-4 rounded-bl-lg relative'>
         <div className='flex items-center justify-between max-w-7xl mx-auto'>

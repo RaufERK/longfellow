@@ -33,6 +33,34 @@ export function useCart() {
     }
 
     loadCart()
+
+    // Слушатель изменений localStorage для синхронизации между компонентами
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === CART_STORAGE_KEY && e.newValue) {
+        try {
+          const parsedCart = JSON.parse(e.newValue) as Cart
+          setCart(parsedCart)
+        } catch (error) {
+          console.error('Ошибка синхронизации корзины:', error)
+        }
+      }
+    }
+
+    // Слушатель кастомного события для синхронизации внутри вкладки
+    const handleCartUpdate = (e: CustomEvent) => {
+      setCart(e.detail)
+    }
+
+    window.addEventListener('storage', handleStorageChange)
+    window.addEventListener('cart-updated', handleCartUpdate as EventListener)
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+      window.removeEventListener(
+        'cart-updated',
+        handleCartUpdate as EventListener
+      )
+    }
   }, [])
 
   // Сохранение корзины в localStorage при изменении
@@ -40,6 +68,13 @@ export function useCart() {
     try {
       localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(newCart))
       setCart(newCart)
+
+      // Отправляем кастомное событие для синхронизации между компонентами
+      window.dispatchEvent(
+        new CustomEvent('cart-updated', {
+          detail: newCart,
+        })
+      )
     } catch (error) {
       console.error('Ошибка сохранения корзины:', error)
     }
@@ -160,4 +195,3 @@ export function useCart() {
     isMinimumOrderMet,
   }
 }
-
