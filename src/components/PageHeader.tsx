@@ -23,7 +23,12 @@ export default function PageHeader({ titleImage, titleAlt }: PageHeaderProps) {
     height: 45,
   }
   return (
-    <div className='w-full'>
+    <div
+      className='w-full relative z-10'
+      style={{
+        boxShadow: '0 3px 6px rgba(0, 0, 0, 0.4)',
+      }}
+    >
       {/* Основная зелёная секция с заголовком */}
       <div className='bg-[#008000] w-full h-[90px] flex items-center justify-center relative'>
         <div className='flex flex-col items-center'>

@@ -28,7 +28,7 @@ export default function SearchCartBar({
 
   if (!isLoaded) {
     return (
-      <div className='w-full bg-yellow-400 border-b border-yellow-500 py-3 px-4 rounded-bl-lg'>
+      <div className='w-full bg-yellow-400 border-b border-yellow-500 py-3 px-4 rounded-bl-lg relative'>
         <div className='flex items-center justify-between max-w-7xl mx-auto'>
           <div className='flex-1 max-w-md'>
             <Input
@@ -45,7 +45,7 @@ export default function SearchCartBar({
   }
 
   return (
-    <div className='w-full bg-yellow-400 border-b border-yellow-500 py-3 px-4 rounded-bl-lg'>
+    <div className='w-full bg-yellow-400 border-b border-yellow-500 py-3 px-4 rounded-bl-lg relative'>
       <div className='flex items-center justify-between max-w-7xl mx-auto gap-4'>
         {/* Левая часть - поиск */}
         <div className='flex-1 max-w-md'>
