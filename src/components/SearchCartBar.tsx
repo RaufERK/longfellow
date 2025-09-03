@@ -34,7 +34,7 @@ export default function SearchCartBar({
             <Input
               type='text'
               placeholder={placeholder}
-              className='w-full'
+              className='w-full bg-white border-white'
               disabled
             />
           </div>
@@ -54,7 +54,7 @@ export default function SearchCartBar({
             placeholder={placeholder}
             value={searchQuery}
             onChange={(e) => handleSearchChange(e.target.value)}
-            className='w-full'
+            className='w-full bg-white border-white'
           />
         </div>
 
