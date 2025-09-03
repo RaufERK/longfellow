@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma'
 import BookCard from '@/components/BookCard'
 import PageHeader from '@/components/PageHeader'
+import SearchCartBar from '@/components/SearchCartBar'
 
 export const dynamic = 'force-dynamic'
 
@@ -59,6 +60,7 @@ export default async function MorePage() {
   return (
     <div className='bg-[#ccffcc]'>
       <PageHeader titleImage='h_dennion.gif' titleAlt='Другие издания' />
+      <SearchCartBar placeholder='Поиск изданий...' />
       <div className='container mx-auto px-4 py-8 bg-[#ccffcc]'>
         {categoriesWithItems.map((category) => (
           <div key={category.id} className='mb-16'>

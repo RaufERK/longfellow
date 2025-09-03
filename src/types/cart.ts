@@ -41,3 +41,4 @@ export const DELIVERY_TYPES = {
 } as const
 
 export type DeliveryType = (typeof DELIVERY_TYPES)[keyof typeof DELIVERY_TYPES]
+

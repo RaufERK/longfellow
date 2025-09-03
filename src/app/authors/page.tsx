@@ -1,4 +1,5 @@
 import PageHeader from '@/components/PageHeader'
+import SearchCartBar from '@/components/SearchCartBar'
 import Image from 'next/image'
 
 export const dynamic = 'force-dynamic'
@@ -7,6 +8,7 @@ export default function Authors() {
   return (
     <div className='bg-[#ccffcc]'>
       <PageHeader titleImage='h_autors.gif' titleAlt='Авторы' />
+      <SearchCartBar placeholder='Поиск...' />
       <div className='container mx-auto px-4 py-8 bg-[#ccffcc]'>
         <div className='max-w-4xl mx-auto'>
           <div className='bg-white rounded-lg shadow-lg p-8'>

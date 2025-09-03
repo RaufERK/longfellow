@@ -28,7 +28,7 @@ export default function SearchCartBar({
 
   if (!isLoaded) {
     return (
-      <div className='w-full bg-gray-50 border-b border-gray-200 py-3 px-4'>
+      <div className='w-full bg-yellow-400 border-b border-yellow-500 py-3 px-4 rounded-bl-lg'>
         <div className='flex items-center justify-between max-w-7xl mx-auto'>
           <div className='flex-1 max-w-md'>
             <Input
@@ -38,14 +38,14 @@ export default function SearchCartBar({
               disabled
             />
           </div>
-          <div className='text-gray-500'>Загрузка...</div>
+          <div className='text-gray-700'>Загрузка...</div>
         </div>
       </div>
     )
   }
 
   return (
-    <div className='w-full bg-gray-50 border-b border-gray-200 py-3 px-4'>
+    <div className='w-full bg-yellow-400 border-b border-yellow-500 py-3 px-4 rounded-bl-lg'>
       <div className='flex items-center justify-between max-w-7xl mx-auto gap-4'>
         {/* Левая часть - поиск */}
         <div className='flex-1 max-w-md'>
@@ -62,24 +62,26 @@ export default function SearchCartBar({
         <div className='flex items-center gap-4'>
           {cart.totalItems > 0 ? (
             <>
-              <div className='text-sm text-gray-600'>
-                Товаров: <span className='font-medium'>{cart.totalItems}</span>
+              <div className='text-sm text-gray-800 font-medium'>
+                Товаров: <span className='font-bold'>{cart.totalItems}</span>
               </div>
-              <div className='text-sm text-gray-600'>
+              <div className='text-sm text-gray-800 font-medium'>
                 Сумма:{' '}
-                <span className='font-medium text-green-600'>
+                <span className='font-bold text-green-700'>
                   {formatPrice(cart.totalAmount)} ₽
                 </span>
               </div>
               <Link
                 href='/shoppingcart'
-                className='bg-yellow-400 hover:bg-orange-400 text-black px-4 py-2 rounded-md transition-colors font-medium text-sm'
+                className='bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md transition-colors font-medium text-sm'
               >
                 Корзина
               </Link>
             </>
           ) : (
-            <div className='text-sm text-gray-500'>Товаров: 0, Сумма: 0 ₽</div>
+            <div className='text-sm text-gray-800 font-medium'>
+              Товаров: 0, Сумма: 0 ₽
+            </div>
           )}
         </div>
       </div>

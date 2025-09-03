@@ -51,20 +51,9 @@ export default function PageHeader({ titleImage, titleAlt }: PageHeaderProps) {
       {/* Декоративная нижняя секция */}
       <div className='flex w-full'>
         {/* Левый угол */}
-        <div className='w-[9px] h-[50px]'>
-          <div className='bg-[#008000] w-[9px] h-[40px]' />
-          <Image
-            src='/legacy/img2/mp_h_corner.gif'
-            width={9}
-            height={10}
-            alt=''
-            style={{
-              imageRendering: 'pixelated',
-              width: 'auto',
-              height: 'auto',
-            }}
-          />
-        </div>
+        {/* <div className='w-[9px] h-[50px]'>
+        </div> */}
+        <div className='bg-[#008000] w-[9px] h-[50px]' />
         {/* Растягивающийся фон */}
         <div
           className='flex-1 h-[50px]'

@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import SearchCartBar from '@/components/SearchCartBar'
 
 export const dynamic = 'force-dynamic'
 
@@ -51,6 +52,8 @@ export default function HelpPage() {
           />
         </div>
       </div>
+
+      <SearchCartBar placeholder='Поиск...' />
 
       <div className='container mx-auto px-4 py-8 bg-[#ccffcc]'>
         <div className='max-w-4xl mx-auto'>
