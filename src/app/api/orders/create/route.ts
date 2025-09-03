@@ -30,9 +30,12 @@ const formatOrderEmail = (
     }} шт. Цена:${item.price} руб.\n`
   })
 
+  // Формируем полный адрес из отдельных полей
+  const fullAddress = `${customer.customerPostalCode}, ${customer.customerCity}, ${customer.customerAddress}`
+
   return `Заказ # ${orderNumber}
 Кому: ${customer.customerName}
-Адрес: ${customer.customerAddress}
+Адрес: ${fullAddress}
 Телефон: ${customer.customerPhone}
 Телефон2: ${customer.customerPhone2 || ''}
 E-mail: ${customer.customerEmail}
@@ -63,6 +66,8 @@ export async function POST(request: NextRequest) {
       !orderData.customer.customerName ||
       !orderData.customer.customerEmail ||
       !orderData.customer.customerPhone ||
+      !orderData.customer.customerPostalCode ||
+      !orderData.customer.customerCity ||
       !orderData.customer.customerAddress
     ) {
       return NextResponse.json(
@@ -93,6 +98,9 @@ export async function POST(request: NextRequest) {
     })
     const orderNumber = lastOrder ? lastOrder.orderNumber + 1 : 7000
 
+    // Формируем полный адрес из отдельных полей
+    const fullAddress = `${orderData.customer.customerPostalCode}, ${orderData.customer.customerCity}, ${orderData.customer.customerAddress}`
+
     // Создание заказа в базе данных
     const order = await prisma.order.create({
       data: {
@@ -101,7 +109,7 @@ export async function POST(request: NextRequest) {
         customerEmail: orderData.customer.customerEmail,
         customerPhone: orderData.customer.customerPhone,
         customerPhone2: orderData.customer.customerPhone2 || null,
-        customerAddress: orderData.customer.customerAddress,
+        customerAddress: fullAddress,
         deliveryType: orderData.customer.deliveryType,
         notes: orderData.customer.notes || null,
         totalAmount: orderData.totalAmount * 100, // сохраняем в копейках
@@ -171,4 +179,3 @@ ${emailContent}
     )
   }
 }
-

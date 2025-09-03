@@ -19,6 +19,8 @@ export interface OrderFormData {
   customerEmail: string
   customerPhone: string
   customerPhone2?: string
+  customerPostalCode: string
+  customerCity: string
   customerAddress: string
   deliveryType: string
   notes?: string
@@ -41,4 +43,3 @@ export const DELIVERY_TYPES = {
 } as const
 
 export type DeliveryType = (typeof DELIVERY_TYPES)[keyof typeof DELIVERY_TYPES]
-

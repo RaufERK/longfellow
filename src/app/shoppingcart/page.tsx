@@ -26,6 +26,8 @@ export default function ShoppingCartPage() {
     customerEmail: '',
     customerPhone: '',
     customerPhone2: '',
+    customerPostalCode: '',
+    customerCity: '',
     customerAddress: '',
     deliveryType: 'Почтой России',
     notes: '',
@@ -59,6 +61,8 @@ export default function ShoppingCartPage() {
       !formData.customerName ||
       !formData.customerEmail ||
       !formData.customerPhone ||
+      !formData.customerPostalCode ||
+      !formData.customerCity ||
       !formData.customerAddress
     ) {
       alert('Пожалуйста, заполните все обязательные поля')
@@ -307,17 +311,44 @@ export default function ShoppingCartPage() {
                   </div>
 
                   <div>
-                    <Label htmlFor='customerAddress'>
-                      Полный адрес доставки *
+                    <Label htmlFor='customerPostalCode'>
+                      Почтовый индекс *
                     </Label>
-                    <textarea
+                    <Input
+                      id='customerPostalCode'
+                      value={formData.customerPostalCode}
+                      onChange={(e) =>
+                        handleFormChange('customerPostalCode', e.target.value)
+                      }
+                      placeholder='630036'
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor='customerCity'>Город (с областью) *</Label>
+                    <Input
+                      id='customerCity'
+                      value={formData.customerCity}
+                      onChange={(e) =>
+                        handleFormChange('customerCity', e.target.value)
+                      }
+                      placeholder='Новосибирская обл., НОВОСИБИРСК'
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor='customerAddress'>
+                      Улица, дом, квартира *
+                    </Label>
+                    <Input
                       id='customerAddress'
-                      className='w-full min-h-[80px] px-3 py-2 border border-gray-300 rounded-md resize-none'
                       value={formData.customerAddress}
                       onChange={(e) =>
                         handleFormChange('customerAddress', e.target.value)
                       }
-                      placeholder='630036, Новосибирская обл., НОВОСИБИРСК, ПОРТОВАЯ 2 КВАРТИРА 8'
+                      placeholder='ПОРТОВАЯ 2 КВАРТИРА 8'
                       required
                     />
                   </div>
