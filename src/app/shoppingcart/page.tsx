@@ -42,13 +42,7 @@ export default function ShoppingCartPage() {
   }
 
   const handleClearCart = () => {
-    if (
-      window.confirm(
-        'Вы уверены, что хотите очистить корзину? Все товары будут удалены.'
-      )
-    ) {
-      clearCart()
-    }
+    clearCart()
   }
 
   const handleSubmitOrder = async () => {
