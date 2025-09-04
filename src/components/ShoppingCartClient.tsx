@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import PageHeader from '@/components/PageHeader'
+import { Button } from '@/components/ui/button'
 import { CartItem } from '@/types/cart'
 
 const CART_STORAGE_KEY = 'longfellow-cart'
@@ -51,6 +52,63 @@ export default function ShoppingCartClient() {
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('ru-RU').format(price)
+  }
+
+  // Пересчет итогов корзины
+  const recalculateCart = (items: CartItem[]) => {
+    const totalItems = items.reduce((sum, item) => sum + item.quantity, 0)
+    const totalAmount = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+    return {
+      items,
+      totalItems,
+      totalAmount
+    }
+  }
+
+  // Сохранение корзины в localStorage
+  const saveCartToStorage = (newCartData: typeof cartData) => {
+    try {
+      const dataToSave = {
+        ...newCartData,
+        lastUpdated: new Date().toISOString()
+      }
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(dataToSave))
+      setCartData(newCartData)
+    } catch (error) {
+      console.error('Ошибка сохранения корзины:', error)
+    }
+  }
+
+  // Обновление количества товара
+  const updateQuantity = (productId: string, newQuantity: number) => {
+    if (!cartData) return
+    
+    if (newQuantity <= 0) {
+      removeFromCart(productId)
+      return
+    }
+
+    const newItems = cartData.items.map(item =>
+      item.productId === productId ? { ...item, quantity: newQuantity } : item
+    )
+    
+    const newCartData = recalculateCart(newItems)
+    saveCartToStorage(newCartData)
+  }
+
+  // Удаление товара из корзины
+  const removeFromCart = (productId: string) => {
+    if (!cartData) return
+    
+    const newItems = cartData.items.filter(item => item.productId !== productId)
+    const newCartData = recalculateCart(newItems)
+    saveCartToStorage(newCartData)
+  }
+
+  // Очистка корзины
+  const clearCart = () => {
+    const emptyCart = { items: [], totalItems: 0, totalAmount: 0 }
+    saveCartToStorage(emptyCart)
   }
 
   if (!mounted) {
@@ -172,22 +230,58 @@ export default function ShoppingCartClient() {
                             </p>
                           )}
                           
-                          <div className='flex items-center gap-4 mt-3'>
-                            <span
-                              className='text-lg font-semibold text-green-600'
-                              style={{ fontSize: '20px' }}
+                          <div className='flex items-center justify-between mt-3'>
+                            <div className='flex items-center gap-4'>
+                              <span
+                                className='text-lg font-semibold text-green-600'
+                                style={{ fontSize: '20px' }}
+                              >
+                                {formatPrice(item.price)} ₽
+                              </span>
+                              
+                              {/* Управление количеством */}
+                              <div className='flex items-center gap-2'>
+                                <Button
+                                  onClick={() => updateQuantity(item.productId, item.quantity - 1)}
+                                  variant='outline'
+                                  size='sm'
+                                  className='w-8 h-8 p-0'
+                                >
+                                  −
+                                </Button>
+                                <span
+                                  className='text-gray-800 font-semibold min-w-[2rem] text-center'
+                                  style={{ fontSize: '18px' }}
+                                >
+                                  {item.quantity}
+                                </span>
+                                <Button
+                                  onClick={() => updateQuantity(item.productId, item.quantity + 1)}
+                                  variant='outline'
+                                  size='sm'
+                                  className='w-8 h-8 p-0'
+                                >
+                                  +
+                                </Button>
+                              </div>
+                              
+                              <span
+                                className='text-lg font-bold text-gray-800'
+                                style={{ fontSize: '20px' }}
+                              >
+                                = {formatPrice(item.price * item.quantity)} ₽
+                              </span>
+                            </div>
+
+                            {/* Кнопка удаления */}
+                            <Button
+                              onClick={() => removeFromCart(item.productId)}
+                              variant='outline'
+                              size='sm'
+                              className='text-red-600 border-red-600 hover:bg-red-50'
                             >
-                              {formatPrice(item.price)} ₽
-                            </span>
-                            <span className='text-gray-600' style={{ fontSize: '18px' }}>
-                              × {item.quantity} шт.
-                            </span>
-                            <span
-                              className='text-lg font-bold text-gray-800'
-                              style={{ fontSize: '20px' }}
-                            >
-                              = {formatPrice(item.price * item.quantity)} ₽
-                            </span>
+                              Удалить
+                            </Button>
                           </div>
                         </div>
                       </div>
@@ -224,9 +318,24 @@ export default function ShoppingCartClient() {
                     </div>
                   )}
 
-                  <p className='text-gray-600 text-center' style={{ fontSize: '18px' }}>
-                    Управление товарами будет добавлено на следующем этапе...
-                  </p>
+                  <div className='flex gap-4 justify-center'>
+                    <Button
+                      onClick={clearCart}
+                      variant='outline'
+                      className='flex-1 max-w-xs'
+                      style={{ fontSize: '18px' }}
+                    >
+                      Очистить корзину
+                    </Button>
+                    
+                    <Button
+                      disabled={cartData.totalAmount < parseInt(process.env.NEXT_PUBLIC_MINSUMM || '500')}
+                      className='flex-1 max-w-xs bg-green-600 hover:bg-green-700'
+                      style={{ fontSize: '18px' }}
+                    >
+                      Оформить заказ
+                    </Button>
+                  </div>
                 </div>
               </>
             )}
