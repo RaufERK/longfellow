@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import nodemailer from 'nodemailer'
+import { writeFile, mkdir } from 'fs/promises'
+import { join } from 'path'
 
 interface CartItem {
   productId: string
@@ -23,18 +25,65 @@ interface OrderData {
 
 export async function POST(req: NextRequest) {
   try {
-    const orderData: OrderData = await req.json()
+    console.log('=== EMAIL API START ===')
+    console.log('YANDEX_EMAIL:', process.env.YANDEX_EMAIL)
+    console.log('YANDEX_PASSWORD exists:', !!process.env.YANDEX_PASSWORD)
 
-    // Создаем транспорт для Yandex SMTP
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.yandex.ru',
-      port: 587,
-      secure: false,
-      auth: {
-        user: process.env.YANDEX_EMAIL,
-        pass: process.env.YANDEX_PASSWORD,
-      },
+    const orderData: OrderData = await req.json()
+    console.log('Order data received:', {
+      items: orderData.items.length,
+      totalAmount: orderData.totalAmount,
+      customerEmail: orderData.customerEmail,
     })
+
+    // Пробуем разные варианты SMTP подключения
+    let transporter = null
+    let connectionError = null
+
+    // Вариант 1: SSL на порту 465
+    try {
+      console.log('Trying SSL connection (port 465)...')
+      transporter = nodemailer.createTransport({
+        host: 'smtp.yandex.ru',
+        port: 465,
+        secure: true,
+        auth: {
+          user: process.env.YANDEX_EMAIL,
+          pass: process.env.YANDEX_PASSWORD,
+        },
+        connectionTimeout: 30000,
+        greetingTimeout: 15000,
+        socketTimeout: 30000,
+      })
+      await transporter.verify()
+      console.log('SSL connection successful!')
+    } catch (error) {
+      console.log('SSL connection failed:', (error as Error).message)
+      connectionError = error
+
+      // Вариант 2: STARTTLS на порту 587
+      try {
+        console.log('Trying STARTTLS connection (port 587)...')
+        transporter = nodemailer.createTransport({
+          host: 'smtp.yandex.ru',
+          port: 587,
+          secure: false,
+          requireTLS: true,
+          auth: {
+            user: process.env.YANDEX_EMAIL,
+            pass: process.env.YANDEX_PASSWORD,
+          },
+          connectionTimeout: 30000,
+          greetingTimeout: 15000,
+          socketTimeout: 30000,
+        })
+        await transporter.verify()
+        console.log('STARTTLS connection successful!')
+      } catch (error2) {
+        console.log('STARTTLS connection failed:', (error2 as Error).message)
+        throw connectionError // Возвращаем первую ошибку
+      }
+    }
 
     // Формируем содержимое письма
     const orderItems = orderData.items
@@ -84,8 +133,9 @@ ${new Date().toLocaleString('ru-RU', {
 `
 
     // Отправляем письмо
-    await transporter.sendMail({
-      from: process.env.YANDEX_EMAIL,
+    console.log('Sending email...')
+    const result = await transporter.sendMail({
+      from: `"Longfellow Store" <${process.env.YANDEX_EMAIL}>`,
       to: process.env.YANDEX_EMAIL, // отправляем на тот же ящик
       subject: `Новый заказ на ${orderData.totalAmount.toLocaleString(
         'ru-RU'
@@ -93,15 +143,97 @@ ${new Date().toLocaleString('ru-RU', {
       text: emailContent,
     })
 
+    console.log('Email sent successfully:', result.messageId)
+    console.log('=== EMAIL API SUCCESS ===')
+
     return NextResponse.json({
       success: true,
       message: 'Заказ успешно отправлен!',
     })
   } catch (error) {
-    console.error('Ошибка отправки письма:', error)
-    return NextResponse.json(
-      { success: false, message: 'Ошибка отправки заказа' },
-      { status: 500 }
-    )
+    console.error('=== EMAIL API ERROR ===')
+    console.error('Error details:', error)
+    console.error('Error name:', (error as Error).name)
+    console.error('Error message:', (error as Error).message)
+
+    // Резервный вариант - сохраняем заказ в файл
+    try {
+      console.log('SMTP failed, saving order to file as backup...')
+
+      const orderData: OrderData = await req.clone().json()
+
+      const backupOrder = {
+        timestamp: new Date().toISOString(),
+        order: orderData,
+        emailContent: `
+НОВЫЙ ЗАКАЗ с сайта Longfellow (РЕЗЕРВНАЯ КОПИЯ)
+
+=== ИНФОРМАЦИЯ О ЗАКАЗЕ ===
+Товаров: ${orderData.totalItems}
+Сумма: ${orderData.totalAmount.toLocaleString('ru-RU')} ₽
+
+=== СОСТАВ ЗАКАЗА ===
+${orderData.items
+  .map(
+    (item: CartItem) =>
+      `• ${item.title}${item.author ? ` (${item.author})` : ''} - ${
+        item.quantity
+      } шт. × ${item.price.toLocaleString('ru-RU')} ₽ = ${(
+        item.price * item.quantity
+      ).toLocaleString('ru-RU')} ₽`
+  )
+  .join('\n')}
+
+=== ДАННЫЕ КЛИЕНТА ===
+Имя: ${orderData.customerName}
+Email: ${orderData.customerEmail}
+Телефон: ${orderData.customerPhone}
+
+=== АДРЕС ДОСТАВКИ ===
+Индекс: ${orderData.customerPostalCode}
+Город: ${orderData.customerCity}
+Адрес: ${orderData.customerAddress}
+
+=== ОШИБКА SMTP ===
+${(error as Error).message}
+        `,
+      }
+
+      // Создаем папку orders если её нет
+      const ordersDir = join(process.cwd(), 'orders')
+      await mkdir(ordersDir, { recursive: true })
+
+      // Сохраняем заказ в файл
+      const filename = `order_${Date.now()}_${orderData.customerName.replace(
+        /[^a-zA-Zа-яё0-9]/gi,
+        '_'
+      )}.json`
+      await writeFile(
+        join(ordersDir, filename),
+        JSON.stringify(backupOrder, null, 2),
+        'utf-8'
+      )
+
+      console.log('Order saved to file:', filename)
+
+      // Возвращаем успех, но с пометкой о резервном сохранении
+      return NextResponse.json({
+        success: true,
+        message:
+          'Заказ принят! (сохранен резервно, письмо будет отправлено позже)',
+        backup: true,
+      })
+    } catch (fileError) {
+      console.error('Failed to save backup order:', fileError)
+
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Ошибка обработки заказа. Попробуйте еще раз.',
+          error: (error as Error).message,
+        },
+        { status: 500 }
+      )
+    }
   }
 }
