@@ -5,6 +5,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import PageHeader from '@/components/PageHeader'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { useCustomerData } from '@/hooks/useCustomerData'
 import { CartItem } from '@/types/cart'
 
 const CART_STORAGE_KEY = 'longfellow-cart'
@@ -17,6 +19,16 @@ export default function ShoppingCartClient() {
     totalAmount: number
   } | null>(null)
   const [isLoaded, setIsLoaded] = useState(false)
+  const [showOrderForm, setShowOrderForm] = useState(false)
+
+  // Хук для работы с данными клиента
+  const { 
+    customerData, 
+    isLoaded: customerDataLoaded,
+    updateField, 
+    hasBasicInfo, 
+    hasAddressInfo 
+  } = useCustomerData()
 
   useEffect(() => {
     setMounted(true)
@@ -116,11 +128,16 @@ export default function ShoppingCartClient() {
     saveCartToStorage(emptyCart)
   }
 
+  // Обработчик кнопки "Оформить заказ"
+  const handleOrderClick = () => {
+    setShowOrderForm(true)
+  }
+
   if (!mounted) {
     return null // Не рендерим ничего на сервере
   }
 
-  if (!isLoaded || !cartData) {
+  if (!isLoaded || !cartData || !customerDataLoaded) {
     return (
       <div className='min-h-screen bg-[#ccffcc]'>
         <PageHeader titleImage='h_present.gif' titleAlt='Корзина товаров' />
@@ -354,6 +371,7 @@ export default function ShoppingCartClient() {
                     </Button>
 
                     <Button
+                      onClick={handleOrderClick}
                       disabled={
                         cartData.totalAmount <
                         parseInt(process.env.NEXT_PUBLIC_MINSUMM || '500')
@@ -367,6 +385,205 @@ export default function ShoppingCartClient() {
                 </div>
               </>
             )}
+
+            {/* Форма оформления заказа */}
+            {showOrderForm && (
+              <div className='mt-6 bg-white rounded-lg shadow-lg p-6'>
+                <div className='flex items-center justify-between mb-4'>
+                  <h3 
+                    className='text-xl font-bold text-gray-800'
+                    style={{ fontFamily: 'Times, Times New Roman', fontSize: '22px' }}
+                  >
+                    Данные для доставки
+                  </h3>
+                  <Button
+                    onClick={() => setShowOrderForm(false)}
+                    variant='outline'
+                    size='sm'
+                  >
+                    Скрыть форму
+                  </Button>
+                </div>
+
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                  {/* Основная информация */}
+                  <div className='space-y-4'>
+                    <h4 
+                      className='font-semibold text-gray-700'
+                      style={{ fontSize: '18px', fontFamily: 'Times, Times New Roman' }}
+                    >
+                      Контактная информация
+                    </h4>
+                    
+                    <div>
+                      <label className='block text-gray-700 mb-1' style={{ fontSize: '18px' }}>
+                        Имя *
+                      </label>
+                      <Input
+                        value={customerData.customerName}
+                        onChange={(e) => updateField('customerName', e.target.value)}
+                        placeholder='Введите ваше имя'
+                        className='text-lg'
+                        style={{ fontSize: '18px' }}
+                      />
+                    </div>
+
+                    <div>
+                      <label className='block text-gray-700 mb-1' style={{ fontSize: '18px' }}>
+                        Email *
+                      </label>
+                      <Input
+                        type='email'
+                        value={customerData.customerEmail}
+                        onChange={(e) => updateField('customerEmail', e.target.value)}
+                        placeholder='example@mail.com'
+                        className='text-lg'
+                        style={{ fontSize: '18px' }}
+                      />
+                    </div>
+
+                    <div>
+                      <label className='block text-gray-700 mb-1' style={{ fontSize: '18px' }}>
+                        Телефон *
+                      </label>
+                      <Input
+                        type='tel'
+                        value={customerData.customerPhone}
+                        onChange={(e) => updateField('customerPhone', e.target.value)}
+                        placeholder='+7 (xxx) xxx-xx-xx'
+                        className='text-lg'
+                        style={{ fontSize: '18px' }}
+                      />
+                    </div>
+
+                    <div>
+                      <label className='block text-gray-700 mb-1' style={{ fontSize: '18px' }}>
+                        Дополнительный телефон
+                      </label>
+                      <Input
+                        type='tel'
+                        value={customerData.customerPhone2 || ''}
+                        onChange={(e) => updateField('customerPhone2', e.target.value)}
+                        placeholder='+7 (xxx) xxx-xx-xx'
+                        className='text-lg'
+                        style={{ fontSize: '18px' }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Адрес доставки */}
+                  <div className='space-y-4'>
+                    <h4 
+                      className='font-semibold text-gray-700'
+                      style={{ fontSize: '18px', fontFamily: 'Times, Times New Roman' }}
+                    >
+                      Адрес доставки
+                    </h4>
+
+                    <div>
+                      <label className='block text-gray-700 mb-1' style={{ fontSize: '18px' }}>
+                        Почтовый индекс *
+                      </label>
+                      <Input
+                        value={customerData.customerPostalCode}
+                        onChange={(e) => updateField('customerPostalCode', e.target.value)}
+                        placeholder='123456'
+                        className='text-lg'
+                        style={{ fontSize: '18px' }}
+                      />
+                    </div>
+
+                    <div>
+                      <label className='block text-gray-700 mb-1' style={{ fontSize: '18px' }}>
+                        Город *
+                      </label>
+                      <Input
+                        value={customerData.customerCity}
+                        onChange={(e) => updateField('customerCity', e.target.value)}
+                        placeholder='Москва'
+                        className='text-lg'
+                        style={{ fontSize: '18px' }}
+                      />
+                    </div>
+
+                    <div>
+                      <label className='block text-gray-700 mb-1' style={{ fontSize: '18px' }}>
+                        Адрес *
+                      </label>
+                      <Input
+                        value={customerData.customerAddress}
+                        onChange={(e) => updateField('customerAddress', e.target.value)}
+                        placeholder='улица, дом, квартира'
+                        className='text-lg'
+                        style={{ fontSize: '18px' }}
+                      />
+                    </div>
+
+                    <div>
+                      <label className='block text-gray-700 mb-1' style={{ fontSize: '18px' }}>
+                        Способ доставки
+                      </label>
+                      <select
+                        value={customerData.deliveryType}
+                        onChange={(e) => updateField('deliveryType', e.target.value)}
+                        className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+                        style={{ fontSize: '18px' }}
+                      >
+                        <option value='Почтой России'>Почтой России</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Примечания */}
+                <div className='mt-4'>
+                  <label className='block text-gray-700 mb-1' style={{ fontSize: '18px' }}>
+                    Примечания к заказу
+                  </label>
+                  <textarea
+                    value={customerData.notes || ''}
+                    onChange={(e) => updateField('notes', e.target.value)}
+                    placeholder='Дополнительные пожелания...'
+                    rows={3}
+                    className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+                    style={{ fontSize: '18px' }}
+                  />
+                </div>
+
+                {/* Статус заполнения */}
+                <div className='mt-6 p-4 bg-gray-50 rounded-lg'>
+                  <div className='flex items-center gap-4 text-sm'>
+                    <span className={hasBasicInfo() ? 'text-green-600' : 'text-orange-600'}>
+                      {hasBasicInfo() ? '✅' : '⚠️'} Контактные данные
+                    </span>
+                    <span className={hasAddressInfo() ? 'text-green-600' : 'text-orange-600'}>
+                      {hasAddressInfo() ? '✅' : '⚠️'} Адрес доставки
+                    </span>
+                  </div>
+                </div>
+
+                {/* Кнопки действий */}
+                <div className='mt-6 flex gap-4'>
+                  <Button
+                    onClick={() => setShowOrderForm(false)}
+                    variant='outline'
+                    className='flex-1'
+                    style={{ fontSize: '18px' }}
+                  >
+                    Вернуться к корзине
+                  </Button>
+                  
+                  <Button
+                    disabled={!hasBasicInfo() || !hasAddressInfo()}
+                    className='flex-1 bg-green-600 hover:bg-green-700'
+                    style={{ fontSize: '18px' }}
+                  >
+                    Отправить заказ
+                  </Button>
+                </div>
+              </div>
+            )}
+
           </div>
         </div>
       </div>
