@@ -136,6 +136,16 @@ export function useCart() {
     [cart.items, recalculateCart, saveCart]
   )
 
+  // Удаление товара из корзины
+  const removeFromCart = useCallback(
+    (productId: string) => {
+      const newItems = cart.items.filter((item) => item.productId !== productId)
+      const newCart = recalculateCart(newItems)
+      saveCart(newCart)
+    },
+    [cart.items, recalculateCart, saveCart]
+  )
+
   // Обновление количества товара
   const updateQuantity = useCallback(
     (productId: string, quantity: number) => {
@@ -151,17 +161,7 @@ export function useCart() {
       const newCart = recalculateCart(newItems)
       saveCart(newCart)
     },
-    [cart.items, recalculateCart, saveCart]
-  )
-
-  // Удаление товара из корзины
-  const removeFromCart = useCallback(
-    (productId: string) => {
-      const newItems = cart.items.filter((item) => item.productId !== productId)
-      const newCart = recalculateCart(newItems)
-      saveCart(newCart)
-    },
-    [cart.items, recalculateCart, saveCart]
+    [cart.items, recalculateCart, saveCart, removeFromCart]
   )
 
   // Очистка корзины

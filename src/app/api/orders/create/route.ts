@@ -5,7 +5,7 @@ import nodemailer from 'nodemailer'
 
 // Создание транспортера для Yandex
 const createTransporter = () => {
-  return nodemailer.createTransporter({
+  return nodemailer.createTransport({
     host: 'smtp.yandex.ru',
     port: 587,
     secure: false,
