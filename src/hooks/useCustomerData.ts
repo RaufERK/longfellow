@@ -26,10 +26,12 @@ export function useCustomerData() {
   useEffect(() => {
     const loadCustomerData = () => {
       try {
-        const stored = localStorage.getItem(CUSTOMER_DATA_STORAGE_KEY)
-        if (stored) {
-          const parsedData = JSON.parse(stored) as OrderFormData
-          setCustomerData(parsedData)
+        if (typeof window !== 'undefined') {
+          const stored = localStorage.getItem(CUSTOMER_DATA_STORAGE_KEY)
+          if (stored) {
+            const parsedData = JSON.parse(stored) as OrderFormData
+            setCustomerData(parsedData)
+          }
         }
       } catch (error) {
         console.error('Ошибка загрузки данных клиента:', error)
@@ -44,15 +46,17 @@ export function useCustomerData() {
   // Сохранение данных в localStorage
   const saveCustomerData = useCallback((newData: OrderFormData) => {
     try {
-      localStorage.setItem(CUSTOMER_DATA_STORAGE_KEY, JSON.stringify(newData))
-      setCustomerData(newData)
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(CUSTOMER_DATA_STORAGE_KEY, JSON.stringify(newData))
+        setCustomerData(newData)
 
-      // Отправляем кастомное событие для синхронизации между компонентами
-      window.dispatchEvent(
-        new CustomEvent('customer-data-updated', {
-          detail: newData,
-        })
-      )
+        // Отправляем кастомное событие для синхронизации между компонентами
+        window.dispatchEvent(
+          new CustomEvent('customer-data-updated', {
+            detail: newData,
+          })
+        )
+      }
     } catch (error) {
       console.error('Ошибка сохранения данных клиента:', error)
     }
@@ -70,14 +74,16 @@ export function useCustomerData() {
   // Очистка данных клиента
   const clearCustomerData = useCallback(() => {
     try {
-      localStorage.removeItem(CUSTOMER_DATA_STORAGE_KEY)
-      setCustomerData(emptyCustomerData)
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem(CUSTOMER_DATA_STORAGE_KEY)
+        setCustomerData(emptyCustomerData)
 
-      window.dispatchEvent(
-        new CustomEvent('customer-data-updated', {
-          detail: emptyCustomerData,
-        })
-      )
+        window.dispatchEvent(
+          new CustomEvent('customer-data-updated', {
+            detail: emptyCustomerData,
+          })
+        )
+      }
     } catch (error) {
       console.error('Ошибка очистки данных клиента:', error)
     }
