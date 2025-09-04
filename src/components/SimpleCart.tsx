@@ -28,6 +28,10 @@ export default function SimpleCart() {
   const [customerAddress, setCustomerAddress] = useState('')
   const [customerPostalCode, setCustomerPostalCode] = useState('')
 
+  // Состояние отправки
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitMessage, setSubmitMessage] = useState('')
+
   useEffect(() => {
     setMounted(true)
 
@@ -161,6 +165,50 @@ export default function SimpleCart() {
       saveCustomerData()
     }
   }, [mounted, saveCustomerData])
+
+  const handleSubmitOrder = async () => {
+    setIsSubmitting(true)
+    setSubmitMessage('')
+
+    try {
+      const orderData = {
+        items: cartItems,
+        totalItems,
+        totalAmount,
+        customerName,
+        customerEmail,
+        customerPhone,
+        customerCity,
+        customerAddress,
+        customerPostalCode,
+      }
+
+      const response = await fetch('/api/orders/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData),
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        setSubmitMessage('✅ Заказ успешно отправлен!')
+        // Очищаем корзину после успешной отправки
+        clearCart()
+      } else {
+        setSubmitMessage('❌ Ошибка отправки заказа. Попробуйте еще раз.')
+      }
+    } catch (error) {
+      console.error('Ошибка:', error)
+      setSubmitMessage(
+        '❌ Ошибка отправки заказа. Проверьте подключение к интернету.'
+      )
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   if (!mounted) {
     return (
@@ -538,13 +586,30 @@ export default function SimpleCart() {
                     </div>
                   </div>
 
+                  {submitMessage && (
+                    <div className='mt-4 p-4 rounded-lg bg-gray-50'>
+                      <p
+                        className='text-center'
+                        style={{
+                          fontSize: '18px',
+                          color: submitMessage.includes('✅')
+                            ? '#16a34a'
+                            : '#dc2626',
+                        }}
+                      >
+                        {submitMessage}
+                      </p>
+                    </div>
+                  )}
+
                   <div className='mt-6'>
                     <Button
-                      disabled={!isValidForm}
-                      className='w-full bg-green-600 hover:bg-green-700'
+                      onClick={handleSubmitOrder}
+                      disabled={!isValidForm || isSubmitting}
+                      className='w-full bg-green-600 hover:bg-green-700 disabled:opacity-50'
                       style={{ fontSize: '18px' }}
                     >
-                      Отправить заказ
+                      {isSubmitting ? 'Отправляется...' : 'Отправить заказ'}
                     </Button>
                   </div>
                 </div>
