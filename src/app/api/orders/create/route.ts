@@ -3,6 +3,8 @@ import { prisma } from '@/lib/prisma'
 import { CreateOrderRequest, CreateOrderResponse } from '@/types/cart'
 import nodemailer from 'nodemailer'
 
+export const dynamic = 'force-dynamic'
+
 // Создание транспортера для Yandex
 const createTransporter = () => {
   return nodemailer.createTransport({
