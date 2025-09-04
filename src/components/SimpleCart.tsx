@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import PageHeader from '@/components/PageHeader'
@@ -19,7 +19,6 @@ interface SimpleCartItem {
 export default function SimpleCart() {
   const [mounted, setMounted] = useState(false)
   const [cartItems, setCartItems] = useState<SimpleCartItem[]>([])
-  const [showForm, setShowForm] = useState(false)
 
   // Данные формы
   const [customerName, setCustomerName] = useState('')
@@ -130,7 +129,7 @@ export default function SimpleCart() {
     }
   }
 
-  const saveCustomerData = () => {
+  const saveCustomerData = useCallback(() => {
     if (typeof window !== 'undefined') {
       const customerData = {
         customerName,
@@ -147,7 +146,21 @@ export default function SimpleCart() {
         JSON.stringify(customerData)
       )
     }
-  }
+  }, [
+    customerName,
+    customerEmail,
+    customerPhone,
+    customerCity,
+    customerAddress,
+    customerPostalCode,
+  ])
+
+  // Автоматическое сохранение при изменении данных
+  useEffect(() => {
+    if (mounted) {
+      saveCustomerData()
+    }
+  }, [mounted, saveCustomerData])
 
   if (!mounted) {
     return (
@@ -377,191 +390,164 @@ export default function SimpleCart() {
                     >
                       Очистить корзину
                     </Button>
-
-                    <Button
-                      onClick={() => setShowForm(!showForm)}
-                      disabled={totalAmount < minSum}
-                      className='flex-1 bg-green-600 hover:bg-green-700'
-                      style={{ fontSize: '18px' }}
-                    >
-                      {showForm ? 'Скрыть форму' : 'Оформить заказ'}
-                    </Button>
                   </div>
                 </div>
 
-                {showForm && (
-                  <div className='mt-6 bg-white rounded-lg shadow-lg p-6'>
-                    <h3
-                      className='text-xl font-bold text-gray-800 mb-4'
-                      style={{
-                        fontFamily: 'Times, Times New Roman',
-                        fontSize: '22px',
-                      }}
-                    >
-                      Данные для доставки
-                    </h3>
+                <div className='mt-6 bg-white rounded-lg shadow-lg p-6'>
+                  <h3
+                    className='text-xl font-bold text-gray-800 mb-4'
+                    style={{
+                      fontFamily: 'Times, Times New Roman',
+                      fontSize: '22px',
+                    }}
+                  >
+                    Данные для доставки
+                  </h3>
 
-                    <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-                      <div className='space-y-4'>
-                        <h4
-                          className='font-semibold text-gray-700'
-                          style={{
-                            fontSize: '18px',
-                            fontFamily: 'Times, Times New Roman',
-                          }}
-                        >
-                          Контактная информация
-                        </h4>
-
-                        <div>
-                          <label
-                            className='block text-gray-700 mb-1'
-                            style={{ fontSize: '18px' }}
-                          >
-                            Имя *
-                          </label>
-                          <Input
-                            value={customerName}
-                            onChange={(e) => {
-                              setCustomerName(e.target.value)
-                              saveCustomerData()
-                            }}
-                            placeholder='Введите ваше имя'
-                            style={{ fontSize: '18px' }}
-                          />
-                        </div>
-
-                        <div>
-                          <label
-                            className='block text-gray-700 mb-1'
-                            style={{ fontSize: '18px' }}
-                          >
-                            Email *
-                          </label>
-                          <Input
-                            type='email'
-                            value={customerEmail}
-                            onChange={(e) => {
-                              setCustomerEmail(e.target.value)
-                              saveCustomerData()
-                            }}
-                            placeholder='example@mail.com'
-                            style={{ fontSize: '18px' }}
-                          />
-                        </div>
-
-                        <div>
-                          <label
-                            className='block text-gray-700 mb-1'
-                            style={{ fontSize: '18px' }}
-                          >
-                            Телефон *
-                          </label>
-                          <Input
-                            type='tel'
-                            value={customerPhone}
-                            onChange={(e) => {
-                              setCustomerPhone(e.target.value)
-                              saveCustomerData()
-                            }}
-                            placeholder='+7 (xxx) xxx-xx-xx'
-                            style={{ fontSize: '18px' }}
-                          />
-                        </div>
-                      </div>
-
-                      <div className='space-y-4'>
-                        <h4
-                          className='font-semibold text-gray-700'
-                          style={{
-                            fontSize: '18px',
-                            fontFamily: 'Times, Times New Roman',
-                          }}
-                        >
-                          Адрес доставки
-                        </h4>
-
-                        <div>
-                          <label
-                            className='block text-gray-700 mb-1'
-                            style={{ fontSize: '18px' }}
-                          >
-                            Индекс *
-                          </label>
-                          <Input
-                            value={customerPostalCode}
-                            onChange={(e) => {
-                              setCustomerPostalCode(e.target.value)
-                              saveCustomerData()
-                            }}
-                            placeholder='123456'
-                            style={{ fontSize: '18px' }}
-                          />
-                        </div>
-
-                        <div>
-                          <label
-                            className='block text-gray-700 mb-1'
-                            style={{ fontSize: '18px' }}
-                          >
-                            Город *
-                          </label>
-                          <Input
-                            value={customerCity}
-                            onChange={(e) => {
-                              setCustomerCity(e.target.value)
-                              saveCustomerData()
-                            }}
-                            placeholder='Москва'
-                            style={{ fontSize: '18px' }}
-                          />
-                        </div>
-
-                        <div>
-                          <label
-                            className='block text-gray-700 mb-1'
-                            style={{ fontSize: '18px' }}
-                          >
-                            Адрес *
-                          </label>
-                          <Input
-                            value={customerAddress}
-                            onChange={(e) => {
-                              setCustomerAddress(e.target.value)
-                              saveCustomerData()
-                            }}
-                            placeholder='улица, дом, квартира'
-                            style={{ fontSize: '18px' }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className='mt-6 p-4 bg-gray-50 rounded-lg'>
-                      <div className='flex items-center gap-4'>
-                        <span
-                          className={
-                            isValidForm ? 'text-green-600' : 'text-orange-600'
-                          }
-                        >
-                          {isValidForm
-                            ? '✅ Все поля заполнены'
-                            : '⚠️ Заполните все обязательные поля'}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className='mt-6'>
-                      <Button
-                        disabled={!isValidForm}
-                        className='w-full bg-green-600 hover:bg-green-700'
-                        style={{ fontSize: '18px' }}
+                  <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                    <div className='space-y-4'>
+                      <h4
+                        className='font-semibold text-gray-700'
+                        style={{
+                          fontSize: '18px',
+                          fontFamily: 'Times, Times New Roman',
+                        }}
                       >
-                        Отправить заказ
-                      </Button>
+                        Контактная информация
+                      </h4>
+
+                      <div>
+                        <label
+                          className='block text-gray-700 mb-1'
+                          style={{ fontSize: '18px' }}
+                        >
+                          Имя *
+                        </label>
+                        <Input
+                          value={customerName}
+                          onChange={(e) => setCustomerName(e.target.value)}
+                          placeholder='Введите ваше имя'
+                          style={{ fontSize: '18px' }}
+                        />
+                      </div>
+
+                      <div>
+                        <label
+                          className='block text-gray-700 mb-1'
+                          style={{ fontSize: '18px' }}
+                        >
+                          Email *
+                        </label>
+                        <Input
+                          type='email'
+                          value={customerEmail}
+                          onChange={(e) => setCustomerEmail(e.target.value)}
+                          placeholder='example@mail.com'
+                          style={{ fontSize: '18px' }}
+                        />
+                      </div>
+
+                      <div>
+                        <label
+                          className='block text-gray-700 mb-1'
+                          style={{ fontSize: '18px' }}
+                        >
+                          Телефон *
+                        </label>
+                        <Input
+                          type='tel'
+                          value={customerPhone}
+                          onChange={(e) => setCustomerPhone(e.target.value)}
+                          placeholder='+7 (xxx) xxx-xx-xx'
+                          style={{ fontSize: '18px' }}
+                        />
+                      </div>
+                    </div>
+
+                    <div className='space-y-4'>
+                      <h4
+                        className='font-semibold text-gray-700'
+                        style={{
+                          fontSize: '18px',
+                          fontFamily: 'Times, Times New Roman',
+                        }}
+                      >
+                        Адрес доставки
+                      </h4>
+
+                      <div>
+                        <label
+                          className='block text-gray-700 mb-1'
+                          style={{ fontSize: '18px' }}
+                        >
+                          Индекс *
+                        </label>
+                        <Input
+                          value={customerPostalCode}
+                          onChange={(e) =>
+                            setCustomerPostalCode(e.target.value)
+                          }
+                          placeholder='123456'
+                          style={{ fontSize: '18px' }}
+                        />
+                      </div>
+
+                      <div>
+                        <label
+                          className='block text-gray-700 mb-1'
+                          style={{ fontSize: '18px' }}
+                        >
+                          Город *
+                        </label>
+                        <Input
+                          value={customerCity}
+                          onChange={(e) => setCustomerCity(e.target.value)}
+                          placeholder='Москва'
+                          style={{ fontSize: '18px' }}
+                        />
+                      </div>
+
+                      <div>
+                        <label
+                          className='block text-gray-700 mb-1'
+                          style={{ fontSize: '18px' }}
+                        >
+                          Адрес *
+                        </label>
+                        <Input
+                          value={customerAddress}
+                          onChange={(e) => setCustomerAddress(e.target.value)}
+                          placeholder='улица, дом, квартира'
+                          style={{ fontSize: '18px' }}
+                        />
+                      </div>
                     </div>
                   </div>
-                )}
+
+                  <div className='mt-6 p-4 bg-gray-50 rounded-lg'>
+                    <div className='flex items-center gap-4'>
+                      <span
+                        className={
+                          isValidForm ? 'text-green-600' : 'text-orange-600'
+                        }
+                      >
+                        {isValidForm
+                          ? '✅ Все поля заполнены'
+                          : '⚠️ Заполните все обязательные поля'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className='mt-6'>
+                    <Button
+                      disabled={!isValidForm}
+                      className='w-full bg-green-600 hover:bg-green-700'
+                      style={{ fontSize: '18px' }}
+                    >
+                      Отправить заказ
+                    </Button>
+                  </div>
+                </div>
               </>
             )}
           </div>
