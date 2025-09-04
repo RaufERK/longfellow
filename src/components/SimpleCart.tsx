@@ -150,7 +150,21 @@ export default function SimpleCart() {
   }
 
   if (!mounted) {
-    return null
+    return (
+      <div className='min-h-screen bg-[#ccffcc]'>
+        <div className='py-20'>
+          <div className='container mx-auto px-4'>
+            <div className='max-w-4xl mx-auto'>
+              <div className='bg-white rounded-lg shadow-lg p-6 text-center'>
+                <p className='text-gray-600' style={{ fontSize: '18px' }}>
+                  Загрузка корзины...
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   const minSum = parseInt(process.env.NEXT_PUBLIC_MINSUMM || '500')
