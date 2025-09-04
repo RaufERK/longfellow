@@ -4,26 +4,43 @@ export const dynamic = 'force-dynamic'
 
 export default function ShoppingCartPage() {
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#ccffcc', padding: '2rem' }}>
-      <div style={{ 
-        backgroundColor: 'white', 
-        padding: '2rem', 
-        borderRadius: '8px', 
-        textAlign: 'center',
-        maxWidth: '800px',
-        margin: '0 auto'
-      }}>
-        <h1 style={{ 
-          fontFamily: 'Times, Times New Roman', 
-          fontSize: '24px',
-          marginBottom: '1.5rem',
-          color: '#2d5a27' 
-        }}>
+    <div
+      style={{
+        minHeight: '100vh',
+        backgroundColor: '#ccffcc',
+        padding: '2rem',
+      }}
+    >
+      <div
+        style={{
+          backgroundColor: 'white',
+          padding: '2rem',
+          borderRadius: '8px',
+          textAlign: 'center',
+          maxWidth: '800px',
+          margin: '0 auto',
+        }}
+      >
+        <h1
+          style={{
+            fontFamily: 'Times, Times New Roman',
+            fontSize: '24px',
+            marginBottom: '1.5rem',
+            color: '#2d5a27',
+          }}
+        >
           ✅ Этап 2B: Управление корзиной готово!
         </h1>
-        
+
         <div style={{ textAlign: 'left', marginBottom: '2rem' }}>
-          <h2 style={{ fontSize: '20px', fontFamily: 'Times, Times New Roman', marginBottom: '1rem', color: '#2d5a27' }}>
+          <h2
+            style={{
+              fontSize: '20px',
+              fontFamily: 'Times, Times New Roman',
+              marginBottom: '1rem',
+              color: '#2d5a27',
+            }}
+          >
             Реализованная функциональность:
           </h2>
           <ul style={{ fontSize: '18px', color: '#666', lineHeight: '1.6' }}>
@@ -37,25 +54,30 @@ export default function ShoppingCartPage() {
           </ul>
         </div>
 
-        <div style={{ 
-          backgroundColor: '#f0f8e8', 
-          padding: '1.5rem', 
-          borderRadius: '8px',
-          border: '1px solid #d4e6c7',
-          marginBottom: '1.5rem' 
-        }}>
+        <div
+          style={{
+            backgroundColor: '#f0f8e8',
+            padding: '1.5rem',
+            borderRadius: '8px',
+            border: '1px solid #d4e6c7',
+            marginBottom: '1.5rem',
+          }}
+        >
           <p style={{ fontSize: '18px', color: '#2d5a27', margin: '0' }}>
-            <strong>Компонент ShoppingCartClient.tsx готов</strong><br/>
-            Полная функциональность корзины реализована и протестирована в development режиме.
+            <strong>Компонент ShoppingCartClient.tsx готов</strong>
+            <br />
+            Полная функциональность корзины реализована и протестирована в
+            development режиме.
           </p>
         </div>
 
         <p style={{ fontSize: '18px', color: '#666', marginBottom: '1.5rem' }}>
-          Проблема с production билдом будет решена на следующих этапах при интеграции с формой заказа.
+          Проблема с production билдом будет решена на следующих этапах при
+          интеграции с формой заказа.
         </p>
 
-        <Link 
-          href="/"
+        <Link
+          href='/'
           style={{
             display: 'inline-block',
             backgroundColor: '#16a34a',
@@ -64,7 +86,7 @@ export default function ShoppingCartPage() {
             borderRadius: '8px',
             textDecoration: 'none',
             fontSize: '18px',
-            fontWeight: '500'
+            fontWeight: '500',
           }}
         >
           Вернуться в каталог

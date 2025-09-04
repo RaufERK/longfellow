@@ -20,7 +20,7 @@ export default function ShoppingCartClient() {
 
   useEffect(() => {
     setMounted(true)
-    
+
     // Загрузка корзины из localStorage на клиенте
     try {
       const stored = localStorage.getItem(CART_STORAGE_KEY)
@@ -29,13 +29,13 @@ export default function ShoppingCartClient() {
         setCartData({
           items: parsedCart.items || [],
           totalItems: parsedCart.totalItems || 0,
-          totalAmount: parsedCart.totalAmount || 0
+          totalAmount: parsedCart.totalAmount || 0,
         })
       } else {
         setCartData({
           items: [],
           totalItems: 0,
-          totalAmount: 0
+          totalAmount: 0,
         })
       }
     } catch (error) {
@@ -43,7 +43,7 @@ export default function ShoppingCartClient() {
       setCartData({
         items: [],
         totalItems: 0,
-        totalAmount: 0
+        totalAmount: 0,
       })
     } finally {
       setIsLoaded(true)
@@ -57,11 +57,14 @@ export default function ShoppingCartClient() {
   // Пересчет итогов корзины
   const recalculateCart = (items: CartItem[]) => {
     const totalItems = items.reduce((sum, item) => sum + item.quantity, 0)
-    const totalAmount = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+    const totalAmount = items.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    )
     return {
       items,
       totalItems,
-      totalAmount
+      totalAmount,
     }
   }
 
@@ -70,7 +73,7 @@ export default function ShoppingCartClient() {
     try {
       const dataToSave = {
         ...newCartData,
-        lastUpdated: new Date().toISOString()
+        lastUpdated: new Date().toISOString(),
       }
       localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(dataToSave))
       setCartData(newCartData)
@@ -82,16 +85,16 @@ export default function ShoppingCartClient() {
   // Обновление количества товара
   const updateQuantity = (productId: string, newQuantity: number) => {
     if (!cartData) return
-    
+
     if (newQuantity <= 0) {
       removeFromCart(productId)
       return
     }
 
-    const newItems = cartData.items.map(item =>
+    const newItems = cartData.items.map((item) =>
       item.productId === productId ? { ...item, quantity: newQuantity } : item
     )
-    
+
     const newCartData = recalculateCart(newItems)
     saveCartToStorage(newCartData)
   }
@@ -99,8 +102,10 @@ export default function ShoppingCartClient() {
   // Удаление товара из корзины
   const removeFromCart = (productId: string) => {
     if (!cartData) return
-    
-    const newItems = cartData.items.filter(item => item.productId !== productId)
+
+    const newItems = cartData.items.filter(
+      (item) => item.productId !== productId
+    )
     const newCartData = recalculateCart(newItems)
     saveCartToStorage(newCartData)
   }
@@ -137,11 +142,10 @@ export default function ShoppingCartClient() {
   return (
     <div className='min-h-screen bg-[#ccffcc]'>
       <PageHeader titleImage='h_present.gif' titleAlt='Корзина товаров' />
-      
+
       <div className='py-8'>
         <div className='container mx-auto px-4'>
           <div className='max-w-4xl mx-auto'>
-            
             {/* Проверка пустой корзины */}
             {!cartData.items || cartData.items.length === 0 ? (
               <div className='bg-white rounded-lg shadow-lg p-6 text-center'>
@@ -180,7 +184,8 @@ export default function ShoppingCartClient() {
                   </h2>
                   <p className='text-gray-600' style={{ fontSize: '18px' }}>
                     Товаров в корзине:{' '}
-                    <span className='font-semibold'>{cartData.totalItems}</span>, на сумму:{' '}
+                    <span className='font-semibold'>{cartData.totalItems}</span>
+                    , на сумму:{' '}
                     <span className='font-semibold text-green-600'>
                       {formatPrice(cartData.totalAmount)} ₽
                     </span>
@@ -190,9 +195,11 @@ export default function ShoppingCartClient() {
                 {/* Список товаров */}
                 <div className='space-y-4 mb-6'>
                   {cartData.items.map((item) => (
-                    <div key={item.productId} className='bg-white rounded-lg shadow-lg p-6'>
+                    <div
+                      key={item.productId}
+                      className='bg-white rounded-lg shadow-lg p-6'
+                    >
                       <div className='flex items-start gap-4'>
-                        
                         {/* Изображение товара */}
                         <div className='w-20 h-28 flex-shrink-0'>
                           {item.thumbnailUrl ? (
@@ -223,13 +230,16 @@ export default function ShoppingCartClient() {
                           >
                             {item.title}
                           </h3>
-                          
+
                           {item.author && (
-                            <p className='text-gray-600 mb-2' style={{ fontSize: '18px' }}>
+                            <p
+                              className='text-gray-600 mb-2'
+                              style={{ fontSize: '18px' }}
+                            >
                               Автор: {item.author}
                             </p>
                           )}
-                          
+
                           <div className='flex items-center justify-between mt-3'>
                             <div className='flex items-center gap-4'>
                               <span
@@ -238,11 +248,16 @@ export default function ShoppingCartClient() {
                               >
                                 {formatPrice(item.price)} ₽
                               </span>
-                              
+
                               {/* Управление количеством */}
                               <div className='flex items-center gap-2'>
                                 <Button
-                                  onClick={() => updateQuantity(item.productId, item.quantity - 1)}
+                                  onClick={() =>
+                                    updateQuantity(
+                                      item.productId,
+                                      item.quantity - 1
+                                    )
+                                  }
                                   variant='outline'
                                   size='sm'
                                   className='w-8 h-8 p-0'
@@ -256,7 +271,12 @@ export default function ShoppingCartClient() {
                                   {item.quantity}
                                 </span>
                                 <Button
-                                  onClick={() => updateQuantity(item.productId, item.quantity + 1)}
+                                  onClick={() =>
+                                    updateQuantity(
+                                      item.productId,
+                                      item.quantity + 1
+                                    )
+                                  }
                                   variant='outline'
                                   size='sm'
                                   className='w-8 h-8 p-0'
@@ -264,7 +284,7 @@ export default function ShoppingCartClient() {
                                   +
                                 </Button>
                               </div>
-                              
+
                               <span
                                 className='text-lg font-bold text-gray-800'
                                 style={{ fontSize: '20px' }}
@@ -310,10 +330,15 @@ export default function ShoppingCartClient() {
                   </div>
 
                   {/* Проверка минимальной суммы */}
-                  {cartData.totalAmount < parseInt(process.env.NEXT_PUBLIC_MINSUMM || '500') && (
+                  {cartData.totalAmount <
+                    parseInt(process.env.NEXT_PUBLIC_MINSUMM || '500') && (
                     <div className='bg-orange-50 border border-orange-200 rounded-lg p-4 mb-4'>
-                      <p className='text-orange-700' style={{ fontSize: '18px' }}>
-                        ⚠️ Минимальная сумма заказа: {process.env.NEXT_PUBLIC_MINSUMM || 500} ₽
+                      <p
+                        className='text-orange-700'
+                        style={{ fontSize: '18px' }}
+                      >
+                        ⚠️ Минимальная сумма заказа:{' '}
+                        {process.env.NEXT_PUBLIC_MINSUMM || 500} ₽
                       </p>
                     </div>
                   )}
@@ -327,9 +352,12 @@ export default function ShoppingCartClient() {
                     >
                       Очистить корзину
                     </Button>
-                    
+
                     <Button
-                      disabled={cartData.totalAmount < parseInt(process.env.NEXT_PUBLIC_MINSUMM || '500')}
+                      disabled={
+                        cartData.totalAmount <
+                        parseInt(process.env.NEXT_PUBLIC_MINSUMM || '500')
+                      }
                       className='flex-1 max-w-xs bg-green-600 hover:bg-green-700'
                       style={{ fontSize: '18px' }}
                     >
@@ -339,7 +367,6 @@ export default function ShoppingCartClient() {
                 </div>
               </>
             )}
-
           </div>
         </div>
       </div>
