@@ -5,16 +5,21 @@ import nodemailer from 'nodemailer'
 
 export const dynamic = 'force-dynamic'
 
-// Создание транспортера для Yandex
+// Создание транспортера
 const createTransporter = () => {
   return nodemailer.createTransport({
-    host: 'smtp.yandex.ru',
+    host: 'mail.amasters.pro',
     port: 587,
     secure: false,
-    auth: {
-      user: process.env.YANDEX_EMAIL,
-      pass: process.env.YANDEX_PASSWORD,
+    requireTLS: true,
+    tls: {
+      servername: 'sm30.hosting.reg.ru', // НЕОБХОДИМ! SSL сертификат выдан для *.hosting.reg.ru
     },
+    auth: {
+      user: process.env.SOURCE_MAIL,
+      pass: process.env.MAIL_PASSWORD,
+    },
+    name: 'amasters.pro',
   })
 }
 
@@ -137,15 +142,15 @@ export async function POST(request: NextRequest) {
 
       // Письмо в отдел продаж
       await transporter.sendMail({
-        from: process.env.YANDEX_EMAIL,
-        to: 'kniga@longfellow.ru',
+        from: process.env.SOURCE_MAIL,
+        to: process.env.TARGET_MAIL || 'kniga@longfellow.ru',
         subject: `Новый заказ #${orderNumber} с сайта`,
         text: emailContent,
       })
 
       // Копия клиенту
       await transporter.sendMail({
-        from: process.env.YANDEX_EMAIL,
+        from: process.env.SOURCE_MAIL,
         to: orderData.customer.customerEmail,
         subject: `Ваш заказ #${orderNumber} принят`,
         text: `Спасибо за ваш заказ!

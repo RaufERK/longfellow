@@ -26,8 +26,10 @@ interface OrderData {
 export async function POST(req: NextRequest) {
   try {
     console.log('=== EMAIL API START ===')
-    console.log('YANDEX_EMAIL:', process.env.YANDEX_EMAIL)
-    console.log('YANDEX_PASSWORD exists:', !!process.env.YANDEX_PASSWORD)
+    console.log('MAIL_SERVER (env):', process.env.MAIL_SERVER)
+    console.log('Using host: mail.amasters.pro')
+    console.log('SOURCE_MAIL:', process.env.SOURCE_MAIL)
+    console.log('MAIL_PASSWORD exists:', !!process.env.MAIL_PASSWORD)
 
     const orderData: OrderData = await req.json()
     console.log('Order data received:', {
@@ -36,53 +38,32 @@ export async function POST(req: NextRequest) {
       customerEmail: orderData.customerEmail,
     })
 
-    // Пробуем разные варианты SMTP подключения
-    let transporter = null
-    let connectionError = null
+    // Создаем SMTP подключение
+    console.log('Creating SMTP connection...')
+    const transporter = nodemailer.createTransport({
+      host: 'mail.amasters.pro',
+      port: 587,
+      secure: false,
+      requireTLS: true,
+      tls: {
+        servername: 'sm30.hosting.reg.ru', // НЕОБХОДИМ! SSL сертификат выдан для *.hosting.reg.ru
+      },
+      auth: {
+        user: process.env.SOURCE_MAIL,
+        pass: process.env.MAIL_PASSWORD,
+      },
+      name: 'amasters.pro',
+      connectionTimeout: 30000,
+      greetingTimeout: 15000,
+      socketTimeout: 30000,
+    })
 
-    // Вариант 1: SSL на порту 465
     try {
-      console.log('Trying SSL connection (port 465)...')
-      transporter = nodemailer.createTransport({
-        host: 'smtp.yandex.ru',
-        port: 465,
-        secure: true,
-        auth: {
-          user: process.env.YANDEX_EMAIL,
-          pass: process.env.YANDEX_PASSWORD,
-        },
-        connectionTimeout: 30000,
-        greetingTimeout: 15000,
-        socketTimeout: 30000,
-      })
       await transporter.verify()
-      console.log('SSL connection successful!')
+      console.log('SMTP connection successful!')
     } catch (error) {
-      console.log('SSL connection failed:', (error as Error).message)
-      connectionError = error
-
-      // Вариант 2: STARTTLS на порту 587
-      try {
-        console.log('Trying STARTTLS connection (port 587)...')
-        transporter = nodemailer.createTransport({
-          host: 'smtp.yandex.ru',
-          port: 587,
-          secure: false,
-          requireTLS: true,
-          auth: {
-            user: process.env.YANDEX_EMAIL,
-            pass: process.env.YANDEX_PASSWORD,
-          },
-          connectionTimeout: 30000,
-          greetingTimeout: 15000,
-          socketTimeout: 30000,
-        })
-        await transporter.verify()
-        console.log('STARTTLS connection successful!')
-      } catch (error2) {
-        console.log('STARTTLS connection failed:', (error2 as Error).message)
-        throw connectionError // Возвращаем первую ошибку
-      }
+      console.error('SMTP connection failed:', (error as Error).message)
+      throw error
     }
 
     // Формируем содержимое письма
@@ -134,9 +115,12 @@ ${new Date().toLocaleString('ru-RU', {
 
     // Отправляем письмо
     console.log('Sending email...')
+    console.log('From:', process.env.SOURCE_MAIL)
+    console.log('To:', process.env.TARGET_MAIL || 'kniga@longfellow.ru')
+
     const result = await transporter.sendMail({
-      from: `"Longfellow Store" <${process.env.YANDEX_EMAIL}>`,
-      to: process.env.YANDEX_EMAIL, // отправляем на тот же ящик
+      from: `"Longfellow Store" <${process.env.SOURCE_MAIL}>`,
+      to: process.env.TARGET_MAIL || 'kniga@longfellow.ru',
       subject: `Новый заказ на ${orderData.totalAmount.toLocaleString(
         'ru-RU'
       )} ₽ от ${orderData.customerName}`,
@@ -160,7 +144,7 @@ ${new Date().toLocaleString('ru-RU', {
     try {
       console.log('SMTP failed, saving order to file as backup...')
 
-      const orderData: OrderData = await req.clone().json()
+      // orderData уже был получен в начале функции, используем его
 
       const backupOrder = {
         timestamp: new Date().toISOString(),

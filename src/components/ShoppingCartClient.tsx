@@ -67,14 +67,15 @@ export default function ShoppingCartClient() {
   }
 
   // Пересчет итогов корзины
-  const recalculateCart = (items: CartItem[]) => {
-    const totalItems = items.reduce((sum, item) => sum + item.quantity, 0)
-    const totalAmount = items.reduce(
+  const recalculateCart = (items: CartItem[] | undefined) => {
+    const safeItems = items || []
+    const totalItems = safeItems.reduce((sum, item) => sum + item.quantity, 0)
+    const totalAmount = safeItems.reduce(
       (sum, item) => sum + item.price * item.quantity,
       0
     )
     return {
-      items,
+      items: safeItems,
       totalItems,
       totalAmount,
     }
@@ -103,9 +104,10 @@ export default function ShoppingCartClient() {
       return
     }
 
-    const newItems = cartData.items.map((item) =>
-      item.productId === productId ? { ...item, quantity: newQuantity } : item
-    )
+    const newItems =
+      cartData?.items?.map((item) =>
+        item.productId === productId ? { ...item, quantity: newQuantity } : item
+      ) || []
 
     const newCartData = recalculateCart(newItems)
     saveCartToStorage(newCartData)
@@ -115,9 +117,8 @@ export default function ShoppingCartClient() {
   const removeFromCart = (productId: string) => {
     if (!cartData) return
 
-    const newItems = cartData.items.filter(
-      (item) => item.productId !== productId
-    )
+    const newItems =
+      cartData?.items?.filter((item) => item.productId !== productId) || []
     const newCartData = recalculateCart(newItems)
     saveCartToStorage(newCartData)
   }
@@ -164,7 +165,7 @@ export default function ShoppingCartClient() {
         <div className='container mx-auto px-4'>
           <div className='max-w-4xl mx-auto'>
             {/* Проверка пустой корзины */}
-            {!cartData.items || cartData.items.length === 0 ? (
+            {!cartData?.items || cartData.items.length === 0 ? (
               <div className='bg-white rounded-lg shadow-lg p-6 text-center'>
                 <h2
                   className='text-2xl font-bold text-gray-800 mb-4'
@@ -201,17 +202,19 @@ export default function ShoppingCartClient() {
                   </h2>
                   <p className='text-gray-600' style={{ fontSize: '18px' }}>
                     Товаров в корзине:{' '}
-                    <span className='font-semibold'>{cartData.totalItems}</span>
+                    <span className='font-semibold'>
+                      {cartData?.totalItems || 0}
+                    </span>
                     , на сумму:{' '}
                     <span className='font-semibold text-green-600'>
-                      {formatPrice(cartData.totalAmount)} ₽
+                      {formatPrice(cartData?.totalAmount || 0)} ₽
                     </span>
                   </p>
                 </div>
 
                 {/* Список товаров */}
                 <div className='space-y-4 mb-6'>
-                  {cartData.items.map((item) => (
+                  {cartData?.items?.map((item) => (
                     <div
                       key={item.productId}
                       className='bg-white rounded-lg shadow-lg p-6'
@@ -342,12 +345,12 @@ export default function ShoppingCartClient() {
                       className='text-2xl font-bold text-green-600'
                       style={{ fontSize: '24px' }}
                     >
-                      {formatPrice(cartData.totalAmount)} ₽
+                      {formatPrice(cartData?.totalAmount || 0)} ₽
                     </span>
                   </div>
 
                   {/* Проверка минимальной суммы */}
-                  {cartData.totalAmount <
+                  {(cartData?.totalAmount || 0) <
                     parseInt(process.env.NEXT_PUBLIC_MINSUMM || '500') && (
                     <div className='bg-orange-50 border border-orange-200 rounded-lg p-4 mb-4'>
                       <p
@@ -373,7 +376,7 @@ export default function ShoppingCartClient() {
                     <Button
                       onClick={handleOrderClick}
                       disabled={
-                        cartData.totalAmount <
+                        (cartData?.totalAmount || 0) <
                         parseInt(process.env.NEXT_PUBLIC_MINSUMM || '500')
                       }
                       className='flex-1 max-w-xs bg-green-600 hover:bg-green-700'
