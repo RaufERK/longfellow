@@ -24,14 +24,14 @@ interface OrderData {
 }
 
 export async function POST(req: NextRequest) {
+  const orderData: OrderData = await req.json()
+
   try {
     console.log('=== EMAIL API START ===')
     console.log('MAIL_SERVER (env):', process.env.MAIL_SERVER)
     console.log('Using host: mail.amasters.pro')
     console.log('SOURCE_MAIL:', process.env.SOURCE_MAIL)
     console.log('MAIL_PASSWORD exists:', !!process.env.MAIL_PASSWORD)
-
-    const orderData: OrderData = await req.json()
     console.log('Order data received:', {
       items: orderData.items.length,
       totalAmount: orderData.totalAmount,
@@ -143,8 +143,6 @@ ${new Date().toLocaleString('ru-RU', {
     // Резервный вариант - сохраняем заказ в файл
     try {
       console.log('SMTP failed, saving order to file as backup...')
-
-      // orderData уже был получен в начале функции, используем его
 
       const backupOrder = {
         timestamp: new Date().toISOString(),
