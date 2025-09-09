@@ -10,23 +10,6 @@ module.exports = {
       env: { NODE_ENV: 'production' },
       env_production: { NODE_ENV: 'production' },
     },
-    {
-      name: 'longfellow-fetch-legacy',
-      script: 'npm',
-      args: 'run fetch:legacy',
-      instances: 1,
-      exec_mode: 'fork',
-      watch: false,
-      autorestart: false,
-      env: {
-        NODE_ENV: 'production',
-        PREFETCH_BASE: 'http://localhost:3010',
-      },
-      env_production: {
-        NODE_ENV: 'production',
-        PREFETCH_BASE: 'http://localhost:3010',
-      },
-    },
   ],
 
   deploy: {
