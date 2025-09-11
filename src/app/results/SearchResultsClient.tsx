@@ -128,11 +128,12 @@ export default function SearchResultsClient({
             <h1 className='text-3xl font-bold text-gray-800'>
               Результаты поиска: &quot;{query}&quot;
             </h1>
-            {searchResults.totalResults !== undefined && (
-              <p className='text-lg text-gray-600 mt-2'>
-                Найдено товаров: {searchResults.totalResults}
-              </p>
-            )}
+            {searchResults.totalResults !== undefined &&
+              searchResults.totalResults > 0 && (
+                <p className='text-lg text-gray-600 mt-2'>
+                  Найдено товаров: {searchResults.totalResults}
+                </p>
+              )}
           </div>
 
           {searchResults.results && searchResults.totalResults === 0 && (
@@ -142,7 +143,7 @@ export default function SearchResultsClient({
           )}
 
           {searchResults.results &&
-            searchResults.totalResults &&
+            searchResults.totalResults !== undefined &&
             searchResults.totalResults > 0 && (
               <div className='space-y-8'>
                 {searchResults.results.books &&
