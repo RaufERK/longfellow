@@ -39,8 +39,8 @@ export default function SearchCartBar({
   const performSearch = () => {
     const trimmedQuery = searchQuery.trim()
 
-    if (trimmedQuery.length < 5) {
-      setValidationError('Минимум 5 символов для поиска')
+    if (trimmedQuery.length < 4) {
+      setValidationError('Минимум 4 символа для поиска')
       return
     }
 

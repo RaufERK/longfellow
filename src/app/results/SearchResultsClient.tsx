@@ -179,7 +179,7 @@ export default function SearchResultsClient({
       {!query && !loading && (
         <div className='text-center py-12'>
           <p className='text-xl text-gray-600'>
-            Введите поисковый запрос (минимум 5 символов)
+            Введите поисковый запрос (минимум 4 символа)
           </p>
         </div>
       )}

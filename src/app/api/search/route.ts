@@ -5,10 +5,10 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const query = searchParams.get('q')?.trim()
 
-  if (!query || query.length < 5) {
+  if (!query || query.length < 4) {
     return NextResponse.json(
       {
-        error: 'Минимум 5 символов для поиска',
+        error: 'Минимум 4 символа для поиска',
         results: {},
       },
       { status: 400 }
