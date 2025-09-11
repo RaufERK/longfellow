@@ -1,13 +1,15 @@
 import PageHeader from '@/components/PageHeader'
+import SearchCartBar from '@/components/SearchCartBar'
 import Link from 'next/link'
 
 export const dynamic = 'force-dynamic'
 
 export default function NotFound() {
   return (
-    <div className='bg-[#ccffcc] flex flex-col min-h-screen'>
+    <div className='bg-[#ccffcc]'>
       <PageHeader titleImage='h_books.gif' titleAlt='Страница не найдена' />
-      <div className='container mx-auto px-4 py-8 bg-[#ccffcc] flex-1 flex items-center justify-center'>
+      <SearchCartBar placeholder='Поиск...' />
+      <div className='container mx-auto px-4 py-8 bg-[#ccffcc]'>
         <div className='text-center'>
           <h1
             className='text-4xl font-bold text-gray-800 mb-4'
