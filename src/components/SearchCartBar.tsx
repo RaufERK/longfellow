@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useCart } from '@/hooks/useCart'
 import { Input } from '@/components/ui/input'
 
@@ -16,15 +17,41 @@ export default function SearchCartBar({
 }: SearchCartBarProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const [mounted, setMounted] = useState(false)
+  const [validationError, setValidationError] = useState('')
   const { cart, isLoaded } = useCart()
+  const router = useRouter()
+  const searchParams = useSearchParams()
 
   useEffect(() => {
     setMounted(true)
-  }, [])
+    const currentQuery = searchParams.get('q')
+    if (currentQuery) {
+      setSearchQuery(currentQuery)
+    }
+  }, [searchParams])
 
   const handleSearchChange = (value: string) => {
     setSearchQuery(value)
+    setValidationError('')
     onSearch?.(value)
+  }
+
+  const performSearch = () => {
+    const trimmedQuery = searchQuery.trim()
+
+    if (trimmedQuery.length < 5) {
+      setValidationError('Минимум 5 символов для поиска')
+      return
+    }
+
+    setValidationError('')
+    router.push(`/results?q=${encodeURIComponent(trimmedQuery)}`)
+  }
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      performSearch()
+    }
   }
 
   const formatPrice = (price: number) => {
@@ -36,12 +63,20 @@ export default function SearchCartBar({
       <div className='w-full bg-yellow-400 border-b border-yellow-500 py-3 px-4 rounded-bl-lg relative'>
         <div className='flex items-center justify-between max-w-7xl mx-auto'>
           <div className='flex-1 max-w-md'>
-            <Input
-              type='text'
-              placeholder={placeholder}
-              className='w-full bg-white border-white'
-              disabled
-            />
+            <div className='flex gap-2'>
+              <Input
+                type='text'
+                placeholder={placeholder}
+                className='flex-1 bg-white border-white'
+                disabled
+              />
+              <button
+                className='bg-green-600 text-white px-4 py-2 rounded-md font-medium text-sm'
+                disabled
+              >
+                Поиск
+              </button>
+            </div>
           </div>
           <div className='text-gray-700'>Загрузка...</div>
         </div>
@@ -54,13 +89,29 @@ export default function SearchCartBar({
       <div className='flex items-center justify-between max-w-7xl mx-auto gap-4'>
         {/* Левая часть - поиск */}
         <div className='flex-1 max-w-md'>
-          <Input
-            type='text'
-            placeholder={placeholder}
-            value={searchQuery}
-            onChange={(e) => handleSearchChange(e.target.value)}
-            className='w-full bg-white border-white'
-          />
+          <div className='space-y-2'>
+            <div className='flex gap-2'>
+              <Input
+                type='text'
+                placeholder={placeholder}
+                value={searchQuery}
+                onChange={(e) => handleSearchChange(e.target.value)}
+                onKeyPress={handleKeyPress}
+                className='flex-1 bg-white border-white'
+              />
+              <button
+                onClick={performSearch}
+                className='bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md transition-colors font-medium text-sm'
+              >
+                Поиск
+              </button>
+            </div>
+            {validationError && (
+              <div className='text-sm text-red-600 bg-red-50 px-2 py-1 rounded'>
+                {validationError}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Правая часть - информация о корзине */}
