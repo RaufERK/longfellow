@@ -27,10 +27,10 @@ export default function RootLayout({
 
         {/* Основной контент сдвинут вправо на десктопе */}
         <div
-          className='lg:ml-[167px] min-h-screen bg-white lg:shadow-lg bg-[#ccffcc]'
+          className='lg:ml-[167px] min-h-screen lg:shadow-lg bg-[#ccffcc] flex flex-col'
           id='top'
         >
-          {children}
+          <main className='flex-1'>{children}</main>
           <Footer />
         </div>
       </body>
