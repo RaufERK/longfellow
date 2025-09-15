@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import ImageUpload from '@/components/ImageUpload'
 
 interface ProductData {
   id: string
@@ -59,6 +60,8 @@ export default function EditProductPage({
     originalImagePath: '',
   })
 
+  const [originalData, setOriginalData] = useState({}) // Для отслеживания изменений
+
   const categories = ['books', 'buklets', 'calendars', 'cards', 'films']
 
   useEffect(() => {
@@ -67,7 +70,7 @@ export default function EditProductPage({
         const response = await fetch(`/api/moderator/products/${params.id}`)
         if (response.ok) {
           const product: ProductData = await response.json()
-          setFormData({
+          const productData = {
             title: product.title || '',
             author: product.author || '',
             shortDescription: product.shortDescription || '',
@@ -94,7 +97,10 @@ export default function EditProductPage({
             category: product.category,
             subcategory: product.subcategory || '',
             originalImagePath: product.originalImagePath || '',
-          })
+          }
+
+          setFormData(productData)
+          setOriginalData(productData) // Сохраняем оригинальные данные
         } else {
           alert('Товар не найден')
           router.push('/moderator/products')
@@ -115,12 +121,26 @@ export default function EditProductPage({
     setLoading(true)
 
     try {
+      // Отправляем только измененные поля
+      const changedData = {}
+      Object.keys(formData).forEach((key) => {
+        if (formData[key] !== originalData[key]) {
+          changedData[key] = formData[key]
+        }
+      })
+
+      // Если ничего не изменилось, просто редиректим
+      if (Object.keys(changedData).length === 0) {
+        router.push('/moderator/products')
+        return
+      }
+
       const response = await fetch(`/api/moderator/products/${params.id}`, {
-        method: 'PUT',
+        method: 'PATCH', // Используем PATCH для частичного обновления
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(changedData),
       })
 
       if (response.ok) {
@@ -481,39 +501,23 @@ export default function EditProductPage({
             </div>
 
             <div className='grid md:grid-cols-2 gap-6'>
-              <div>
-                <label
-                  className='block text-lg font-medium mb-2'
-                  style={{ fontSize: '18px' }}
-                >
-                  URL миниатюры
-                </label>
-                <input
-                  type='url'
-                  name='thumbnailUrl'
-                  value={formData.thumbnailUrl}
-                  onChange={handleChange}
-                  className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500'
-                  style={{ fontSize: '18px' }}
-                />
-              </div>
+              <ImageUpload
+                currentImage={formData.thumbnailUrl}
+                onImageChange={(imagePath) =>
+                  setFormData((prev) => ({ ...prev, thumbnailUrl: imagePath }))
+                }
+                type='thumbnail'
+                label='Миниатюра товара'
+              />
 
-              <div>
-                <label
-                  className='block text-lg font-medium mb-2'
-                  style={{ fontSize: '18px' }}
-                >
-                  URL большого изображения
-                </label>
-                <input
-                  type='url'
-                  name='largeImageUrl'
-                  value={formData.largeImageUrl}
-                  onChange={handleChange}
-                  className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500'
-                  style={{ fontSize: '18px' }}
-                />
-              </div>
+              <ImageUpload
+                currentImage={formData.largeImageUrl}
+                onImageChange={(imagePath) =>
+                  setFormData((prev) => ({ ...prev, largeImageUrl: imagePath }))
+                }
+                type='large'
+                label='Большое изображение'
+              />
             </div>
 
             <div className='flex items-center'>

@@ -14,8 +14,6 @@ export default function ModeratorLogin() {
     setIsLoading(true)
     setError('')
 
-    console.log('🔐 Отправляю запрос логина...')
-
     try {
       const response = await fetch('/api/moderator/login', {
         method: 'POST',
@@ -25,20 +23,14 @@ export default function ModeratorLogin() {
         body: JSON.stringify({ password }),
       })
 
-      console.log('📡 Ответ сервера:', response.status, response.statusText)
-
       const data = await response.json()
-      console.log('📄 Данные ответа:', data)
 
       if (response.ok) {
-        console.log('✅ Авторизация успешна, редиректим...')
         router.push('/moderator')
       } else {
-        console.log('❌ Ошибка авторизации:', data.error)
         setError(data.error || 'Ошибка авторизации')
       }
-    } catch (error) {
-      console.error('💥 Ошибка сети:', error)
+    } catch {
       setError('Ошибка сети')
     } finally {
       setIsLoading(false)

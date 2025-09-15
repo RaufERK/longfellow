@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import ImageUpload from '@/components/ImageUpload'
 
 export default function NewProductPage() {
   const router = useRouter()
@@ -392,39 +393,23 @@ export default function NewProductPage() {
             </div>
 
             <div className='grid md:grid-cols-2 gap-6'>
-              <div>
-                <label
-                  className='block text-lg font-medium mb-2'
-                  style={{ fontSize: '18px' }}
-                >
-                  URL миниатюры
-                </label>
-                <input
-                  type='url'
-                  name='thumbnailUrl'
-                  value={formData.thumbnailUrl}
-                  onChange={handleChange}
-                  className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500'
-                  style={{ fontSize: '18px' }}
-                />
-              </div>
+              <ImageUpload
+                currentImage={formData.thumbnailUrl}
+                onImageChange={(imagePath) =>
+                  setFormData((prev) => ({ ...prev, thumbnailUrl: imagePath }))
+                }
+                type='thumbnail'
+                label='Миниатюра товара'
+              />
 
-              <div>
-                <label
-                  className='block text-lg font-medium mb-2'
-                  style={{ fontSize: '18px' }}
-                >
-                  URL большого изображения
-                </label>
-                <input
-                  type='url'
-                  name='largeImageUrl'
-                  value={formData.largeImageUrl}
-                  onChange={handleChange}
-                  className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500'
-                  style={{ fontSize: '18px' }}
-                />
-              </div>
+              <ImageUpload
+                currentImage={formData.largeImageUrl}
+                onImageChange={(imagePath) =>
+                  setFormData((prev) => ({ ...prev, largeImageUrl: imagePath }))
+                }
+                type='large'
+                label='Большое изображение'
+              />
             </div>
 
             <div className='flex items-center'>
