@@ -22,12 +22,16 @@ module.exports = {
       'pre-deploy-local': '',
       'post-deploy': [
         'source ~/.nvm/nvm.sh && nvm use --lts',
-        'ln -sf /home/appuser/shared/longfellow/.env.production ./.env.production || true',
+        // кладём .env.production в корень (source/)
+        'ln -sf /home/appuser/apps/longfellow/shared/.env.production ./source/.env.production',
+        // работаем из source
+        'cd source',
         'npm ci --include=dev',
         'npx prisma generate',
         'npx prisma migrate deploy',
         'npm run build',
-        'pm2 startOrReload ecosystem.config.cjs --env production',
+        // стартуем
+        'pm2 startOrReload ../ecosystem.config.cjs --env production',
         'pm2 save',
       ].join(' && '),
       env: { NODE_ENV: 'production' },
