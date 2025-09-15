@@ -151,30 +151,14 @@ async function seedProducts() {
 }
 
 // Создание базовых категорий
-async function seedCategories() {
-  const categories = [
-    { slug: 'books', title: 'Книги' },
-    { slug: 'buklets', title: 'Буклеты' },
-    { slug: 'films', title: 'Фильмы' },
-    { slug: 'cards', title: 'Открытки' },
-    { slug: 'calendars', title: 'Календарики' },
-    { slug: 'shedevry', title: 'Другие издания' },
-  ]
-
-  for (const category of categories) {
-    await prisma.category.upsert({
-      where: { slug: category.slug },
-      update: { title: category.title },
-      create: { slug: category.slug, title: category.title },
-    })
-  }
-
-  console.log('✅ Категории созданы')
-}
+// async function seedCategories() {
+//   // Функция отключена - таблица Category удалена
+//   console.log('📂 Категории больше не используются (удалена таблица Category)')
+// }
 
 async function main() {
   try {
-    await seedCategories()
+    // await seedCategories() // Отключено - таблица Category удалена
     await seedProducts()
   } catch (error) {
     console.error('❌ Ошибка заполнения БД:', error)

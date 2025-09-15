@@ -1,13 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+
+export const dynamic = 'force-dynamic'
 
 export default function ModeratorLogin() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -26,7 +26,7 @@ export default function ModeratorLogin() {
       const data = await response.json()
 
       if (response.ok) {
-        router.push('/moderator')
+        window.location.href = '/moderator'
       } else {
         setError(data.error || 'Ошибка авторизации')
       }

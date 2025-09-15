@@ -16,7 +16,7 @@ async function getRedisClient() {
         url: process.env.REDIS_URL || 'redis://localhost:6379',
       })
 
-      client.on('error', (err) => {
+      client.on('error', () => {
         if (!warningShown) {
           console.warn('⚠️  Redis недоступен - защита от брут-форс отключена')
           warningShown = true
@@ -26,14 +26,14 @@ async function getRedisClient() {
 
       await client.connect()
       console.log('✅ Redis подключен успешно')
-    } catch (error) {
+    } catch {
       if (!warningShown) {
         console.warn('⚠️  Redis недоступен - защита от брут-форс отключена')
         warningShown = true
       }
       connectionFailed = true
       client = null
-      throw error
+      throw new Error('Redis connection failed')
     }
   }
 
@@ -50,14 +50,13 @@ export async function checkBruteForce(
     const currentAttempts = attempts ? parseInt(attempts) : 0
 
     const maxAttempts = 5
-    const lockDuration = 15 * 60 // 15 минут
 
     if (currentAttempts >= maxAttempts) {
       return { allowed: false, remainingAttempts: 0 }
     }
 
     return { allowed: true, remainingAttempts: maxAttempts - currentAttempts }
-  } catch (error) {
+  } catch {
     if (!warningShown) {
       console.warn('⚠️  Redis недоступен - защита от брут-форс отключена')
       warningShown = true
@@ -74,7 +73,7 @@ export async function recordFailedAttempt(ip: string): Promise<void> {
 
     await redis.incr(key)
     await redis.expire(key, lockDuration)
-  } catch (error) {
+  } catch {
     // Молча пропускаем - предупреждение уже показано
   }
 }
@@ -84,7 +83,7 @@ export async function clearFailedAttempts(ip: string): Promise<void> {
     const redis = await getRedisClient()
     const key = `brute-force:${ip}`
     await redis.del(key)
-  } catch (error) {
+  } catch {
     // Молча пропускаем - предупреждение уже показано
   }
 }

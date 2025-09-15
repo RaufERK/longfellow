@@ -1,8 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+
+export const dynamic = 'force-dynamic'
 
 interface Product {
   id: string
@@ -37,32 +39,35 @@ export default function ProductsPage() {
 
   const categories = ['books', 'buklets', 'calendars', 'cards', 'films']
 
-  const loadProducts = async (page = 1) => {
-    setLoading(true)
-    try {
-      const params = new URLSearchParams({
-        page: page.toString(),
-        limit: '20',
-        ...(search && { search }),
-        ...(category && { category }),
-      })
+  const loadProducts = useCallback(
+    async (page = 1) => {
+      setLoading(true)
+      try {
+        const params = new URLSearchParams({
+          page: page.toString(),
+          limit: '20',
+          ...(search && { search }),
+          ...(category && { category }),
+        })
 
-      const response = await fetch(`/api/moderator/products?${params}`)
-      if (response.ok) {
-        const data = await response.json()
-        setProducts(data.products)
-        setPagination(data.pagination)
+        const response = await fetch(`/api/moderator/products?${params}`)
+        if (response.ok) {
+          const data = await response.json()
+          setProducts(data.products)
+          setPagination(data.pagination)
+        }
+      } catch (error) {
+        console.error('Error loading products:', error)
+      } finally {
+        setLoading(false)
       }
-    } catch (error) {
-      console.error('Error loading products:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
+    },
+    [search, category]
+  )
 
   useEffect(() => {
     loadProducts()
-  }, [search, category])
+  }, [loadProducts])
 
   const handleDelete = async (id: string) => {
     if (!confirm('Вы уверены, что хотите удалить этот товар?')) return

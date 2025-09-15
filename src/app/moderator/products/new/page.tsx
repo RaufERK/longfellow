@@ -5,6 +5,8 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import ImageUpload from '@/components/ImageUpload'
 
+export const dynamic = 'force-dynamic'
+
 export default function NewProductPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)

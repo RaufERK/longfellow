@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken'
-import bcrypt from 'bcrypt'
 import { NextRequest } from 'next/server'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-for-dev'

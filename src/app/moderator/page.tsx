@@ -1,15 +1,14 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
-export default function ModeratorDashboard() {
-  const router = useRouter()
+export const dynamic = 'force-dynamic'
 
+export default function ModeratorDashboard() {
   const handleLogout = async () => {
     try {
       await fetch('/api/moderator/logout', { method: 'POST' })
-      router.push('/moderator/login')
+      window.location.href = '/moderator/login'
     } catch (error) {
       console.error('Logout error:', error)
     }

@@ -5,6 +5,8 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import ImageUpload from '@/components/ImageUpload'
 
+export const dynamic = 'force-dynamic'
+
 interface ProductData {
   id: string
   title: string
@@ -32,7 +34,7 @@ interface ProductData {
 export default function EditProductPage({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
@@ -60,14 +62,13 @@ export default function EditProductPage({
     originalImagePath: '',
   })
 
-  const [originalData, setOriginalData] = useState({}) // Для отслеживания изменений
-
   const categories = ['books', 'buklets', 'calendars', 'cards', 'films']
 
   useEffect(() => {
     const loadProduct = async () => {
       try {
-        const response = await fetch(`/api/moderator/products/${params.id}`)
+        const { id } = await params
+        const response = await fetch(`/api/moderator/products/${id}`)
         if (response.ok) {
           const product: ProductData = await response.json()
           const productData = {
@@ -100,7 +101,6 @@ export default function EditProductPage({
           }
 
           setFormData(productData)
-          setOriginalData(productData) // Сохраняем оригинальные данные
         } else {
           alert('Товар не найден')
           router.push('/moderator/products')
@@ -114,33 +114,21 @@ export default function EditProductPage({
     }
 
     loadProduct()
-  }, [params.id, router])
+  }, [params, router])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
 
     try {
-      // Отправляем только измененные поля
-      const changedData = {}
-      Object.keys(formData).forEach((key) => {
-        if (formData[key] !== originalData[key]) {
-          changedData[key] = formData[key]
-        }
-      })
+      const { id } = await params
 
-      // Если ничего не изменилось, просто редиректим
-      if (Object.keys(changedData).length === 0) {
-        router.push('/moderator/products')
-        return
-      }
-
-      const response = await fetch(`/api/moderator/products/${params.id}`, {
-        method: 'PATCH', // Используем PATCH для частичного обновления
+      const response = await fetch(`/api/moderator/products/${id}`, {
+        method: 'PUT', // Возвращаемся к PUT для полного обновления
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(changedData),
+        body: JSON.stringify(formData),
       })
 
       if (response.ok) {

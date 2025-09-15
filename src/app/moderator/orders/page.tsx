@@ -1,8 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+
+export const dynamic = 'force-dynamic'
 
 interface OrderItem {
   id: string
@@ -69,32 +72,35 @@ export default function OrdersPage() {
     completed: 'bg-green-100 text-green-800',
   }
 
-  const loadOrders = async (page = 1) => {
-    setLoading(true)
-    try {
-      const params = new URLSearchParams({
-        page: page.toString(),
-        limit: '20',
-        ...(search && { search }),
-        ...(statusFilter && { status: statusFilter }),
-      })
+  const loadOrders = useCallback(
+    async (page = 1) => {
+      setLoading(true)
+      try {
+        const params = new URLSearchParams({
+          page: page.toString(),
+          limit: '20',
+          ...(search && { search }),
+          ...(statusFilter && { status: statusFilter }),
+        })
 
-      const response = await fetch(`/api/moderator/orders?${params}`)
-      if (response.ok) {
-        const data = await response.json()
-        setOrders(data.orders)
-        setPagination(data.pagination)
+        const response = await fetch(`/api/moderator/orders?${params}`)
+        if (response.ok) {
+          const data = await response.json()
+          setOrders(data.orders)
+          setPagination(data.pagination)
+        }
+      } catch (error) {
+        console.error('Error loading orders:', error)
+      } finally {
+        setLoading(false)
       }
-    } catch (error) {
-      console.error('Error loading orders:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
+    },
+    [search, statusFilter]
+  )
 
   useEffect(() => {
     loadOrders()
-  }, [search, statusFilter])
+  }, [loadOrders])
 
   const updateOrderStatus = async (orderId: string, newStatus: string) => {
     try {
@@ -230,7 +236,7 @@ export default function OrdersPage() {
           </div>
         ) : (
           <div className='space-y-6'>
-            {orders.map((order) => (
+            {orders?.map((order) => (
               <div
                 key={order.id}
                 className='bg-white rounded-lg shadow-md overflow-hidden'
@@ -319,16 +325,18 @@ export default function OrdersPage() {
                         Товары в заказе:
                       </h4>
                       <div className='space-y-2'>
-                        {order.items.map((item) => (
+                        {order.items?.map((item) => (
                           <div
                             key={item.id}
                             className='flex items-center gap-3 p-2 bg-gray-50 rounded'
                           >
                             {item.product.thumbnailUrl && (
-                              <img
+                              <Image
                                 src={item.product.thumbnailUrl}
                                 alt={item.product.title}
-                                className='w-12 h-12 object-cover rounded'
+                                width={48}
+                                height={48}
+                                className='object-cover rounded'
                               />
                             )}
                             <div className='flex-1'>

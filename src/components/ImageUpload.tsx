@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useCallback, useRef } from 'react'
+import Image from 'next/image'
 
 interface ImageUploadProps {
   currentImage?: string
@@ -37,34 +38,37 @@ export default function ImageUpload({
     setIsDragging(false)
   }, [])
 
-  const uploadFile = async (file: File) => {
-    setUploading(true)
+  const uploadFile = useCallback(
+    async (file: File) => {
+      setUploading(true)
 
-    try {
-      const formData = new FormData()
-      formData.append('image', file)
-      formData.append('type', type)
+      try {
+        const formData = new FormData()
+        formData.append('image', file)
+        formData.append('type', type)
 
-      const response = await fetch('/api/moderator/upload', {
-        method: 'POST',
-        body: formData,
-      })
+        const response = await fetch('/api/moderator/upload', {
+          method: 'POST',
+          body: formData,
+        })
 
-      if (response.ok) {
-        const result = await response.json()
-        onImageChange(result.path)
-        setPreviewImage(URL.createObjectURL(file))
-      } else {
-        const error = await response.json()
-        alert(`Ошибка загрузки: ${error.error}`)
+        if (response.ok) {
+          const result = await response.json()
+          onImageChange(result.path)
+          setPreviewImage(URL.createObjectURL(file))
+        } else {
+          const error = await response.json()
+          alert(`Ошибка загрузки: ${error.error}`)
+        }
+      } catch (error) {
+        console.error('Upload error:', error)
+        alert('Ошибка загрузки файла')
+      } finally {
+        setUploading(false)
       }
-    } catch (error) {
-      console.error('Upload error:', error)
-      alert('Ошибка загрузки файла')
-    } finally {
-      setUploading(false)
-    }
-  }
+    },
+    [type, onImageChange]
+  )
 
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
@@ -81,7 +85,7 @@ export default function ImageUpload({
         alert('Пожалуйста, загрузите изображение')
       }
     },
-    [type, onImageChange]
+    [uploadFile]
   )
 
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -136,11 +140,15 @@ export default function ImageUpload({
           </div>
         ) : displayImage ? (
           <div className='flex flex-col items-center'>
-            <img
-              src={displayImage}
-              alt='Предпросмотр'
-              className='max-w-full max-h-32 object-contain mb-2 rounded'
-            />
+            <div className='relative w-32 h-32 mb-2'>
+              <Image
+                src={displayImage}
+                alt='Предпросмотр'
+                fill
+                className='object-contain rounded'
+                sizes='(max-width: 128px) 100vw, 128px'
+              />
+            </div>
             <div className='text-sm text-gray-600 mb-2'>
               {currentImage ? 'Текущее изображение' : 'Новое изображение'}
             </div>

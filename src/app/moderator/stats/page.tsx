@@ -1,8 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+
+export const dynamic = 'force-dynamic'
 
 interface Overview {
   totalRevenue: number
@@ -54,7 +56,7 @@ export default function StatsPage() {
     { value: '365', label: 'Последний год' },
   ]
 
-  const loadStats = async () => {
+  const loadStats = useCallback(async () => {
     setLoading(true)
     try {
       const response = await fetch(`/api/moderator/stats?period=${period}`)
@@ -67,11 +69,11 @@ export default function StatsPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [period])
 
   useEffect(() => {
     loadStats()
-  }, [period])
+  }, [loadStats])
 
   const handleLogout = async () => {
     await fetch('/api/moderator/logout', { method: 'POST' })
@@ -269,7 +271,7 @@ export default function StatsPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {stats.dailySales.slice(0, 10).map((day) => (
+                    {stats.dailySales?.slice(0, 10)?.map((day) => (
                       <tr key={day.date} className='border-t'>
                         <td className='px-4 py-2' style={{ fontSize: '18px' }}>
                           {formatDate(day.date)}
@@ -327,7 +329,7 @@ export default function StatsPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {stats.topProducts.map((product, index) => (
+                    {stats.topProducts?.map((product, index) => (
                       <tr key={product.productId} className='border-t'>
                         <td className='px-4 py-2'>
                           <div className='flex items-center gap-2'>
@@ -370,7 +372,7 @@ export default function StatsPage() {
                 📋 Продажи по категориям
               </h2>
               <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-4'>
-                {stats.categories.map((cat) => (
+                {stats.categories?.map((cat) => (
                   <div key={cat.category} className='bg-gray-50 rounded-lg p-4'>
                     <h3
                       className='font-bold mb-2 text-center'

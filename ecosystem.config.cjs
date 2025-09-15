@@ -21,17 +21,15 @@ module.exports = {
       path: '/home/appuser/apps/longfellow',
       'pre-deploy-local': '',
       'post-deploy': [
+        'export NODE_ENV=production',
         'source ~/.nvm/nvm.sh && nvm use --lts',
-        // кладём .env.production в корень (source/)
-        'ln -sf /home/appuser/apps/longfellow/shared/.env.production ./source/.env.production',
-        // работаем из source
-        'cd source',
+        // только один симлинк
+        'ln -sf /home/appuser/apps/longfellow/shared/.env /home/appuser/apps/longfellow/source/.env',
         'npm ci --include=dev',
         'npx prisma generate',
         'npx prisma migrate deploy',
         'npm run build',
-        // стартуем
-        'pm2 startOrReload ../ecosystem.config.cjs --env production',
+        'pm2 startOrReload ecosystem.config.cjs --env production',
         'pm2 save',
       ].join(' && '),
       env: { NODE_ENV: 'production' },

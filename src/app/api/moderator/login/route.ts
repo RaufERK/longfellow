@@ -17,7 +17,6 @@ export async function POST(req: NextRequest) {
     const clientIP =
       req.headers.get('x-forwarded-for') ||
       req.headers.get('x-real-ip') ||
-      req.ip ||
       'unknown'
 
     const bruteForceCheck = await checkBruteForce(clientIP)
