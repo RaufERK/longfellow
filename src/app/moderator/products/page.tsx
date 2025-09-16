@@ -333,13 +333,13 @@ export default function ProductsPage() {
                         <div className='flex justify-center gap-2'>
                           <Link
                             href={`/moderator/products/${product.id}/edit`}
-                            className='bg-orange-600 hover:bg-orange-700 text-white px-3 py-1 rounded text-sm transition duration-200'
+                            className='bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm transition duration-200'
                           >
                             Изменить
                           </Link>
                           <button
                             onClick={() => handleDelete(product.id)}
-                            className='bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm transition duration-200'
+                            className='bg-orange-600 hover:bg-orange-700 text-white px-3 py-1 rounded text-sm transition duration-200'
                           >
                             Удалить
                           </button>
