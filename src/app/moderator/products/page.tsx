@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import ToggleSwitch from '@/components/ToggleSwitch'
+import ModeratorHeader from '@/components/ModeratorHeader'
 
 export const dynamic = 'force-dynamic'
 
@@ -37,7 +37,6 @@ export default function ProductsPage() {
   const [search, setSearch] = useState('')
   const [category, setCategory] = useState('')
   const [itemsPerPage, setItemsPerPage] = useState(50)
-  const router = useRouter()
 
   const categories = [
     { value: 'books', label: 'Книги' },
@@ -130,30 +129,16 @@ export default function ProductsPage() {
     }
   }
 
-  const handleLogout = async () => {
-    await fetch('/api/moderator/logout', { method: 'POST' })
-    router.push('/moderator/login')
-  }
-
   return (
     <div
       className='min-h-screen bg-[#ccffcc]'
       style={{ fontFamily: 'Times, Times New Roman, serif' }}
     >
-      <header className='bg-white shadow-md'>
-        <div className='max-w-7xl mx-auto px-4 py-4 flex justify-between items-center'>
-          <h1 className='text-3xl font-bold text-green-800'>
-            📚 Управление товарами
-          </h1>
-          <button
-            onClick={handleLogout}
-            className='bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-200'
-            style={{ fontSize: '18px' }}
-          >
-            🚪 Выйти
-          </button>
-        </div>
-      </header>
+      <ModeratorHeader
+        title='Управление товарами'
+        icon='📚'
+        maxWidth='max-w-7xl'
+      />
 
       <nav className='bg-green-600 text-white'>
         <div className='max-w-7xl mx-auto px-4'>
