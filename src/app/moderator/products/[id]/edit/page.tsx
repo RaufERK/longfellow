@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import ImageUpload from '@/components/ImageUpload'
+import ToggleSwitch from '@/components/ToggleSwitch'
 
 export const dynamic = 'force-dynamic'
 
@@ -243,7 +244,7 @@ export default function EditProductPage({
       </nav>
 
       <main className='max-w-7xl mx-auto px-4 py-6'>
-        <div className='bg-white rounded-lg shadow-md p-4'>
+        <div className=' rounded-lg shadow-md p-4 bg-green-600'>
           <form onSubmit={handleSubmit} className='space-y-4'>
             {/* Название товара - на всю ширину */}
             <div>
@@ -471,23 +472,14 @@ export default function EditProductPage({
               </div>
 
               <div className='flex items-center justify-center'>
-                <div className='flex items-center'>
-                  <input
-                    type='checkbox'
-                    id='inStock'
-                    name='inStock'
-                    checked={formData.inStock}
-                    onChange={handleChange}
-                    className='mr-2 scale-125'
-                  />
-                  <label
-                    htmlFor='inStock'
-                    className='text-lg font-medium'
-                    style={{ fontSize: '18px' }}
-                  >
-                    В наличии
-                  </label>
-                </div>
+                <ToggleSwitch
+                  checked={formData.inStock}
+                  onChange={(checked) =>
+                    setFormData((prev) => ({ ...prev, inStock: checked }))
+                  }
+                  size='md'
+                  label='В наличии'
+                />
               </div>
             </div>
 

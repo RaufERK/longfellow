@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import ToggleSwitch from '@/components/ToggleSwitch'
 
 export const dynamic = 'force-dynamic'
 
@@ -322,21 +323,13 @@ export default function ProductsPage() {
                           : '—'}
                       </td>
                       <td className='px-4 py-3 text-center'>
-                        <button
-                          onClick={() =>
-                            handleToggleStock(product.id, product.inStock)
+                        <ToggleSwitch
+                          checked={product.inStock}
+                          onChange={(checked) =>
+                            handleToggleStock(product.id, !checked)
                           }
-                          className={`px-3 py-1 rounded text-sm font-medium transition duration-200 hover:opacity-80 ${
-                            product.inStock
-                              ? 'bg-green-100 text-green-800 hover:bg-green-200'
-                              : 'bg-red-100 text-red-800 hover:bg-red-200'
-                          }`}
-                          style={{ fontSize: '16px' }}
-                        >
-                          {product.inStock
-                            ? '✅ В наличии'
-                            : '❌ Нет в наличии'}
-                        </button>
+                          size='sm'
+                        />
                       </td>
                       <td className='px-4 py-3 text-center'>
                         <div className='flex justify-center gap-2'>

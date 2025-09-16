@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import ImageUpload from '@/components/ImageUpload'
+import ToggleSwitch from '@/components/ToggleSwitch'
 
 export const dynamic = 'force-dynamic'
 
@@ -148,11 +149,11 @@ export default function NewProductPage() {
         </div>
       </nav>
 
-      <main className='max-w-4xl mx-auto px-4 py-8'>
-        <div className='bg-white rounded-lg shadow-md p-6'>
-          <form onSubmit={handleSubmit} className='space-y-6'>
-            <div className='grid md:grid-cols-2 gap-6'>
-              <div>
+      <main className='max-w-4xl mx-auto px-4 py-8 bg-green-700'>
+        <div className='rounded-lg shadow-md p-6  bg-green-700'>
+          <form onSubmit={handleSubmit} className='space-y-6 bg-green-700'>
+            <div className='grid md:grid-cols-2 gap-6 bg-green-700'>
+              <div className='bg-green-700'>
                 <label
                   className='block text-lg font-medium mb-2'
                   style={{ fontSize: '18px' }}
@@ -421,21 +422,14 @@ export default function NewProductPage() {
             </div>
 
             <div className='flex items-center'>
-              <input
-                type='checkbox'
-                id='inStock'
-                name='inStock'
+              <ToggleSwitch
                 checked={formData.inStock}
-                onChange={handleChange}
-                className='mr-2 scale-125'
+                onChange={(checked) =>
+                  setFormData((prev) => ({ ...prev, inStock: checked }))
+                }
+                size='md'
+                label='В наличии'
               />
-              <label
-                htmlFor='inStock'
-                className='text-lg font-medium'
-                style={{ fontSize: '18px' }}
-              >
-                В наличии
-              </label>
             </div>
 
             <div className='flex gap-4 pt-6'>
