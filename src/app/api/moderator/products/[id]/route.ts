@@ -82,6 +82,35 @@ export async function PUT(
   }
 }
 
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  if (!isAuthenticated(req)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  try {
+    const { id } = await params
+    const data = await req.json()
+
+    const product = await prisma.product.update({
+      where: { id },
+      data: {
+        inStock: data.inStock,
+      },
+    })
+
+    return NextResponse.json(product)
+  } catch (error) {
+    console.error('Error updating product status:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
+  }
+}
+
 export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }

@@ -33,7 +33,13 @@ export default function NewProductPage() {
     originalImagePath: '',
   })
 
-  const categories = ['books', 'buklets', 'calendars', 'cards', 'films']
+  const categories = [
+    { value: 'books', label: 'Книги' },
+    { value: 'buklets', label: 'Буклеты' },
+    { value: 'calendars', label: 'Календарики' },
+    { value: 'cards', label: 'Открытки' },
+    { value: 'films', label: 'Фильмы' },
+  ]
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -197,8 +203,8 @@ export default function NewProductPage() {
                   style={{ fontSize: '18px' }}
                 >
                   {categories.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
+                    <option key={cat.value} value={cat.value}>
+                      {cat.label}
                     </option>
                   ))}
                 </select>

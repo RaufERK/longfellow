@@ -28,24 +28,31 @@ export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [pagination, setPagination] = useState<PaginationInfo>({
     page: 1,
-    limit: 20,
+    limit: 50,
     total: 0,
     pages: 0,
   })
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [category, setCategory] = useState('')
+  const [itemsPerPage, setItemsPerPage] = useState(50)
   const router = useRouter()
 
-  const categories = ['books', 'buklets', 'calendars', 'cards', 'films']
+  const categories = [
+    { value: 'books', label: 'Книги' },
+    { value: 'buklets', label: 'Буклеты' },
+    { value: 'calendars', label: 'Календарики' },
+    { value: 'cards', label: 'Открытки' },
+    { value: 'films', label: 'Фильмы' },
+  ]
 
   const loadProducts = useCallback(
-    async (page = 1) => {
+    async (page = 1, limit = itemsPerPage) => {
       setLoading(true)
       try {
         const params = new URLSearchParams({
           page: page.toString(),
-          limit: '20',
+          limit: limit.toString(),
           ...(search && { search }),
           ...(category && { category }),
         })
@@ -62,12 +69,46 @@ export default function ProductsPage() {
         setLoading(false)
       }
     },
-    [search, category]
+    [search, category, itemsPerPage]
   )
 
   useEffect(() => {
     loadProducts()
   }, [loadProducts])
+
+  const handleItemsPerPageChange = (newLimit: number) => {
+    setItemsPerPage(newLimit)
+    setPagination((prev) => ({ ...prev, page: 1 })) // Сбрасываем на первую страницу
+    loadProducts(1, newLimit)
+  }
+
+  const handleToggleStock = async (id: string, currentStatus: boolean) => {
+    try {
+      const response = await fetch(`/api/moderator/products/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ inStock: !currentStatus }),
+      })
+
+      if (response.ok) {
+        // Обновляем локальное состояние
+        setProducts(
+          products.map((product) =>
+            product.id === id
+              ? { ...product, inStock: !currentStatus }
+              : product
+          )
+        )
+      } else {
+        alert('Ошибка при обновлении статуса товара')
+      }
+    } catch (error) {
+      console.error('Error updating product status:', error)
+      alert('Ошибка при обновлении статуса товара')
+    }
+  }
 
   const handleDelete = async (id: string) => {
     if (!confirm('Вы уверены, что хотите удалить этот товар?')) return
@@ -99,7 +140,7 @@ export default function ProductsPage() {
       style={{ fontFamily: 'Times, Times New Roman, serif' }}
     >
       <header className='bg-white shadow-md'>
-        <div className='max-w-6xl mx-auto px-4 py-4 flex justify-between items-center'>
+        <div className='max-w-7xl mx-auto px-4 py-4 flex justify-between items-center'>
           <h1 className='text-3xl font-bold text-green-800'>
             📚 Управление товарами
           </h1>
@@ -114,7 +155,7 @@ export default function ProductsPage() {
       </header>
 
       <nav className='bg-green-600 text-white'>
-        <div className='max-w-6xl mx-auto px-4'>
+        <div className='max-w-7xl mx-auto px-4'>
           <ul className='flex space-x-8 py-4'>
             <li>
               <Link
@@ -155,7 +196,7 @@ export default function ProductsPage() {
         </div>
       </nav>
 
-      <main className='max-w-6xl mx-auto px-4 py-8'>
+      <main className='max-w-7xl mx-auto px-4 py-8'>
         <div className='bg-white rounded-lg shadow-md p-6 mb-6'>
           <div className='flex flex-col lg:flex-row gap-4 items-center justify-between'>
             <div className='flex flex-col lg:flex-row gap-4 flex-1'>
@@ -175,10 +216,22 @@ export default function ProductsPage() {
               >
                 <option value=''>Все категории</option>
                 {categories.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat}
+                  <option key={cat.value} value={cat.value}>
+                    {cat.label}
                   </option>
                 ))}
+              </select>
+              <select
+                value={itemsPerPage}
+                onChange={(e) =>
+                  handleItemsPerPageChange(parseInt(e.target.value))
+                }
+                className='px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500'
+                style={{ fontSize: '18px' }}
+              >
+                <option value={20}>20 товаров</option>
+                <option value={50}>50 товаров</option>
+                <option value={100}>100 товаров</option>
               </select>
             </div>
             <Link
@@ -259,7 +312,9 @@ export default function ProductsPage() {
                         {product.author || '—'}
                       </td>
                       <td className='px-4 py-3' style={{ fontSize: '18px' }}>
-                        {product.category}
+                        {categories.find(
+                          (cat) => cat.value === product.category
+                        )?.label || product.category}
                       </td>
                       <td className='px-4 py-3' style={{ fontSize: '18px' }}>
                         {product.price
@@ -267,15 +322,21 @@ export default function ProductsPage() {
                           : '—'}
                       </td>
                       <td className='px-4 py-3 text-center'>
-                        <span
-                          className={`px-2 py-1 rounded text-sm font-medium ${
+                        <button
+                          onClick={() =>
+                            handleToggleStock(product.id, product.inStock)
+                          }
+                          className={`px-3 py-1 rounded text-sm font-medium transition duration-200 hover:opacity-80 ${
                             product.inStock
-                              ? 'bg-green-100 text-green-800'
-                              : 'bg-red-100 text-red-800'
+                              ? 'bg-green-100 text-green-800 hover:bg-green-200'
+                              : 'bg-red-100 text-red-800 hover:bg-red-200'
                           }`}
+                          style={{ fontSize: '16px' }}
                         >
-                          {product.inStock ? '✅ Да' : '❌ Нет'}
-                        </span>
+                          {product.inStock
+                            ? '✅ В наличии'
+                            : '❌ Нет в наличии'}
+                        </button>
                       </td>
                       <td className='px-4 py-3 text-center'>
                         <div className='flex justify-center gap-2'>

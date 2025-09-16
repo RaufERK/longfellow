@@ -62,7 +62,13 @@ export default function EditProductPage({
     originalImagePath: '',
   })
 
-  const categories = ['books', 'buklets', 'calendars', 'cards', 'films']
+  const categories = [
+    { value: 'books', label: 'Книги' },
+    { value: 'buklets', label: 'Буклеты' },
+    { value: 'calendars', label: 'Календарики' },
+    { value: 'cards', label: 'Открытки' },
+    { value: 'films', label: 'Фильмы' },
+  ]
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -179,7 +185,7 @@ export default function EditProductPage({
       style={{ fontFamily: 'Times, Times New Roman, serif' }}
     >
       <header className='bg-white shadow-md'>
-        <div className='max-w-6xl mx-auto px-4 py-4 flex justify-between items-center'>
+        <div className='max-w-7xl mx-auto px-4 py-4 flex justify-between items-center'>
           <h1 className='text-3xl font-bold text-green-800'>
             ✏️ Редактировать товар
           </h1>
@@ -194,7 +200,7 @@ export default function EditProductPage({
       </header>
 
       <nav className='bg-green-600 text-white'>
-        <div className='max-w-6xl mx-auto px-4'>
+        <div className='max-w-7xl mx-auto px-4'>
           <ul className='flex space-x-8 py-4'>
             <li>
               <Link
@@ -236,28 +242,30 @@ export default function EditProductPage({
         </div>
       </nav>
 
-      <main className='max-w-4xl mx-auto px-4 py-8'>
-        <div className='bg-white rounded-lg shadow-md p-6'>
-          <form onSubmit={handleSubmit} className='space-y-6'>
-            <div className='grid md:grid-cols-2 gap-6'>
-              <div>
-                <label
-                  className='block text-lg font-medium mb-2'
-                  style={{ fontSize: '18px' }}
-                >
-                  Название товара *
-                </label>
-                <input
-                  type='text'
-                  name='title'
-                  value={formData.title}
-                  onChange={handleChange}
-                  required
-                  className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500'
-                  style={{ fontSize: '18px' }}
-                />
-              </div>
+      <main className='max-w-7xl mx-auto px-4 py-6'>
+        <div className='bg-white rounded-lg shadow-md p-4'>
+          <form onSubmit={handleSubmit} className='space-y-4'>
+            {/* Название товара - на всю ширину */}
+            <div>
+              <label
+                className='block text-lg font-medium mb-2'
+                style={{ fontSize: '18px' }}
+              >
+                Название товара *
+              </label>
+              <input
+                type='text'
+                name='title'
+                value={formData.title}
+                onChange={handleChange}
+                required
+                className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500'
+                style={{ fontSize: '18px' }}
+              />
+            </div>
 
+            {/* Автор и Издательство в одной строке */}
+            <div className='grid md:grid-cols-2 gap-4'>
               <div>
                 <label
                   className='block text-lg font-medium mb-2'
@@ -280,6 +288,26 @@ export default function EditProductPage({
                   className='block text-lg font-medium mb-2'
                   style={{ fontSize: '18px' }}
                 >
+                  Издательство
+                </label>
+                <input
+                  type='text'
+                  name='publisher'
+                  value={formData.publisher}
+                  onChange={handleChange}
+                  className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500'
+                  style={{ fontSize: '18px' }}
+                />
+              </div>
+            </div>
+
+            {/* Категория и Подкатегория в одной строке */}
+            <div className='grid md:grid-cols-2 gap-4'>
+              <div>
+                <label
+                  className='block text-lg font-medium mb-2'
+                  style={{ fontSize: '18px' }}
+                >
                   Категория *
                 </label>
                 <select
@@ -291,8 +319,8 @@ export default function EditProductPage({
                   style={{ fontSize: '18px' }}
                 >
                   {categories.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
+                    <option key={cat.value} value={cat.value}>
+                      {cat.label}
                     </option>
                   ))}
                 </select>
@@ -303,7 +331,7 @@ export default function EditProductPage({
                   className='block text-lg font-medium mb-2'
                   style={{ fontSize: '18px' }}
                 >
-                  Подkategория
+                  Подкатегория
                 </label>
                 <input
                   type='text'
@@ -314,25 +342,10 @@ export default function EditProductPage({
                   style={{ fontSize: '18px' }}
                 />
               </div>
+            </div>
 
-              <div>
-                <label
-                  className='block text-lg font-medium mb-2'
-                  style={{ fontSize: '18px' }}
-                >
-                  Цена (в копейках)
-                </label>
-                <input
-                  type='number'
-                  name='price'
-                  value={formData.price}
-                  onChange={handleChange}
-                  placeholder='Например: 50000 (500 руб)'
-                  className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500'
-                  style={{ fontSize: '18px' }}
-                />
-              </div>
-
+            {/* Артикул и ISBN в одной строке */}
+            <div className='grid md:grid-cols-2 gap-4'>
               <div>
                 <label
                   className='block text-lg font-medium mb-2'
@@ -355,23 +368,6 @@ export default function EditProductPage({
                   className='block text-lg font-medium mb-2'
                   style={{ fontSize: '18px' }}
                 >
-                  Издательство
-                </label>
-                <input
-                  type='text'
-                  name='publisher'
-                  value={formData.publisher}
-                  onChange={handleChange}
-                  className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500'
-                  style={{ fontSize: '18px' }}
-                />
-              </div>
-
-              <div>
-                <label
-                  className='block text-lg font-medium mb-2'
-                  style={{ fontSize: '18px' }}
-                >
                   ISBN
                 </label>
                 <input
@@ -379,6 +375,27 @@ export default function EditProductPage({
                   name='isbn'
                   value={formData.isbn}
                   onChange={handleChange}
+                  className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500'
+                  style={{ fontSize: '18px' }}
+                />
+              </div>
+            </div>
+
+            {/* Короткие поля в три колонки */}
+            <div className='grid md:grid-cols-3 gap-4'>
+              <div>
+                <label
+                  className='block text-lg font-medium mb-2'
+                  style={{ fontSize: '18px' }}
+                >
+                  Цена (в копейках)
+                </label>
+                <input
+                  type='number'
+                  name='price'
+                  value={formData.price}
+                  onChange={handleChange}
+                  placeholder='Например: 50000 (500 руб)'
                   className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500'
                   style={{ fontSize: '18px' }}
                 />
@@ -452,6 +469,26 @@ export default function EditProductPage({
                   style={{ fontSize: '18px' }}
                 />
               </div>
+
+              <div className='flex items-center justify-center'>
+                <div className='flex items-center'>
+                  <input
+                    type='checkbox'
+                    id='inStock'
+                    name='inStock'
+                    checked={formData.inStock}
+                    onChange={handleChange}
+                    className='mr-2 scale-125'
+                  />
+                  <label
+                    htmlFor='inStock'
+                    className='text-lg font-medium'
+                    style={{ fontSize: '18px' }}
+                  >
+                    В наличии
+                  </label>
+                </div>
+              </div>
             </div>
 
             <div>
@@ -506,24 +543,6 @@ export default function EditProductPage({
                 type='large'
                 label='Большое изображение'
               />
-            </div>
-
-            <div className='flex items-center'>
-              <input
-                type='checkbox'
-                id='inStock'
-                name='inStock'
-                checked={formData.inStock}
-                onChange={handleChange}
-                className='mr-2 scale-125'
-              />
-              <label
-                htmlFor='inStock'
-                className='text-lg font-medium'
-                style={{ fontSize: '18px' }}
-              >
-                В наличии
-              </label>
             </div>
 
             <div className='flex gap-4 pt-6'>
