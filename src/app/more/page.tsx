@@ -59,7 +59,7 @@ export default async function MorePage() {
 
   return (
     <div className='bg-[#ccffcc]'>
-      <PageHeader titleImage='h_dennion.gif' titleAlt='Другие издания' />
+      <PageHeader titleText='Рекомендованные книги' />
       <SearchCartBar placeholder='Поиск изданий...' />
       <div className='container mx-auto px-4 py-8 bg-[#ccffcc]'>
         {categoriesWithItems.map((category) => (

@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic'
 export default function Contacts() {
   return (
     <div className='bg-[#ccffcc]'>
-      <PageHeader titleImage='h_kontakts.gif' titleAlt='Контакты' />
+      <PageHeader titleText='Контакты' />
       <SearchCartBar placeholder='Поиск...' />
       <div className='container mx-auto px-4 py-8 bg-[#ccffcc]'>
         <div className='max-w-4xl mx-auto'>

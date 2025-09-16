@@ -17,7 +17,7 @@ export default async function CalendarsPage() {
 
   return (
     <div className='bg-[#ccffcc]'>
-      <PageHeader titleImage='h_calendars.png' titleAlt='Календарики' />
+      <PageHeader titleText='Календарики' />
       <SearchCartBar placeholder='Поиск календариков...' />
       <div className='container mx-auto px-4 py-8 bg-[#ccffcc]'>
         <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6'>

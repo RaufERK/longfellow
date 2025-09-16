@@ -13,15 +13,23 @@ const titleImageSizes: Record<string, { width: number; height: number }> = {
 }
 
 interface PageHeaderProps {
-  titleImage: string
-  titleAlt: string
+  titleImage?: string
+  titleAlt?: string
+  titleText?: string
 }
 
-export default function PageHeader({ titleImage, titleAlt }: PageHeaderProps) {
-  const imageDimensions = titleImageSizes[titleImage] || {
-    width: 200,
-    height: 45,
-  }
+export default function PageHeader({
+  titleImage,
+  titleAlt,
+  titleText,
+}: PageHeaderProps) {
+  const imageDimensions = titleImage
+    ? titleImageSizes[titleImage] || {
+        width: 200,
+        height: 45,
+      }
+    : null
+
   return (
     <div
       className='w-full relative z-10'
@@ -42,14 +50,29 @@ export default function PageHeader({ titleImage, titleAlt }: PageHeaderProps) {
             style={{ imageRendering: 'pixelated' }}
           />
           {/* Заголовок страницы */}
-          <Image
-            id='title-image'
-            src={`/legacy/img2/${titleImage}`}
-            width={imageDimensions.width}
-            height={imageDimensions.height}
-            alt={titleAlt}
-            style={{ imageRendering: 'pixelated' }}
-          />
+          {titleText ? (
+            <h1
+              className='text-yellow-400 font-bold italic text-xl md:text-2xl lg:text-4xl'
+              style={{
+                fontFamily: 'Georgia, serif',
+                textShadow: '3px 3px 6px rgba(0, 0, 0, 0.8)',
+                marginTop: '0px',
+                marginBottom: '20px',
+                letterSpacing: '2px',
+              }}
+            >
+              {titleText}
+            </h1>
+          ) : titleImage && imageDimensions ? (
+            <Image
+              id='title-image'
+              src={`/legacy/img2/${titleImage}`}
+              width={imageDimensions.width}
+              height={imageDimensions.height}
+              alt={titleAlt || ''}
+              style={{ imageRendering: 'pixelated' }}
+            />
+          ) : null}
         </div>
       </div>
 
