@@ -21,6 +21,7 @@ export default function Authors() {
                     width={152}
                     height={233}
                     className='mx-auto rounded-lg shadow-md'
+                    style={{ width: 'auto', height: 'auto' }}
                   />
                 </div>
                 <h3 className='text-xl font-semibold text-green-600 mb-2'>
@@ -36,6 +37,7 @@ export default function Authors() {
                     width={166}
                     height={229}
                     className='mx-auto rounded-lg shadow-md'
+                    style={{ width: 'auto', height: 'auto' }}
                   />
                 </div>
                 <h3 className='text-xl font-semibold text-green-600 mb-2'>
