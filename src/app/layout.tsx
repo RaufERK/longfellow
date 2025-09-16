@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import SideNavigation from '@/components/SideNavigation'
-import MobileNavigation from '@/components/MobileNavigation'
+import ConditionalNavigation from '@/components/ConditionalNavigation'
+import ClientLayout from '@/components/ClientLayout'
 import Footer from '@/components/Footer'
 
 export const metadata: Metadata = {
@@ -22,17 +22,13 @@ export default function RootLayout({
   return (
     <html lang='ru'>
       <body className='antialiased min-h-dvh text-foreground bg-[#ccffcc]'>
-        <SideNavigation />
-        <MobileNavigation />
+        <ConditionalNavigation />
 
-        {/* Основной контент сдвинут вправо на десктопе */}
-        <div
-          className='lg:ml-[167px] min-h-screen lg:shadow-lg bg-[#ccffcc] flex flex-col'
-          id='top'
-        >
+        {/* Основной контент */}
+        <ClientLayout>
           <main className='flex-1'>{children}</main>
           <Footer />
-        </div>
+        </ClientLayout>
       </body>
     </html>
   )

@@ -197,8 +197,8 @@ export default function ProductsPage() {
         </div>
       </nav>
 
-      <main className='max-w-7xl mx-auto px-4 py-8'>
-        <div className='bg-white rounded-lg shadow-md p-6 mb-6'>
+      <main className='max-w-7xl mx-auto px-2 py-4'>
+        <div className='bg-white rounded-lg shadow-md p-3 mb-3'>
           <div className='flex flex-col lg:flex-row gap-4 items-center justify-between'>
             <div className='flex flex-col lg:flex-row gap-4 flex-1'>
               <input
@@ -256,38 +256,38 @@ export default function ProductsPage() {
                 <thead className='bg-gray-50'>
                   <tr>
                     <th
-                      className='px-4 py-3 text-left font-semibold'
-                      style={{ fontSize: '18px' }}
+                      className='px-2 py-2 text-left font-semibold'
+                      style={{ fontSize: '16px' }}
                     >
                       Название
                     </th>
                     <th
-                      className='px-4 py-3 text-left font-semibold'
-                      style={{ fontSize: '18px' }}
+                      className='px-2 py-2 text-left font-semibold'
+                      style={{ fontSize: '16px' }}
                     >
                       Автор
                     </th>
                     <th
-                      className='px-4 py-3 text-left font-semibold'
-                      style={{ fontSize: '18px' }}
+                      className='px-2 py-2 text-left font-semibold'
+                      style={{ fontSize: '16px' }}
                     >
                       Категория
                     </th>
                     <th
-                      className='px-4 py-3 text-left font-semibold'
-                      style={{ fontSize: '18px' }}
+                      className='px-2 py-2 text-left font-semibold'
+                      style={{ fontSize: '16px' }}
                     >
                       Цена
                     </th>
                     <th
-                      className='px-4 py-3 text-center font-semibold'
-                      style={{ fontSize: '18px' }}
+                      className='px-2 py-2 text-center font-semibold'
+                      style={{ fontSize: '16px' }}
                     >
                       В наличии
                     </th>
                     <th
-                      className='px-4 py-3 text-center font-semibold'
-                      style={{ fontSize: '18px' }}
+                      className='px-2 py-2 text-center font-semibold'
+                      style={{ fontSize: '16px' }}
                     >
                       Действия
                     </th>
@@ -296,33 +296,33 @@ export default function ProductsPage() {
                 <tbody>
                   {products.map((product) => (
                     <tr key={product.id} className='border-t hover:bg-gray-50'>
-                      <td className='px-4 py-3'>
+                      <td className='px-2 py-2'>
                         <div
                           className='font-medium'
-                          style={{ fontSize: '18px' }}
+                          style={{ fontSize: '16px' }}
                         >
                           {product.title}
                         </div>
                         {product.sku && (
-                          <div className='text-gray-500 text-sm'>
+                          <div className='text-gray-500 text-xs'>
                             Артикул: {product.sku}
                           </div>
                         )}
                       </td>
-                      <td className='px-4 py-3' style={{ fontSize: '18px' }}>
+                      <td className='px-2 py-2' style={{ fontSize: '16px' }}>
                         {product.author || '—'}
                       </td>
-                      <td className='px-4 py-3' style={{ fontSize: '18px' }}>
+                      <td className='px-2 py-2' style={{ fontSize: '16px' }}>
                         {categories.find(
                           (cat) => cat.value === product.category
                         )?.label || product.category}
                       </td>
-                      <td className='px-4 py-3' style={{ fontSize: '18px' }}>
+                      <td className='px-2 py-2' style={{ fontSize: '16px' }}>
                         {product.price
                           ? `${(product.price / 100).toFixed(2)} ₽`
                           : '—'}
                       </td>
-                      <td className='px-4 py-3 text-center'>
+                      <td className='px-2 py-2 text-center'>
                         <ToggleSwitch
                           checked={product.inStock}
                           onChange={(checked) =>
@@ -331,19 +331,19 @@ export default function ProductsPage() {
                           size='sm'
                         />
                       </td>
-                      <td className='px-4 py-3 text-center'>
-                        <div className='flex justify-center gap-2'>
+                      <td className='px-2 py-2 text-center'>
+                        <div className='flex justify-center gap-1'>
                           <Link
                             href={`/moderator/products/${product.id}/edit`}
-                            className='bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm transition duration-200'
+                            className='bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded text-xs transition duration-200'
                           >
-                            ✏️ Редактировать
+                            ✏️
                           </Link>
                           <button
                             onClick={() => handleDelete(product.id)}
-                            className='bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm transition duration-200'
+                            className='bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-xs transition duration-200'
                           >
-                            🗑️ Удалить
+                            🗑️
                           </button>
                         </div>
                       </td>
@@ -354,11 +354,11 @@ export default function ProductsPage() {
             </div>
 
             {pagination.pages > 1 && (
-              <div className='px-4 py-3 bg-gray-50 flex justify-between items-center'>
-                <div style={{ fontSize: '18px' }}>
+              <div className='px-2 py-2 bg-gray-50 flex justify-between items-center'>
+                <div style={{ fontSize: '16px' }}>
                   Показано {products.length} из {pagination.total} товаров
                 </div>
-                <div className='flex gap-2'>
+                <div className='flex gap-1'>
                   {Array.from(
                     { length: pagination.pages },
                     (_, i) => i + 1
@@ -366,12 +366,12 @@ export default function ProductsPage() {
                     <button
                       key={page}
                       onClick={() => loadProducts(page)}
-                      className={`px-3 py-1 rounded transition duration-200 ${
+                      className={`px-2 py-1 rounded transition duration-200 ${
                         page === pagination.page
                           ? 'bg-green-600 text-white'
                           : 'bg-white border border-gray-300 hover:bg-gray-50'
                       }`}
-                      style={{ fontSize: '18px' }}
+                      style={{ fontSize: '16px' }}
                     >
                       {page}
                     </button>
