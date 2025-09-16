@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import ToggleSwitch from '@/components/ToggleSwitch'
 import ModeratorHeader from '@/components/ModeratorHeader'
+import ModeratorNavigation from '@/components/ModeratorNavigation'
 
 export const dynamic = 'force-dynamic'
 
@@ -140,47 +141,7 @@ export default function ProductsPage() {
         maxWidth='max-w-7xl'
       />
 
-      <nav className='bg-green-600 text-white'>
-        <div className='max-w-7xl mx-auto px-4'>
-          <ul className='flex space-x-8 py-4'>
-            <li>
-              <Link
-                href='/moderator'
-                className='hover:text-green-200 font-medium'
-                style={{ fontSize: '18px' }}
-              >
-                🏠 Главная
-              </Link>
-            </li>
-            <li>
-              <span
-                className='text-green-200 font-medium'
-                style={{ fontSize: '18px' }}
-              >
-                📚 Товары
-              </span>
-            </li>
-            <li>
-              <Link
-                href='/moderator/orders'
-                className='hover:text-green-200 font-medium'
-                style={{ fontSize: '18px' }}
-              >
-                🛒 Заказы
-              </Link>
-            </li>
-            <li>
-              <Link
-                href='/moderator/stats'
-                className='hover:text-green-200 font-medium'
-                style={{ fontSize: '18px' }}
-              >
-                📈 Статистика
-              </Link>
-            </li>
-          </ul>
-        </div>
-      </nav>
+      <ModeratorNavigation currentPage='products' />
 
       <main className='max-w-7xl mx-auto px-2 py-4'>
         <div className='bg-white rounded-lg shadow-md p-3 mb-3'>

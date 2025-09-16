@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import ImageUpload from '@/components/ImageUpload'
 import ToggleSwitch from '@/components/ToggleSwitch'
 import ModeratorHeader from '@/components/ModeratorHeader'
+import ModeratorNavigation from '@/components/ModeratorNavigation'
 
 export const dynamic = 'force-dynamic'
 
@@ -187,48 +188,7 @@ export default function EditProductPage({
         maxWidth='max-w-7xl'
       />
 
-      <nav className='bg-green-600 text-white'>
-        <div className='max-w-7xl mx-auto px-4'>
-          <ul className='flex space-x-8 py-4'>
-            <li>
-              <Link
-                href='/moderator'
-                className='hover:text-green-200 font-medium'
-                style={{ fontSize: '18px' }}
-              >
-                🏠 Главная
-              </Link>
-            </li>
-            <li>
-              <Link
-                href='/moderator/products'
-                className='hover:text-green-200 font-medium'
-                style={{ fontSize: '18px' }}
-              >
-                📚 Товары
-              </Link>
-            </li>
-            <li>
-              <Link
-                href='/moderator/orders'
-                className='hover:text-green-200 font-medium'
-                style={{ fontSize: '18px' }}
-              >
-                🛒 Заказы
-              </Link>
-            </li>
-            <li>
-              <Link
-                href='/moderator/stats'
-                className='hover:text-green-200 font-medium'
-                style={{ fontSize: '18px' }}
-              >
-                📈 Статистика
-              </Link>
-            </li>
-          </ul>
-        </div>
-      </nav>
+      <ModeratorNavigation />
 
       <main className='max-w-7xl mx-auto px-4 py-6'>
         <div className=' rounded-lg shadow-md p-4 bg-gray-400'>
