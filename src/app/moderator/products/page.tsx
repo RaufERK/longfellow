@@ -318,9 +318,7 @@ export default function ProductsPage() {
                         )?.label || product.category}
                       </td>
                       <td className='px-2 py-2' style={{ fontSize: '16px' }}>
-                        {product.price
-                          ? `${(product.price / 100).toFixed(2)} ₽`
-                          : '—'}
+                        {product.price ? `${product.price} ₽` : '—'}
                       </td>
                       <td className='px-2 py-2 text-center'>
                         <ToggleSwitch
@@ -332,18 +330,18 @@ export default function ProductsPage() {
                         />
                       </td>
                       <td className='px-2 py-2 text-center'>
-                        <div className='flex justify-center gap-1'>
+                        <div className='flex justify-center gap-2'>
                           <Link
                             href={`/moderator/products/${product.id}/edit`}
-                            className='bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded text-xs transition duration-200'
+                            className='bg-orange-600 hover:bg-orange-700 text-white px-3 py-1 rounded text-sm transition duration-200'
                           >
-                            ✏️
+                            Изменить
                           </Link>
                           <button
                             onClick={() => handleDelete(product.id)}
-                            className='bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-xs transition duration-200'
+                            className='bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm transition duration-200'
                           >
-                            🗑️
+                            Удалить
                           </button>
                         </div>
                       </td>

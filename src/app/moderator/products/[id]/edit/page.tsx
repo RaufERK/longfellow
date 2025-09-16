@@ -244,7 +244,7 @@ export default function EditProductPage({
       </nav>
 
       <main className='max-w-7xl mx-auto px-4 py-6'>
-        <div className=' rounded-lg shadow-md p-4 bg-green-600'>
+        <div className=' rounded-lg shadow-md p-4 bg-gray-400'>
           <form onSubmit={handleSubmit} className='space-y-4'>
             {/* Название товара - на всю ширину */}
             <div>

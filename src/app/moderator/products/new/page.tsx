@@ -233,14 +233,14 @@ export default function NewProductPage() {
                   className='block text-lg font-medium mb-2'
                   style={{ fontSize: '18px' }}
                 >
-                  Цена (в копейках)
+                  Цена
                 </label>
                 <input
                   type='number'
                   name='price'
                   value={formData.price}
                   onChange={handleChange}
-                  placeholder='Например: 50000 (500 руб)'
+                  placeholder='Например: 500'
                   className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500'
                   style={{ fontSize: '18px' }}
                 />
