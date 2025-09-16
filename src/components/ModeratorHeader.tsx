@@ -15,9 +15,16 @@ export default function ModeratorHeader({
 }: ModeratorHeaderProps) {
   const router = useRouter()
 
-  const handleLogout = () => {
-    localStorage.removeItem('moderatorToken')
-    router.push('/moderator/login')
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/moderator/logout', {
+        method: 'POST',
+      })
+      router.push('/moderator/login')
+    } catch (error) {
+      console.error('Logout error:', error)
+      router.push('/moderator/login')
+    }
   }
 
   return (
