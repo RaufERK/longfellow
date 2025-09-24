@@ -37,6 +37,9 @@ export default function ShoppingCartClient() {
     Record<string, string>
   >({})
 
+  // Состояние для модального окна успешной отправки
+  const [showSuccessModal, setShowSuccessModal] = useState(false)
+
   useEffect(() => {
     setMounted(true)
 
@@ -167,10 +170,22 @@ export default function ShoppingCartClient() {
     if (validation.isValid) {
       // Здесь будет логика отправки заказа
       console.log('Заказ отправлен:', customerData)
-      alert('Заказ успешно отправлен!')
+
+      // Очищаем корзину
+      clearCart()
+
+      // Показываем модальное окно успеха
+      setShowSuccessModal(true)
     } else {
       console.log('Ошибки валидации:', validation.errors)
     }
+  }
+
+  // Обработчик закрытия модального окна успеха
+  const handleCloseSuccessModal = () => {
+    setShowSuccessModal(false)
+    // Скрываем форму заказа только после закрытия модального окна
+    setShowOrderForm(false)
   }
 
   if (!mounted) {
@@ -837,6 +852,57 @@ export default function ShoppingCartClient() {
           </div>
         </div>
       </div>
+
+      {/* Модальное окно успешной отправки заказа */}
+      {showSuccessModal && (
+        <div className='fixed inset-0 flex items-center justify-center z-50 pointer-events-none'>
+          <div
+            className='bg-white rounded-lg shadow-2xl p-8 max-w-md mx-4 text-center border-2 border-green-200 pointer-events-auto'
+            style={{
+              boxShadow:
+                '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(34, 197, 94, 0.1)',
+            }}
+          >
+            <div className='mb-6'>
+              <div className='w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4'>
+                <svg
+                  className='w-8 h-8 text-green-600'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={2}
+                    d='M5 13l4 4L19 7'
+                  />
+                </svg>
+              </div>
+              <h3
+                className='text-2xl font-bold text-gray-800 mb-2'
+                style={{
+                  fontFamily: 'Times, Times New Roman',
+                  fontSize: '24px',
+                }}
+              >
+                Заказ успешно отправлен!
+              </h3>
+              <p className='text-gray-600' style={{ fontSize: '18px' }}>
+                Спасибо за ваш заказ. Мы свяжемся с вами в ближайшее время для
+                подтверждения.
+              </p>
+            </div>
+            <Button
+              onClick={handleCloseSuccessModal}
+              className='bg-green-600 hover:bg-green-700 text-white px-8 py-3'
+              style={{ fontSize: '18px' }}
+            >
+              Понятно
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
