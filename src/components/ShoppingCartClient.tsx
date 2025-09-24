@@ -28,7 +28,14 @@ export default function ShoppingCartClient() {
     updateField,
     hasBasicInfo,
     hasAddressInfo,
+    validateForm,
+    validateField,
   } = useCustomerData()
+
+  // Состояние для ошибок валидации
+  const [validationErrors, setValidationErrors] = useState<
+    Record<string, string>
+  >({})
 
   useEffect(() => {
     setMounted(true)
@@ -132,6 +139,38 @@ export default function ShoppingCartClient() {
   // Обработчик кнопки "Оформить заказ"
   const handleOrderClick = () => {
     setShowOrderForm(true)
+  }
+
+  // Обработчик изменения поля с валидацией в реальном времени
+  const handleFieldChange = (
+    field: keyof typeof customerData,
+    value: string
+  ) => {
+    // Обновляем значение поля
+    updateField(field, value)
+
+    // Валидируем поле в реальном времени
+    const validation = validateField(field, value)
+    setValidationErrors((prev) => ({
+      ...prev,
+      [field]: validation.isValid
+        ? ''
+        : validation.message || 'Ошибка валидации',
+    }))
+  }
+
+  // Обработчик отправки заказа
+  const handleSubmitOrder = () => {
+    const validation = validateForm()
+    setValidationErrors(validation.errors)
+
+    if (validation.isValid) {
+      // Здесь будет логика отправки заказа
+      console.log('Заказ отправлен:', customerData)
+      alert('Заказ успешно отправлен!')
+    } else {
+      console.log('Ошибки валидации:', validation.errors)
+    }
   }
 
   if (!mounted) {
@@ -434,12 +473,52 @@ export default function ShoppingCartClient() {
                       <Input
                         value={customerData.customerName}
                         onChange={(e) =>
-                          updateField('customerName', e.target.value)
+                          handleFieldChange('customerName', e.target.value)
                         }
                         placeholder='Введите ваше имя'
-                        className='text-lg'
+                        className={`text-lg ${
+                          validationErrors.customerName ? 'border-red-500' : ''
+                        }`}
                         style={{ fontSize: '18px' }}
                       />
+                      {validationErrors.customerName && (
+                        <p
+                          className='text-red-500 text-sm mt-1'
+                          style={{ fontSize: '16px' }}
+                        >
+                          {validationErrors.customerName}
+                        </p>
+                      )}
+                    </div>
+
+                    <div>
+                      <label
+                        className='block text-gray-700 mb-1'
+                        style={{ fontSize: '18px' }}
+                      >
+                        Фамилия *
+                      </label>
+                      <Input
+                        value={customerData.customerSurname}
+                        onChange={(e) =>
+                          handleFieldChange('customerSurname', e.target.value)
+                        }
+                        placeholder='Введите вашу фамилию'
+                        className={`text-lg ${
+                          validationErrors.customerSurname
+                            ? 'border-red-500'
+                            : ''
+                        }`}
+                        style={{ fontSize: '18px' }}
+                      />
+                      {validationErrors.customerSurname && (
+                        <p
+                          className='text-red-500 text-sm mt-1'
+                          style={{ fontSize: '16px' }}
+                        >
+                          {validationErrors.customerSurname}
+                        </p>
+                      )}
                     </div>
 
                     <div>
@@ -453,12 +532,22 @@ export default function ShoppingCartClient() {
                         type='email'
                         value={customerData.customerEmail}
                         onChange={(e) =>
-                          updateField('customerEmail', e.target.value)
+                          handleFieldChange('customerEmail', e.target.value)
                         }
                         placeholder='example@mail.com'
-                        className='text-lg'
+                        className={`text-lg ${
+                          validationErrors.customerEmail ? 'border-red-500' : ''
+                        }`}
                         style={{ fontSize: '18px' }}
                       />
+                      {validationErrors.customerEmail && (
+                        <p
+                          className='text-red-500 text-sm mt-1'
+                          style={{ fontSize: '16px' }}
+                        >
+                          {validationErrors.customerEmail}
+                        </p>
+                      )}
                     </div>
 
                     <div>
@@ -472,12 +561,39 @@ export default function ShoppingCartClient() {
                         type='tel'
                         value={customerData.customerPhone}
                         onChange={(e) =>
-                          updateField('customerPhone', e.target.value)
+                          handleFieldChange('customerPhone', e.target.value)
                         }
+                        onKeyDown={(e) => {
+                          // Разрешаем только цифры, +, -, (, ), пробел, Backspace, Delete, Tab, Arrow keys
+                          if (
+                            !/[0-9+\-()\s]/.test(e.key) &&
+                            ![
+                              'Backspace',
+                              'Delete',
+                              'Tab',
+                              'ArrowLeft',
+                              'ArrowRight',
+                              'ArrowUp',
+                              'ArrowDown',
+                            ].includes(e.key)
+                          ) {
+                            e.preventDefault()
+                          }
+                        }}
                         placeholder='+7 (xxx) xxx-xx-xx'
-                        className='text-lg'
+                        className={`text-lg ${
+                          validationErrors.customerPhone ? 'border-red-500' : ''
+                        }`}
                         style={{ fontSize: '18px' }}
                       />
+                      {validationErrors.customerPhone && (
+                        <p
+                          className='text-red-500 text-sm mt-1'
+                          style={{ fontSize: '16px' }}
+                        >
+                          {validationErrors.customerPhone}
+                        </p>
+                      )}
                     </div>
 
                     <div>
@@ -493,6 +609,23 @@ export default function ShoppingCartClient() {
                         onChange={(e) =>
                           updateField('customerPhone2', e.target.value)
                         }
+                        onKeyDown={(e) => {
+                          // Разрешаем только цифры, +, -, (, ), пробел, Backspace, Delete, Tab, Arrow keys
+                          if (
+                            !/[0-9+\-()\s]/.test(e.key) &&
+                            ![
+                              'Backspace',
+                              'Delete',
+                              'Tab',
+                              'ArrowLeft',
+                              'ArrowRight',
+                              'ArrowUp',
+                              'ArrowDown',
+                            ].includes(e.key)
+                          ) {
+                            e.preventDefault()
+                          }
+                        }}
                         placeholder='+7 (xxx) xxx-xx-xx'
                         className='text-lg'
                         style={{ fontSize: '18px' }}
@@ -522,12 +655,45 @@ export default function ShoppingCartClient() {
                       <Input
                         value={customerData.customerPostalCode}
                         onChange={(e) =>
-                          updateField('customerPostalCode', e.target.value)
+                          handleFieldChange(
+                            'customerPostalCode',
+                            e.target.value
+                          )
                         }
+                        onKeyDown={(e) => {
+                          // Разрешаем только цифры, Backspace, Delete, Tab, Arrow keys
+                          if (
+                            !/[0-9]/.test(e.key) &&
+                            ![
+                              'Backspace',
+                              'Delete',
+                              'Tab',
+                              'ArrowLeft',
+                              'ArrowRight',
+                              'ArrowUp',
+                              'ArrowDown',
+                            ].includes(e.key)
+                          ) {
+                            e.preventDefault()
+                          }
+                        }}
                         placeholder='123456'
-                        className='text-lg'
+                        className={`text-lg ${
+                          validationErrors.customerPostalCode
+                            ? 'border-red-500'
+                            : ''
+                        }`}
                         style={{ fontSize: '18px' }}
+                        maxLength={6}
                       />
+                      {validationErrors.customerPostalCode && (
+                        <p
+                          className='text-red-500 text-sm mt-1'
+                          style={{ fontSize: '16px' }}
+                        >
+                          {validationErrors.customerPostalCode}
+                        </p>
+                      )}
                     </div>
 
                     <div>
@@ -540,12 +706,22 @@ export default function ShoppingCartClient() {
                       <Input
                         value={customerData.customerCity}
                         onChange={(e) =>
-                          updateField('customerCity', e.target.value)
+                          handleFieldChange('customerCity', e.target.value)
                         }
                         placeholder='Москва'
-                        className='text-lg'
+                        className={`text-lg ${
+                          validationErrors.customerCity ? 'border-red-500' : ''
+                        }`}
                         style={{ fontSize: '18px' }}
                       />
+                      {validationErrors.customerCity && (
+                        <p
+                          className='text-red-500 text-sm mt-1'
+                          style={{ fontSize: '16px' }}
+                        >
+                          {validationErrors.customerCity}
+                        </p>
+                      )}
                     </div>
 
                     <div>
@@ -558,12 +734,24 @@ export default function ShoppingCartClient() {
                       <Input
                         value={customerData.customerAddress}
                         onChange={(e) =>
-                          updateField('customerAddress', e.target.value)
+                          handleFieldChange('customerAddress', e.target.value)
                         }
                         placeholder='улица, дом, квартира'
-                        className='text-lg'
+                        className={`text-lg ${
+                          validationErrors.customerAddress
+                            ? 'border-red-500'
+                            : ''
+                        }`}
                         style={{ fontSize: '18px' }}
                       />
+                      {validationErrors.customerAddress && (
+                        <p
+                          className='text-red-500 text-sm mt-1'
+                          style={{ fontSize: '16px' }}
+                        >
+                          {validationErrors.customerAddress}
+                        </p>
+                      )}
                     </div>
 
                     <div>
@@ -637,7 +825,7 @@ export default function ShoppingCartClient() {
                   </Button>
 
                   <Button
-                    disabled={!hasBasicInfo() || !hasAddressInfo()}
+                    onClick={handleSubmitOrder}
                     className='flex-1 bg-green-600 hover:bg-green-700'
                     style={{ fontSize: '18px' }}
                   >

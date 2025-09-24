@@ -16,6 +16,7 @@ export interface Cart {
 
 export interface OrderFormData {
   customerName: string
+  customerSurname: string
   customerEmail: string
   customerPhone: string
   customerPhone2?: string
