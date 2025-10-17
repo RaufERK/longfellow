@@ -23,8 +23,11 @@ module.exports = {
       'post-deploy': [
         'export NODE_ENV=production',
         'source ~/.nvm/nvm.sh && nvm use --lts',
-        // только один симлинк
+        // симлинки для shared-директорий
         'ln -sf /home/appuser/apps/longfellow/shared/.env /home/appuser/apps/longfellow/source/.env',
+        'mkdir -p /home/appuser/apps/longfellow/shared/uploads',
+        'rm -rf /home/appuser/apps/longfellow/source/public/images/products/uploads',
+        'ln -sf /home/appuser/apps/longfellow/shared/uploads /home/appuser/apps/longfellow/source/public/images/products/uploads',
         'npm ci --include=dev',
         'npx prisma generate',
         'npx prisma migrate deploy',
