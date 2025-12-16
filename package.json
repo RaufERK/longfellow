@@ -11,7 +11,7 @@
     "seed:products": "tsx scripts/seed-products.ts",
     "seed": "tsx scripts/seed.ts",
     "db:seed": "prisma db seed",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "next lint",
     "deploy": "pm2 deploy ecosystem.config.cjs production"
