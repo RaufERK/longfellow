@@ -17,7 +17,7 @@ module.exports = {
       user: 'appuser',
       host: 'amster_app',
       ref: 'origin/main',
-      repo: 'git@github.com:RaufERK/longfellow.git',
+      repo: 'https://github.com/RaufERK/longfellow.git',
       path: '/home/appuser/apps/longfellow',
       'pre-deploy-local': '',
       'post-deploy': [
