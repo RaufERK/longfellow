@@ -34,6 +34,20 @@ export default function SideNavigation() {
                 </td>
               </tr>
             ))}
+            <tr>
+              <td>
+                <Link
+                  href='/seminar'
+                  className='block text-center text-[20px] font-bold text-[#f9e000] px-2 py-3 hover:text-[#ffe666] drop-shadow-[0_0_8px_rgba(0,0,0,0.55)] hover:drop-shadow-[0_0_14px_rgba(0,0,0,0.75)] hover:scale-[1.05] transition-all leading-snug'
+                  style={{
+                    fontFamily: 'Times, "Times New Roman", serif',
+                    backgroundColor: 'transparent',
+                  }}
+                >
+                  Выездной семинар
+                </Link>
+              </td>
+            </tr>
           </tbody>
         </table>
       </nav>

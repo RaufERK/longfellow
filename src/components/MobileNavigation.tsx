@@ -10,6 +10,7 @@ const menuItems = [
   { href: '/presentations', label: 'Презентации' },
   { href: '/authors', label: 'Авторы' },
   { href: '/contacts', label: 'Контакты' },
+  { href: '/seminar', label: 'Выездной семинар' },
 ]
 
 export default function MobileNavigation() {

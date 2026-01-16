@@ -63,6 +63,12 @@ export default function Navigation() {
             >
               Контакты
             </Link>
+            <Link
+              href='/seminar'
+              className='text-gray-600 hover:text-gray-900 transition-colors'
+            >
+              Выездной семинар
+            </Link>
           </div>
         </div>
       </div>
