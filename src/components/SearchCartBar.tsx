@@ -23,6 +23,7 @@ export default function SearchCartBar({
   const searchParams = useSearchParams()
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true)
     const currentQuery = searchParams.get('q')
     if (currentQuery) {

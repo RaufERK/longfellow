@@ -17,7 +17,7 @@
     "db:seed": "prisma db seed",
     "build": "next build --webpack",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "check:env": "node -v && npm -v",
     "deploy": "pm2 deploy ecosystem.config.cjs production"
   },

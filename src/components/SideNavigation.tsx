@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import menuItems from './navigation'
+import menuItems from './menuItems'
 
 export default function SideNavigation() {
   return (

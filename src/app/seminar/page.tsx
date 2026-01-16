@@ -1,6 +1,8 @@
 import PageHeader from '@/components/PageHeader'
 import SearchCartBar from '@/components/SearchCartBar'
 
+export const dynamic = 'force-dynamic'
+
 export default function SeminarPage() {
   return (
     <div className='bg-[#ccffcc]'>
