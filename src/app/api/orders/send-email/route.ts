@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
     // Создаем SMTP подключение
     console.log('Creating SMTP connection...')
     const transporter = nodemailer.createTransport({
-      host: 'sm30.hosting.reg.ru', // Реальный SMTP хост (mail.amasters.pro не существует)
+      host: process.env.MAIL_SERVER || 'mail.amasters.pro',
       port: 587,
       secure: false,
       requireTLS: true,

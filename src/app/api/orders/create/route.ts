@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic'
 // Создание транспортера
 const createTransporter = () => {
   return nodemailer.createTransport({
-    host: 'sm30.hosting.reg.ru', // Реальный SMTP хост (mail.amasters.pro не существует)
+    host: process.env.MAIL_SERVER || 'mail.amasters.pro',
     port: 587,
     secure: false,
     requireTLS: true,
