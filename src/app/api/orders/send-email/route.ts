@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
   try {
     console.log('=== EMAIL API START ===')
     console.log('MAIL_SERVER (env):', process.env.MAIL_SERVER)
-    console.log('Using host: mail.amasters.pro')
+    console.log('Using host: sm30.hosting.reg.ru')
     console.log('SOURCE_MAIL:', process.env.SOURCE_MAIL)
     console.log('MAIL_PASSWORD exists:', !!process.env.MAIL_PASSWORD)
     console.log('Order data received:', {
@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
     // Создаем SMTP подключение
     console.log('Creating SMTP connection...')
     const transporter = nodemailer.createTransport({
-      host: 'mail.amasters.pro',
+      host: 'sm30.hosting.reg.ru', // Реальный SMTP хост (mail.amasters.pro не существует)
       port: 587,
       secure: false,
       requireTLS: true,
