@@ -163,19 +163,48 @@ export default function ShoppingCartClient() {
   }
 
   // Обработчик отправки заказа
-  const handleSubmitOrder = () => {
+  const handleSubmitOrder = async () => {
     const validation = validateForm()
     setValidationErrors(validation.errors)
 
-    if (validation.isValid) {
-      // Здесь будет логика отправки заказа
-      console.log('Заказ отправлен:', customerData)
+    if (validation.isValid && cartData) {
+      try {
+        const orderData = {
+          items: cartData.items,
+          totalItems: cartData.totalItems,
+          totalAmount: cartData.totalAmount,
+          customerName: customerData.customerName,
+          customerEmail: customerData.customerEmail,
+          customerPhone: customerData.customerPhone,
+          customerCity: customerData.customerCity,
+          customerAddress: customerData.customerAddress,
+          customerPostalCode: customerData.customerPostalCode,
+        }
 
-      // Очищаем корзину
-      clearCart()
+        const response = await fetch('/api/orders/send-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(orderData),
+        })
 
-      // Показываем модальное окно успеха
-      setShowSuccessModal(true)
+        const result = await response.json()
+
+        if (result.success) {
+          console.log('✅ Заказ успешно отправлен:', result)
+          // Очищаем корзину
+          clearCart()
+          // Показываем модальное окно успеха
+          setShowSuccessModal(true)
+        } else {
+          console.error('❌ Ошибка отправки:', result)
+          alert('Ошибка отправки заказа. Попробуйте еще раз.')
+        }
+      } catch (error) {
+        console.error('❌ Ошибка сети:', error)
+        alert('Ошибка отправки заказа. Проверьте подключение к интернету.')
+      }
     } else {
       console.log('Ошибки валидации:', validation.errors)
     }
