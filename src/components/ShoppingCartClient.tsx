@@ -82,7 +82,7 @@ export default function ShoppingCartClient() {
     const totalItems = safeItems.reduce((sum, item) => sum + item.quantity, 0)
     const totalAmount = safeItems.reduce(
       (sum, item) => sum + item.price * item.quantity,
-      0
+      0,
     )
     return {
       items: safeItems,
@@ -116,7 +116,9 @@ export default function ShoppingCartClient() {
 
     const newItems =
       cartData?.items?.map((item) =>
-        item.productId === productId ? { ...item, quantity: newQuantity } : item
+        item.productId === productId
+          ? { ...item, quantity: newQuantity }
+          : item,
       ) || []
 
     const newCartData = recalculateCart(newItems)
@@ -147,7 +149,7 @@ export default function ShoppingCartClient() {
   // Обработчик изменения поля с валидацией в реальном времени
   const handleFieldChange = (
     field: keyof typeof customerData,
-    value: string
+    value: string,
   ) => {
     // Обновляем значение поля
     updateField(field, value)
@@ -174,6 +176,7 @@ export default function ShoppingCartClient() {
           totalItems: cartData.totalItems,
           totalAmount: cartData.totalAmount,
           customerName: customerData.customerName,
+          customerSurname: customerData.customerSurname,
           customerEmail: customerData.customerEmail,
           customerPhone: customerData.customerPhone,
           customerCity: customerData.customerCity,
@@ -358,7 +361,7 @@ export default function ShoppingCartClient() {
                                   onClick={() =>
                                     updateQuantity(
                                       item.productId,
-                                      item.quantity - 1
+                                      item.quantity - 1,
                                     )
                                   }
                                   variant='outline'
@@ -377,7 +380,7 @@ export default function ShoppingCartClient() {
                                   onClick={() =>
                                     updateQuantity(
                                       item.productId,
-                                      item.quantity + 1
+                                      item.quantity + 1,
                                     )
                                   }
                                   variant='outline'
@@ -701,7 +704,7 @@ export default function ShoppingCartClient() {
                         onChange={(e) =>
                           handleFieldChange(
                             'customerPostalCode',
-                            e.target.value
+                            e.target.value,
                           )
                         }
                         onKeyDown={(e) => {

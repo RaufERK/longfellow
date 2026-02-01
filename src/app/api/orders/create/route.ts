@@ -32,16 +32,15 @@ const formatOrderEmail = (
 
   let itemsList = ''
   items.forEach((item, index) => {
-    itemsList += `${index + 1}. ${item.title.toUpperCase()} - {${
-      item.quantity
-    }} шт. Цена:${item.price} руб.\n`
+    itemsList += `${index + 1}. ${item.title.toUpperCase()} - {${item.quantity
+      }} шт. Цена:${item.price} руб.\n`
   })
 
   // Формируем полный адрес из отдельных полей
   const fullAddress = `${customer.customerPostalCode}, ${customer.customerCity}, ${customer.customerAddress}`
 
   return `Заказ # ${orderNumber}
-Кому: ${customer.customerName}
+Кому: ${customer.customerName} ${customer.customerSurname}
 Адрес: ${fullAddress}
 Телефон: ${customer.customerPhone}
 Телефон2: ${customer.customerPhone2 || ''}
@@ -71,6 +70,7 @@ export async function POST(request: NextRequest) {
 
     if (
       !orderData.customer.customerName ||
+      !orderData.customer.customerSurname ||
       !orderData.customer.customerEmail ||
       !orderData.customer.customerPhone ||
       !orderData.customer.customerPostalCode ||
@@ -113,6 +113,7 @@ export async function POST(request: NextRequest) {
       data: {
         orderNumber,
         customerName: orderData.customer.customerName,
+        customerSurname: orderData.customer.customerSurname,
         customerEmail: orderData.customer.customerEmail,
         customerPhone: orderData.customer.customerPhone,
         customerPhone2: orderData.customer.customerPhone2 || null,

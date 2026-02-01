@@ -16,6 +16,7 @@ interface OrderData {
   totalItems: number
   totalAmount: number
   customerName: string
+  customerSurname: string
   customerEmail: string
   customerPhone: string
   customerCity: string
@@ -70,8 +71,7 @@ export async function POST(req: NextRequest) {
     const orderItems = orderData.items
       .map(
         (item: CartItem) =>
-          `• ${item.title}${item.author ? ` (${item.author})` : ''} - ${
-            item.quantity
+          `• ${item.title}${item.author ? ` (${item.author})` : ''} - ${item.quantity
           } шт. × ${item.price.toLocaleString('ru-RU')} ₽ = ${(
             item.price * item.quantity
           ).toLocaleString('ru-RU')} ₽`
@@ -90,6 +90,7 @@ ${orderItems}
 
 === ДАННЫЕ КЛИЕНТА ===
 Имя: ${orderData.customerName}
+Фамилия: ${orderData.customerSurname}
 Email: ${orderData.customerEmail}
 Телефон: ${orderData.customerPhone}
 
@@ -101,13 +102,13 @@ Email: ${orderData.customerEmail}
 
 === ДАТА И ВРЕМЯ ===
 ${new Date().toLocaleString('ru-RU', {
-  timeZone: 'Europe/Moscow',
-  year: 'numeric',
-  month: '2-digit',
-  day: '2-digit',
-  hour: '2-digit',
-  minute: '2-digit',
-})}
+      timeZone: 'Europe/Moscow',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    })}
 
 ---
 Заказ отправлен с сайта longfellow.ru
@@ -123,7 +124,7 @@ ${new Date().toLocaleString('ru-RU', {
       to: process.env.TARGET_MAIL || 'kniga@longfellow.ru',
       subject: `Новый заказ на ${orderData.totalAmount.toLocaleString(
         'ru-RU'
-      )} ₽ от ${orderData.customerName}`,
+      )} ₽ от ${orderData.customerName} ${orderData.customerSurname}`,
       text: emailContent,
     })
 
@@ -156,18 +157,18 @@ ${new Date().toLocaleString('ru-RU', {
 
 === СОСТАВ ЗАКАЗА ===
 ${orderData.items
-  .map(
-    (item: CartItem) =>
-      `• ${item.title}${item.author ? ` (${item.author})` : ''} - ${
-        item.quantity
-      } шт. × ${item.price.toLocaleString('ru-RU')} ₽ = ${(
-        item.price * item.quantity
-      ).toLocaleString('ru-RU')} ₽`
-  )
-  .join('\n')}
+            .map(
+              (item: CartItem) =>
+                `• ${item.title}${item.author ? ` (${item.author})` : ''} - ${item.quantity
+                } шт. × ${item.price.toLocaleString('ru-RU')} ₽ = ${(
+                  item.price * item.quantity
+                ).toLocaleString('ru-RU')} ₽`
+            )
+            .join('\n')}
 
 === ДАННЫЕ КЛИЕНТА ===
 Имя: ${orderData.customerName}
+Фамилия: ${orderData.customerSurname}
 Email: ${orderData.customerEmail}
 Телефон: ${orderData.customerPhone}
 
@@ -189,7 +190,7 @@ ${(error as Error).message}
       const filename = `order_${Date.now()}_${orderData.customerName.replace(
         /[^a-zA-Zа-яё0-9]/gi,
         '_'
-      )}.json`
+      )}_${orderData.customerSurname.replace(/[^a-zA-Zа-яё0-9]/gi, '_')}.json`
       await writeFile(
         join(ordersDir, filename),
         JSON.stringify(backupOrder, null, 2),
