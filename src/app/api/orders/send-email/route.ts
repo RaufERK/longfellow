@@ -19,9 +19,12 @@ interface OrderData {
   customerSurname: string
   customerEmail: string
   customerPhone: string
+  customerPhone2?: string
   customerCity: string
   customerAddress: string
   customerPostalCode: string
+  deliveryType: string
+  notes?: string
 }
 
 export async function POST(req: NextRequest) {
@@ -92,13 +95,13 @@ ${orderItems}
 Имя: ${orderData.customerName}
 Фамилия: ${orderData.customerSurname}
 Email: ${orderData.customerEmail}
-Телефон: ${orderData.customerPhone}
+Телефон: ${orderData.customerPhone}${orderData.customerPhone2 ? `\nДополнительный телефон: ${orderData.customerPhone2}` : ''}
 
 === АДРЕС ДОСТАВКИ ===
 Индекс: ${orderData.customerPostalCode}
 Город: ${orderData.customerCity}
 Адрес: ${orderData.customerAddress}
-Доставка: Почтой России
+Доставка: ${orderData.deliveryType}${orderData.notes ? `\n\n=== ПРИМЕЧАНИЯ К ЗАКАЗУ ===\n${orderData.notes}` : ''}
 
 === ДАТА И ВРЕМЯ ===
 ${new Date().toLocaleString('ru-RU', {
@@ -170,12 +173,13 @@ ${orderData.items
 Имя: ${orderData.customerName}
 Фамилия: ${orderData.customerSurname}
 Email: ${orderData.customerEmail}
-Телефон: ${orderData.customerPhone}
+Телефон: ${orderData.customerPhone}${orderData.customerPhone2 ? `\nДополнительный телефон: ${orderData.customerPhone2}` : ''}
 
 === АДРЕС ДОСТАВКИ ===
 Индекс: ${orderData.customerPostalCode}
 Город: ${orderData.customerCity}
 Адрес: ${orderData.customerAddress}
+Доставка: ${orderData.deliveryType}${orderData.notes ? `\n\n=== ПРИМЕЧАНИЯ К ЗАКАЗУ ===\n${orderData.notes}` : ''}
 
 === ОШИБКА SMTP ===
 ${(error as Error).message}

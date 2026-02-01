@@ -179,9 +179,12 @@ export default function ShoppingCartClient() {
           customerSurname: customerData.customerSurname,
           customerEmail: customerData.customerEmail,
           customerPhone: customerData.customerPhone,
+          customerPhone2: customerData.customerPhone2,
           customerCity: customerData.customerCity,
           customerAddress: customerData.customerAddress,
           customerPostalCode: customerData.customerPostalCode,
+          deliveryType: customerData.deliveryType,
+          notes: customerData.notes,
         }
 
         const response = await fetch('/api/orders/send-email', {
