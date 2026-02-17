@@ -31,6 +31,7 @@ module.exports = {
         'npm ci --include=dev',
         'npx prisma generate',
         'npx prisma migrate deploy',
+        'rm -rf .next', // очистка кэша перед билдом
         'npm run build',
         'npx pm2 startOrReload ecosystem.config.cjs --env production',
         'npx pm2 save',
