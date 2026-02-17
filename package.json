@@ -33,19 +33,18 @@
   "overrides": {
     "js-yaml": "4.1.1",
     "jws": "4.0.1",
-    "fast-xml-parser": "^5.3.4",
-    "ajv": "^8.18.0"
+    "fast-xml-parser": "^5.3.4"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
+    "@eslint/eslintrc": "^3.3.3",
     "@tailwindcss/postcss": "^4",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20",
     "@types/nodemailer": "^7.0.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "^16.1.2",
+    "eslint": "^9.39.2",
+    "eslint-config-next": "^16.1.6",
     "pm2": "^6.0.14",
     "tailwindcss": "^4",
     "tsx": "^4.20.4",
