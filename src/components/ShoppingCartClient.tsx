@@ -171,23 +171,25 @@ export default function ShoppingCartClient() {
 
     if (validation.isValid && cartData) {
       try {
+        // Формат данных для /api/orders/create (сохраняет в БД + отправляет email)
         const orderData = {
           items: cartData.items,
-          totalItems: cartData.totalItems,
           totalAmount: cartData.totalAmount,
-          customerName: customerData.customerName,
-          customerSurname: customerData.customerSurname,
-          customerEmail: customerData.customerEmail,
-          customerPhone: customerData.customerPhone,
-          customerPhone2: customerData.customerPhone2,
-          customerCity: customerData.customerCity,
-          customerAddress: customerData.customerAddress,
-          customerPostalCode: customerData.customerPostalCode,
-          deliveryType: customerData.deliveryType,
-          notes: customerData.notes,
+          customer: {
+            customerName: customerData.customerName,
+            customerSurname: customerData.customerSurname,
+            customerEmail: customerData.customerEmail,
+            customerPhone: customerData.customerPhone,
+            customerPhone2: customerData.customerPhone2,
+            customerPostalCode: customerData.customerPostalCode,
+            customerCity: customerData.customerCity,
+            customerAddress: customerData.customerAddress,
+            deliveryType: customerData.deliveryType,
+            notes: customerData.notes,
+          },
         }
 
-        const response = await fetch('/api/orders/send-email', {
+        const response = await fetch('/api/orders/create', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -198,14 +200,14 @@ export default function ShoppingCartClient() {
         const result = await response.json()
 
         if (result.success) {
-          console.log('✅ Заказ успешно отправлен:', result)
+          console.log('✅ Заказ успешно создан:', result)
           // Очищаем корзину
           clearCart()
           // Показываем модальное окно успеха
           setShowSuccessModal(true)
         } else {
-          console.error('❌ Ошибка отправки:', result)
-          alert('Ошибка отправки заказа. Попробуйте еще раз.')
+          console.error('❌ Ошибка создания заказа:', result)
+          alert(result.message || 'Ошибка отправки заказа. Попробуйте еще раз.')
         }
       } catch (error) {
         console.error('❌ Ошибка сети:', error)
