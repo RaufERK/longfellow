@@ -2,6 +2,53 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { isAuthenticated } from '@/lib/auth'
 
+function normalizeCategory(category: string) {
+  return category.trim().toLowerCase()
+}
+
+function getCategoryFilter(category: string) {
+  const normalizedCategory = normalizeCategory(category)
+
+  if (!normalizedCategory) {
+    return undefined
+  }
+
+  if (normalizedCategory === 'books' || normalizedCategory === 'book') {
+    return {
+      category: {
+        in: ['book', 'books'],
+      },
+    }
+  }
+
+  return {
+    category: normalizedCategory,
+  }
+}
+
+function normalizeSearch(search: string) {
+  return search.trim().toLocaleLowerCase('ru-RU')
+}
+
+function parsePositiveInteger(value: string | null, fallback: number) {
+  const parsed = Number.parseInt(value || '', 10)
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback
+}
+
+function matchesSearch({
+  title,
+  author,
+  sku,
+}: {
+  title: string
+  author: string | null
+  sku: string | null
+}, normalizedSearch: string) {
+  return [title, author || '', sku || ''].some((value) =>
+    value.toLocaleLowerCase('ru-RU').includes(normalizedSearch)
+  )
+}
+
 export async function GET(req: NextRequest) {
   if (!isAuthenticated(req)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -9,36 +56,47 @@ export async function GET(req: NextRequest) {
 
   try {
     const { searchParams } = new URL(req.url)
-    const page = parseInt(searchParams.get('page') || '1')
-    const limit = parseInt(searchParams.get('limit') || '20')
+    const page = parsePositiveInteger(searchParams.get('page'), 1)
+    const limit = parsePositiveInteger(searchParams.get('limit'), 20)
     const search = searchParams.get('search') || ''
     const category = searchParams.get('category') || ''
+    const normalizedSearch = normalizeSearch(search)
+    const categoryFilter = getCategoryFilter(category)
 
     const skip = (page - 1) * limit
 
-    const where = {
-      AND: [
-        search
-          ? {
-              OR: [
-                { title: { contains: search, mode: 'insensitive' as const } },
-                { author: { contains: search, mode: 'insensitive' as const } },
-                { sku: { contains: search, mode: 'insensitive' as const } },
-              ],
-            }
-          : {},
-        category ? { category: { equals: category } } : {},
-      ],
+    if (normalizedSearch) {
+      const productsByCategory = await prisma.product.findMany({
+        where: categoryFilter,
+        orderBy: { updatedAt: 'desc' },
+      })
+
+      const filteredProducts = productsByCategory.filter((product) =>
+        matchesSearch(product, normalizedSearch)
+      )
+
+      const total = filteredProducts.length
+      const products = filteredProducts.slice(skip, skip + limit)
+
+      return NextResponse.json({
+        products,
+        pagination: {
+          page,
+          limit,
+          total,
+          pages: Math.ceil(total / limit),
+        },
+      })
     }
 
     const [products, total] = await Promise.all([
       prisma.product.findMany({
-        where,
+        where: categoryFilter,
         skip,
         take: limit,
         orderBy: { updatedAt: 'desc' },
       }),
-      prisma.product.count({ where }),
+      prisma.product.count({ where: categoryFilter }),
     ])
 
     return NextResponse.json({
