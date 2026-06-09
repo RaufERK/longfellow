@@ -34,7 +34,10 @@
     "js-yaml": "4.1.1",
     "jws": "4.0.1",
     "fast-xml-parser": "^5.3.4",
-    "postcss": "8.5.14"
+    "postcss": "8.5.14",
+    "pm2": {
+      "ws": "8.21.0"
+    }
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.3",
