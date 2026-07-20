@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Script from 'next/script'
 import './globals.css'
 import ConditionalNavigation from '@/components/ConditionalNavigation'
 import ClientLayout from '@/components/ClientLayout'
@@ -29,6 +30,13 @@ export default function RootLayout({
           <main className='flex-1'>{children}</main>
           <Footer />
         </ClientLayout>
+
+        <Script
+          defer
+          src='https://analytics.amasters.ru/script.js'
+          data-website-id='f85acab2-c938-4865-95d8-755c1a3e528c'
+          strategy='afterInteractive'
+        />
       </body>
     </html>
   )

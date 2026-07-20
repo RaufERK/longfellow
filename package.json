@@ -57,5 +57,14 @@
   },
   "prisma": {
     "seed": "tsx scripts/seed-products.ts"
+  },
+  "allowScripts": {
+    "@prisma/client@6.19.2": true,
+    "@prisma/engines@6.19.3": true,
+    "esbuild@0.27.2": true,
+    "fsevents@2.3.3": true,
+    "prisma@6.19.3": true,
+    "sharp@0.34.5": true,
+    "unrs-resolver@1.11.1": true
   }
 }
