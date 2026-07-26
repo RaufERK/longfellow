@@ -1,0 +1,24 @@
+diff --git a/node_modules/minimatch/dist/commonjs/index.js b/node_modules/minimatch/dist/commonjs/index.js
+index 5a69834..c7125e1 100644
+--- a/node_modules/minimatch/dist/commonjs/index.js
++++ b/node_modules/minimatch/dist/commonjs/index.js
+@@ -1125,3 +1125,19 @@ exports.minimatch.Minimatch = Minimatch;
+ exports.minimatch.escape = escape_js_1.escape;
+ exports.minimatch.unescape = unescape_js_1.unescape;
+ //# sourceMappingURL=index.js.map
++/* __longfellow_callable_minimatch__ */
++(() => {
++  const realMinimatch = exports.minimatch;
++  const callable = function minimatch(p, pattern, options) {
++    return realMinimatch(p, pattern, options);
++  };
++  for (const key of Object.keys(exports)) {
++    Object.defineProperty(callable, key, {
++      enumerable: true,
++      configurable: true,
++      get: () => exports[key],
++    });
++  }
++  callable.default = callable;
++  module.exports = callable;
++})();
