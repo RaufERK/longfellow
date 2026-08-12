@@ -3,7 +3,7 @@ module.exports = {
     {
       name: 'longfellow',
       script: 'node_modules/next/dist/bin/next',
-      args: 'start -p 3010',
+      args: 'start -H 127.0.0.1 -p 3010',
       instances: 1,
       exec_mode: 'fork',
       watch: false,
@@ -15,7 +15,7 @@ module.exports = {
   deploy: {
     production: {
       user: 'appuser',
-      host: 'amster_app',
+      host: 'app',
       ref: 'origin/main',
       repo: 'https://github.com/RaufERK/longfellow.git',
       path: '/home/appuser/apps/longfellow',
