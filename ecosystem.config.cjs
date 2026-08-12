@@ -22,7 +22,8 @@ module.exports = {
       'pre-deploy-local': '',
       'post-deploy': [
         'export NODE_ENV=production',
-        'source ~/.nvm/nvm.sh && nvm use --lts',
+        // pin to installed Node (nvm --lts may point to uninstalled version)
+        'source ~/.nvm/nvm.sh && nvm use 24.14.1',
         // симлинки для shared-директорий
         'ln -sf /home/appuser/apps/longfellow/shared/.env /home/appuser/apps/longfellow/source/.env',
         'mkdir -p /home/appuser/apps/longfellow/shared/uploads',
