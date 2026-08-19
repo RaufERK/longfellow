@@ -1,4 +1,5 @@
-import jwt from 'jsonwebtoken'
+import { createHash } from 'crypto'
+import { SignJWT, jwtVerify } from 'jose'
 import { NextRequest } from 'next/server'
 
 export const SESSION_MAX_AGE_SECONDS = 7 * 24 * 60 * 60
@@ -11,27 +12,39 @@ export interface ModeratorPayload {
   exp?: number
 }
 
-function getJwtSecret(): string {
+function getJwtSecretKey() {
   const secret = process.env.JWT_SECRET
 
   if (!secret) {
     throw new Error('JWT_SECRET environment variable is required')
   }
 
-  return secret
+  return createHash('sha256').update(secret).digest()
 }
 
-export function generateToken(): string {
-  const payload: ModeratorPayload = { role: 'moderator' }
-  return jwt.sign(payload, getJwtSecret(), {
-    expiresIn: SESSION_MAX_AGE_SECONDS,
-  })
+export async function generateToken(): Promise<string> {
+  return new SignJWT({ role: 'moderator' })
+    .setProtectedHeader({ alg: 'HS256' })
+    .setIssuedAt()
+    .setExpirationTime(`${SESSION_MAX_AGE_SECONDS}s`)
+    .sign(getJwtSecretKey())
 }
 
-export function verifyToken(token: string): ModeratorPayload | null {
+export async function verifyToken(token: string): Promise<ModeratorPayload | null> {
   try {
-    const payload = jwt.verify(token, getJwtSecret()) as ModeratorPayload
-    return payload
+    const { payload } = await jwtVerify(token, getJwtSecretKey(), {
+      algorithms: ['HS256'],
+    })
+
+    if (payload.role !== 'moderator') {
+      return null
+    }
+
+    return {
+      role: 'moderator',
+      iat: payload.iat,
+      exp: payload.exp,
+    }
   } catch {
     return null
   }
@@ -50,13 +63,13 @@ export function getTokenFromRequest(req: NextRequest): string | null {
   return req.cookies.get('moderator-token')?.value || null
 }
 
-export function isAuthenticated(req: NextRequest): boolean {
+export async function isAuthenticated(req: NextRequest): Promise<boolean> {
   const token = getTokenFromRequest(req)
 
   if (!token) {
     return false
   }
 
-  const payload = verifyToken(token)
+  const payload = await verifyToken(token)
   return payload?.role === 'moderator'
 }

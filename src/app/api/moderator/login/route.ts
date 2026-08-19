@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
 
     await clearFailedAttempts(clientIP)
 
-    const token = generateToken()
+    const token = await generateToken()
 
     const response = NextResponse.json({ success: true })
 

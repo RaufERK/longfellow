@@ -16,7 +16,7 @@ const ALLOWED_KINDS = new Set(['thumbnail', 'large'])
 const MAX_FILE_SIZE = 5 * 1024 * 1024
 
 export async function POST(req: NextRequest) {
-  if (!isAuthenticated(req)) {
+  if (!(await isAuthenticated(req))) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

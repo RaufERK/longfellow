@@ -1,22 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { verifyToken } from '@/lib/auth'
+import { isAuthenticated } from '@/lib/auth'
 
-function isAuthenticated(req: NextRequest): boolean {
-  const token = req.cookies.get('moderator-token')?.value
-
-  if (!token) {
-    return false
-  }
-
-  const payload = verifyToken(token)
-  return payload?.role === 'moderator'
-}
-
-export default function proxy(request: NextRequest) {
+export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   if (pathname.startsWith('/moderator')) {
-    const isAuth = isAuthenticated(request)
+    const isAuth = await isAuthenticated(request)
 
     if (pathname === '/moderator/login') {
       if (isAuth) {
