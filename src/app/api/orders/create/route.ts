@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { CreateOrderRequest, CreateOrderResponse } from '@/types/cart'
 import { checkOrderRateLimit } from '@/lib/redis'
+import { getClientIp } from '@/lib/clientIp'
 import nodemailer from 'nodemailer'
 
 export const dynamic = 'force-dynamic'
@@ -174,10 +175,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const clientIP =
-      request.headers.get('x-real-ip') ||
-      request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-      'unknown'
+    const clientIP = getClientIp(request)
     const rateLimit = await checkOrderRateLimit(clientIP)
 
     if (!rateLimit.allowed) {

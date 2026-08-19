@@ -9,6 +9,7 @@ import {
   recordFailedAttempt,
   clearFailedAttempts,
 } from '@/lib/redis'
+import { getClientIp } from '@/lib/clientIp'
 
 export async function POST(req: NextRequest) {
   try {
@@ -18,12 +19,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Пароль обязателен' }, { status: 400 })
     }
 
-    const clientIP =
-      req.headers.get('x-forwarded-for') ||
-      req.headers.get('x-real-ip') ||
-      'unknown'
-
+    const clientIP = getClientIp(req)
     const bruteForceCheck = await checkBruteForce(clientIP)
+
+    if (bruteForceCheck.redisDown) {
+      return NextResponse.json(
+        {
+          error: 'Вход временно недоступен. Попробуйте позже.',
+        },
+        { status: 503 }
+      )
+    }
 
     if (!bruteForceCheck.allowed) {
       return NextResponse.json(
