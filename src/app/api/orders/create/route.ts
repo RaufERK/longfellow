@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { CreateOrderRequest, CreateOrderResponse } from '@/types/cart'
+import { checkOrderRateLimit } from '@/lib/redis'
 import nodemailer from 'nodemailer'
 
 export const dynamic = 'force-dynamic'
 
-// Создание транспортера
+const MAX_ITEMS = 50
+const MAX_QUANTITY = 99
+
 const createTransporter = () => {
   return nodemailer.createTransport({
     host: process.env.MAIL_SERVER || 'mail.amasters.pro',
@@ -13,7 +16,7 @@ const createTransporter = () => {
     secure: false,
     requireTLS: true,
     tls: {
-      servername: 'sm30.hosting.reg.ru', // НЕОБХОДИМ! SSL сертификат выдан для *.hosting.reg.ru
+      servername: 'sm30.hosting.reg.ru',
     },
     auth: {
       user: process.env.SOURCE_MAIL,
@@ -23,20 +26,31 @@ const createTransporter = () => {
   })
 }
 
-// Форматирование письма
-const formatOrderEmail = (
-  orderNumber: number,
-  orderData: CreateOrderRequest
-) => {
-  const { customer, items, totalAmount } = orderData
+type PricedItem = {
+  productId: string
+  title: string
+  quantity: number
+  price: number
+}
 
-  let itemsList = ''
-  items.forEach((item, index) => {
-    itemsList += `${index + 1}. ${item.title.toUpperCase()} - {${item.quantity
-      }} шт. Цена:${item.price} руб.\n`
-  })
+function formatOrderEmail({
+  orderNumber,
+  customer,
+  items,
+  totalAmount,
+}: {
+  orderNumber: number
+  customer: CreateOrderRequest['customer']
+  items: PricedItem[]
+  totalAmount: number
+}) {
+  const itemsList = items
+    .map(
+      (item, index) =>
+        `${index + 1}. ${item.title.toUpperCase()} - {${item.quantity}} шт. Цена:${item.price} руб.`
+    )
+    .join('\n')
 
-  // Формируем полный адрес из отдельных полей
   const fullAddress = `${customer.customerPostalCode}, ${customer.customerCity}, ${customer.customerAddress}`
 
   return `Заказ # ${orderNumber}
@@ -60,10 +74,16 @@ export async function POST(request: NextRequest) {
   try {
     const orderData: CreateOrderRequest = await request.json()
 
-    // Валидация данных
     if (!orderData.items || orderData.items.length === 0) {
       return NextResponse.json(
         { success: false, message: 'Корзина пуста' } as CreateOrderResponse,
+        { status: 400 }
+      )
+    }
+
+    if (orderData.items.length > MAX_ITEMS) {
+      return NextResponse.json(
+        { success: false, message: 'Слишком много позиций в заказе' } as CreateOrderResponse,
         { status: 400 }
       )
     }
@@ -86,9 +106,65 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Проверка минимальной суммы заказа
+    for (const item of orderData.items) {
+      if (
+        !item.productId ||
+        !Number.isInteger(item.quantity) ||
+        item.quantity < 1 ||
+        item.quantity > MAX_QUANTITY
+      ) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: 'Некорректное количество товара',
+          } as CreateOrderResponse,
+          { status: 400 }
+        )
+      }
+    }
+
+    const productIds = [...new Set(orderData.items.map((item) => item.productId))]
+    const products = await prisma.product.findMany({
+      where: { id: { in: productIds } },
+      select: {
+        id: true,
+        title: true,
+        price: true,
+        inStock: true,
+      },
+    })
+    const productsById = new Map(products.map((product) => [product.id, product]))
+
+    const pricedItems: PricedItem[] = []
+
+    for (const item of orderData.items) {
+      const product = productsById.get(item.productId)
+
+      if (!product || product.price == null || !product.inStock) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: 'Один из товаров недоступен для заказа',
+          } as CreateOrderResponse,
+          { status: 400 }
+        )
+      }
+
+      pricedItems.push({
+        productId: product.id,
+        title: product.title,
+        quantity: item.quantity,
+        price: product.price,
+      })
+    }
+
+    const totalAmount = pricedItems.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    )
     const minSum = parseInt(process.env.MINSUMM || '500')
-    if (orderData.totalAmount < minSum) {
+
+    if (totalAmount < minSum) {
       return NextResponse.json(
         {
           success: false,
@@ -98,17 +174,29 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Получение следующего номера заказа
+    const clientIP =
+      request.headers.get('x-real-ip') ||
+      request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+      'unknown'
+    const rateLimit = await checkOrderRateLimit(clientIP)
+
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Слишком много заказов. Попробуйте позже.',
+        } as CreateOrderResponse,
+        { status: 429 }
+      )
+    }
+
     const lastOrder = await prisma.order.findFirst({
       orderBy: { orderNumber: 'desc' },
       select: { orderNumber: true },
     })
     const orderNumber = lastOrder ? lastOrder.orderNumber + 1 : 7000
-
-    // Формируем полный адрес из отдельных полей
     const fullAddress = `${orderData.customer.customerPostalCode}, ${orderData.customer.customerCity}, ${orderData.customer.customerAddress}`
 
-    // Создание заказа в базе данных
     const order = await prisma.order.create({
       data: {
         orderNumber,
@@ -120,28 +208,28 @@ export async function POST(request: NextRequest) {
         customerAddress: fullAddress,
         deliveryType: orderData.customer.deliveryType,
         notes: orderData.customer.notes || null,
-        totalAmount: orderData.totalAmount * 100, // сохраняем в копейках
+        totalAmount: totalAmount * 100,
         status: 'pending',
         items: {
-          create: orderData.items.map((item) => ({
+          create: pricedItems.map((item) => ({
             productId: item.productId,
             productTitle: item.title,
             quantity: item.quantity,
-            price: item.price * 100, // сохраняем в копейках
+            price: item.price * 100,
           })),
         },
       },
-      include: {
-        items: true,
-      },
     })
 
-    // Отправка email
     try {
       const transporter = createTransporter()
-      const emailContent = formatOrderEmail(orderNumber, orderData)
+      const emailContent = formatOrderEmail({
+        orderNumber,
+        customer: orderData.customer,
+        items: pricedItems,
+        totalAmount,
+      })
 
-      // Письмо в отдел продаж
       await transporter.sendMail({
         from: process.env.SOURCE_MAIL,
         to: process.env.TARGET_MAIL || 'kniga@longfellow.ru',
@@ -149,7 +237,6 @@ export async function POST(request: NextRequest) {
         text: emailContent,
       })
 
-      // Копия клиенту
       await transporter.sendMail({
         from: process.env.SOURCE_MAIL,
         to: orderData.customer.customerEmail,
@@ -164,14 +251,12 @@ ${emailContent}
 Команда Longfellow`,
       })
 
-      // Обновляем статус заказа
       await prisma.order.update({
         where: { id: order.id },
         data: { status: 'sent' },
       })
     } catch (emailError) {
       console.error('Ошибка отправки email:', emailError)
-      // Не возвращаем ошибку, так как заказ уже создан
     }
 
     return NextResponse.json({

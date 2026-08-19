@@ -87,3 +87,23 @@ export async function clearFailedAttempts(ip: string): Promise<void> {
     // Молча пропускаем - предупреждение уже показано
   }
 }
+
+const ORDER_LIMIT_PER_HOUR = 10
+
+export async function checkOrderRateLimit(
+  ip: string
+): Promise<{ allowed: boolean }> {
+  try {
+    const redis = await getRedisClient()
+    const key = `order-rate:${ip}`
+    const current = await redis.incr(key)
+
+    if (current === 1) {
+      await redis.expire(key, 60 * 60)
+    }
+
+    return { allowed: current <= ORDER_LIMIT_PER_HOUR }
+  } catch {
+    return { allowed: true }
+  }
+}
