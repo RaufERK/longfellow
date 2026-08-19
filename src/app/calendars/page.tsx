@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma'
+import { catalogProductSelect } from '@/lib/catalog'
 import CompactCard from '@/components/CompactCard'
 import PageHeader from '@/components/PageHeader'
 import SearchCartBar from '@/components/SearchCartBar'
@@ -12,6 +13,7 @@ export default async function CalendarsPage() {
       price: { not: null },
       inStock: true,
     },
+    select: catalogProductSelect,
     orderBy: { legacyId: 'asc' },
   })
 

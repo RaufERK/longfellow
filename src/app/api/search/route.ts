@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { catalogProductSelect } from '@/lib/catalog'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
@@ -18,31 +19,28 @@ export async function GET(request: NextRequest) {
   try {
     const searchTerms = query.toLowerCase().split(/\s+/)
 
-    // Получаем все продукты с ценой и в наличии
     const allProducts = await prisma.product.findMany({
       where: {
         price: { not: null },
         inStock: true,
       },
+      select: catalogProductSelect,
     })
 
-    // Фильтруем продукты по поисковым терминам (регистронезависимо)
-    const products = allProducts.filter(product => {
-      return searchTerms.every(term => {
+    const products = allProducts.filter((product) => {
+      return searchTerms.every((term) => {
         const searchableText = [
           product.title,
           product.author,
           product.shortDescription,
-          product.longDescription,
           product.publisher,
           product.isbn,
-          product.sku,
-          product.dimensions
+          product.dimensions,
         ]
           .filter(Boolean)
           .join(' ')
           .toLowerCase()
-        
+
         return searchableText.includes(term)
       })
     })
@@ -52,7 +50,6 @@ export async function GET(request: NextRequest) {
         title?: string | null
         author?: string | null
         shortDescription?: string | null
-        longDescription?: string | null
       },
       searchQuery: string
     ) => {
@@ -65,10 +62,7 @@ export async function GET(request: NextRequest) {
       if (product.author?.toLowerCase().includes(lowerQuery)) {
         relevanceScore += 50
       }
-      if (
-        product.shortDescription?.toLowerCase().includes(lowerQuery) ||
-        product.longDescription?.toLowerCase().includes(lowerQuery)
-      ) {
+      if (product.shortDescription?.toLowerCase().includes(lowerQuery)) {
         relevanceScore += 25
       }
 
@@ -88,30 +82,28 @@ export async function GET(request: NextRequest) {
       .sort((a, b) => b.relevance - a.relevance)
 
     const groupedResults = {
-      books: sortedProducts.filter((p) => p.category === 'books' || p.category === 'book'),
+      books: sortedProducts.filter(
+        (p) => p.category === 'books' || p.category === 'book'
+      ),
       buklets: sortedProducts.filter((p) => p.category === 'buklets'),
       films: sortedProducts.filter((p) => p.category === 'films'),
       cards: sortedProducts.filter((p) => p.category === 'cards'),
       calendars: sortedProducts.filter((p) => p.category === 'calendars'),
     }
 
-    const totalResults = products.length
-
     return NextResponse.json({
       query,
-      totalResults,
+      totalResults: products.length,
       results: groupedResults,
     })
   } catch (error) {
     console.error('Search error details:', {
       error: error instanceof Error ? error.message : 'Unknown error',
-      stack: error instanceof Error ? error.stack : undefined,
-      query: query
+      query: query,
     })
     return NextResponse.json(
       {
         error: 'Ошибка поиска',
-        message: error instanceof Error ? error.message : 'Unknown error',
         results: {},
       },
       { status: 500 }

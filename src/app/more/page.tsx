@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma'
+import { catalogProductSelect } from '@/lib/catalog'
 import BookCard from '@/components/BookCard'
 import PageHeader from '@/components/PageHeader'
 import SearchCartBar from '@/components/SearchCartBar'
@@ -46,6 +47,7 @@ export default async function MorePage() {
         price: { not: null },
         inStock: true,
       },
+      select: catalogProductSelect,
       orderBy: { legacyId: 'asc' },
     })
 
