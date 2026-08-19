@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { verifyToken } from '@/lib/auth'
 
 function isAuthenticated(req: NextRequest): boolean {
   const token = req.cookies.get('moderator-token')?.value
@@ -7,17 +8,8 @@ function isAuthenticated(req: NextRequest): boolean {
     return false
   }
 
-  try {
-    const parts = token.split('.')
-    if (parts.length !== 3) {
-      return false
-    }
-
-    const payload = JSON.parse(atob(parts[1]))
-    return payload.role === 'moderator' && payload.exp > Date.now() / 1000
-  } catch {
-    return false
-  }
+  const payload = verifyToken(token)
+  return payload?.role === 'moderator'
 }
 
 export default function proxy(request: NextRequest) {

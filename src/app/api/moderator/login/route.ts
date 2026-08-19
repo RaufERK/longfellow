@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { verifyPassword, generateToken } from '@/lib/auth'
+import {
+  verifyPassword,
+  generateToken,
+  SESSION_MAX_AGE_SECONDS,
+} from '@/lib/auth'
 import {
   checkBruteForce,
   recordFailedAttempt,
@@ -47,13 +51,13 @@ export async function POST(req: NextRequest) {
 
     const token = generateToken()
 
-    const response = NextResponse.json({ success: true, token })
+    const response = NextResponse.json({ success: true })
 
     response.cookies.set('moderator-token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 365 * 24 * 60 * 60, // 1 год
+      maxAge: SESSION_MAX_AGE_SECONDS,
     })
 
     return response

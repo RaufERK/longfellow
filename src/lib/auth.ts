@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken'
 import { NextRequest } from 'next/server'
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-for-dev'
+export const SESSION_MAX_AGE_SECONDS = 7 * 24 * 60 * 60
+
 const MODERATOR_PASS = process.env.MODERATOR_PASS || ''
 
 export interface ModeratorPayload {
@@ -10,14 +11,27 @@ export interface ModeratorPayload {
   exp?: number
 }
 
+function getJwtSecret(): string {
+  const secret = process.env.JWT_SECRET
+
+  if (!secret) {
+    throw new Error('JWT_SECRET environment variable is required')
+  }
+
+  return secret
+}
+
 export function generateToken(): string {
   const payload: ModeratorPayload = { role: 'moderator' }
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: '365d' })
+  return jwt.sign(payload, getJwtSecret(), {
+    expiresIn: SESSION_MAX_AGE_SECONDS,
+  })
 }
 
 export function verifyToken(token: string): ModeratorPayload | null {
   try {
-    return jwt.verify(token, JWT_SECRET) as ModeratorPayload
+    const payload = jwt.verify(token, getJwtSecret()) as ModeratorPayload
+    return payload
   } catch {
     return null
   }
