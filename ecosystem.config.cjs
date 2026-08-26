@@ -1,8 +1,13 @@
+const NODE_VERSION = '24.14.1'
+const NODE_BIN = `/home/appuser/.nvm/versions/node/v${NODE_VERSION}/bin/node`
+const PM2_BIN = `/home/appuser/.nvm/versions/node/v${NODE_VERSION}/bin/pm2`
+
 module.exports = {
   apps: [
     {
       name: 'longfellow',
       script: 'node_modules/next/dist/bin/next',
+      interpreter: NODE_BIN,
       args: 'start -H 127.0.0.1 -p 3010',
       instances: 1,
       exec_mode: 'fork',
@@ -22,8 +27,7 @@ module.exports = {
       'pre-deploy-local': '',
       'post-deploy': [
         'export NODE_ENV=production',
-        // pin to installed Node (nvm --lts may point to uninstalled version)
-        'source ~/.nvm/nvm.sh && nvm use 24.14.1',
+        `source ~/.nvm/nvm.sh && nvm use ${NODE_VERSION}`,
         // симлинки для shared-директорий
         'ln -sf /home/appuser/apps/longfellow/shared/.env /home/appuser/apps/longfellow/source/.env',
         'mkdir -p /home/appuser/apps/longfellow/shared/uploads',
@@ -34,8 +38,8 @@ module.exports = {
         'npx prisma migrate deploy',
         'rm -rf .next', // очистка кэша перед билдом
         'npm run build',
-        'npx pm2 startOrReload ecosystem.config.cjs --env production',
-        'npx pm2 save',
+        `${PM2_BIN} startOrReload ecosystem.config.cjs --env production`,
+        `${PM2_BIN} save`,
       ].join(' && '),
       env: { NODE_ENV: 'production' },
     },
