@@ -24,8 +24,8 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "jose": "^6.2.9",
-    "next": "^16.2.12",
-    "nodemailer": "^9.0.1",
+    "next": "^16.3.6",
+    "nodemailer": "^10.0.10",
     "prisma": "^6.14.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
@@ -41,7 +41,6 @@
     "minimatch": "10.2.5",
     "nanoid": "3.3.18",
     "postcss": "8.5.23",
-    "sharp": "0.35.3",
     "pm2": {
       "ws": "8.21.0"
     }
@@ -50,11 +49,10 @@
     "@eslint/eslintrc": "^3.3.3",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^20",
-    "@types/nodemailer": "^8.0.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9.39.2",
-    "eslint-config-next": "^16.2.12",
+    "eslint-config-next": "^16.3.6",
     "patch-package": "^8.0.0",
     "pm2": "^7.0.3",
     "tailwindcss": "^4.3.3",
@@ -71,7 +69,7 @@
     "esbuild@0.27.2": true,
     "fsevents@2.3.3": true,
     "prisma@6.19.3": true,
-    "sharp@0.35.3": true,
+    "sharp@0.35.4": true,
     "unrs-resolver@1.11.1": true
   }
 }
